@@ -3,50 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>EcoGo</title>
+    <link rel="stylesheet" href="styles\landingpage.css">
     <style>
-        *{
-            margin:0;
-        }
-
-        .top-block{
-            display:flex;
-            height:80px;
-            border:1px;
-            background-color:rgb(228, 228, 228);
-            border-bottom-left-radius:30px;
-            border-bottom-right-radius:30px;
-
-
-        }
-        .logo-icon{
-            width:120px;
-            margin-left:20px;
-            margin-top:8px;
-        }
-
-        .right-side-button{
-            
-        }
-
-
-        .aboutUs{
-            display:block;
-        }
+       
     </style>
 </head>
 <body>
-    <div class="top-block">
-            <img class="logo-icon"src="Pictures\icon.jpeg">
-            <div class="right-side-button">
-                <button>Sign Up</button>
-                <button>Login</button>
-            </div>
+    <!-- Upper Part -->
+    <div class="upper-menu">
+            <!-- Logo -->
+            <img class="logo" src="Pictures\icon.jpeg">
+            
+        <!-- Login, SignUp, about.... -->
+        <div class="right-side-navigation">
+            <nav class="menu">
+                <a href="#about">About Us</a>
+                <a href="#faq">FAQ</a>
+                <a href="#contact">Contact Us</a>
+            </nav>
+            <button class="right-side-navigation-button">Sign Up</button>
+            <button class="right-side-navigation-button">Login</button>
+        </div>
     </div>
-    <div class="aboutUs">
-        <p>About Us</p>
-    </div>
-
 
 </body>
 </html>

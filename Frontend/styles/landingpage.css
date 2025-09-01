@@ -1,0 +1,45 @@
+.upper-menu{
+            display:grid;
+            grid-template-columns:auto auto;
+            align-items:center;
+            grid-column-gap:20px;
+            overflow-wrap:anywhere;
+        }
+        .logo{
+            display:block;
+            width:100px;
+        }
+        .right-side-navigation{
+            display:flex;
+            justify-content:flex-end;
+            align-items:center;
+            gap:15px;
+
+        }
+        .right-side-navigation-button{
+            width:80px;
+            font-size:15px;
+            border:solid;
+            border-color:rgba(87, 246, 66, 0.919);
+            padding-top:10px;
+            padding-bottom:10px;
+            border-radius:10px;
+            background-color:white;
+            transition:background-color 0.15s, color 0.15s;
+        }
+        .right-side-navigation-button:hover{
+            border:none;
+            background-color:rgba(87, 246, 66, 0.919);
+            color:white;
+        }
+        .menu{
+            display:flex;
+            gap:10px;
+        }
+        .menu a{
+            color:black;
+            text-decoration:none;
+        }
+        .menu a:hover{
+            color:green;
+        }
