@@ -26,6 +26,7 @@
             border-radius:10px;
             background-color:white;
             transition:background-color 0.15s, color 0.15s;
+            cursor:pointer;
         }
         .right-side-navigation-button:hover{
             border:none;
