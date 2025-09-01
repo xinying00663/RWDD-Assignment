@@ -40,7 +40,23 @@
         .menu a{
             color:black;
             text-decoration:none;
+            transition:font-size 1s;
         }
         .menu a:hover{
             color:green;
+            font-size:20px;
+        }
+
+        .big-content{
+            display:grid;
+            background-color:aquamarine;
+            height:100px;
+            align-items:center;
+
+        }
+        .welcome-word{
+            text-align:center;
+            color:green;
+            font-size:50px;
+            margin:0px;
         }
