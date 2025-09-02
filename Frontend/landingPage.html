@@ -6,7 +6,26 @@
     <title>EcoGo</title>
     <link rel="stylesheet" href="styles\landingpage.css">
     <style>
-        
+        .about-us{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            padding: 2rem;
+        }
+        .about-us-content{
+            flex:1;
+        }
+        .about-us-pictures{
+            flex:1;
+            flex-direction:column;
+        }
+        .about-us-picture{
+            width:200px;
+            height:200px;
+            object-fit:cover;
+            border-radius:12px;
+        }
     </style>
 </head>
 <body>
@@ -30,6 +49,18 @@
     <!-- Content -->
      <div class="big-content">
         <p class="welcome-word">Welcome to Eco GO</p>
+     </div>
+     <div class="about-us">
+        <div class="about-us-content">
+            <p class="about-us-description">
+            We believe small actions can create big change. Our platform is dedicated to inspiring and empowering people to live more sustainably through simple, practical steps. From recycling programs and gardening projects to item swaps and conservation tips, we aim to make eco-friendly living accessible and enjoyable for everyone.
+            </p>
+        </div>
+        <div class="about-us-pictures">
+            <img class="about-us-picture" src="Pictures\recycling-pic.jpg">
+            <img class="about-us-picture" src="Pictures\gardening-pic.jpg">
+            <img class="about-us-picture" src="Pictures\conservation-pic.jpg">
+        </div>
      </div>
 
 </body>
