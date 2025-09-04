@@ -12,49 +12,100 @@
         .navigation-icon a img{
             width:30px;
         }
-        .profile-icon a img{
-            width:40px;
+        .logo-icon{
+            padding-top:10px;
+            padding-bottom:95px;
+            padding-left:10px;
+            padding-right:10px;
+    
+            
         }
-        
+        p{
+            font-size:10px;
+        }
+        .all {
+            display: flex;
+            flex-direction: column; 
+            justify-content:center;
+            align-items: center;    
+            min-height: 100vh;         
+            width: auto;           
+            background-color: #edf6ef; 
+            position: fixed;         
+            left: 0;
+            top: 0;
+        }
+
+        .navigation-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 15px 0;
+            padding: 8px 12px;
+            border-radius: 12px;  /* rounded corners */
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            cursor: pointer;
+        }
+
+        .navigation-button:hover {
+            background-color: rgba(0, 0, 0, 0.05); /* light grey like Canva */
+            transform: scale(1.05); /* subtle zoom effect */
+        }
+
+        .profile{
+            display:flex;
+            padding-top:85px;
+        }
+
     </style>
 </head>
 <body>
     <div class="all">
-    <div class="right-side-menu">
-        <div class="logo-icon">
-            <a href=""><img src="Pictures/icon.jpeg" alt="logo icon"></a>
-        </div>
-        <div class="navigation-icon">
-            <div>
-                <a href=""><img src="Pictures/homepage/recycle-sign.png" alt="navigation icon"></a>
+    <div class="logo-icon">
+        <a href=""><img src="Pictures/icon.jpeg"></a>
+    </div>
+    <div class="navigation-sidebar">
+    <nav class="navigations">
+        <span class="navigation-button">
+            <div class="navigation-icon">
+                <a href=""><img src="Pictures/homepage/recycle-sign.png"></a>
             </div>
-            <div>
-                <p>Recycling Programs</p>
+            <p>Recycling Program</p>
+        </span>
+        <span class="navigation-button">
+            <div class="navigation-icon">
+                <a href=""><img src="Pictures/homepage/lamp.png"></a>
             </div>
-        </div>
-        <div class="navigation-icon">
-            <a href=""><img src="Pictures/homepage/lamp.png" alt="navigation icon"></a>
             <p>Energy Tips</p>
-        </div>
-        <div class="navigation-icon">
-            <a href=""><img src="Pictures/homepage/garden.png" alt="navigation icon"></a>
-            <p>Gradening Community</p>
-        </div>
-        <div class="navigation-icon">
-            <a href=""><img src="Pictures/homepage/swap.png" alt="navigation icon"></a>
+        </span>
+        <span class="navigation-button">
+            <div class="navigation-icon">
+                <a href=""><img src="Pictures/homepage/garden.png"></a>
+            </div>
+            <p>Gardening Community</p>
+        </span>
+        <span class="navigation-button">
+            <div class="navigation-icon">
+                <a href=""><img src="Pictures/homepage/swap.png"></a>
+            </div>
             <p>Swap Items</p>
-        </div>
-        <div class="navigation-icon">
-            <a href=""><img src="Pictures/homepage/inbox.png" alt="navigation icon"></a>
+        </span>
+        <span class="navigation-button">
+            <div class="navigation-icon">
+                <a href=""><img src="Pictures/homepage/inbox.png"></a>
+            </div>
             <p>Inbox</p>
-        </div>
-        <div class="profile-icon">
-            <a href=""><img src="Pictures/homepage/user.png" alt="navigation icon"></a>
+        </span>
+    </div>
+    <div class="profile">
+        <span class="navigation-button">
+            <div class="navigation-icon">
+                <a href=""><img src="Pictures/homepage/user.png"></a>
+            </div>
             <p>Profile</p>
-        </div>
+        </span>
     </div>
-    <div class="map"></div>
+    </nav>
     </div>
-
 </body>
 </html>
