@@ -5,63 +5,133 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EcoGo</title>
     <link rel="stylesheet" href="styles\landingpage.css">
+    <link rel="stylesheet" href="styles\general.css">
     <style>
-        .about-us{
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 2rem;
-            padding: 2rem;
-        }
-        .about-us-content{
-            flex:1;
-        }
-        .about-us-pictures{
-            flex:1;
-            flex-direction:column;
-        }
-        .about-us-picture{
-            width:200px;
-            height:200px;
-            object-fit:cover;
-            border-radius:12px;
-        }
+
+
+    
     </style>
 </head>
 <body>
     <!-- Upper Part -->
     <div class="upper-menu">
-            <!-- Logo -->
-            <img class="logo" src="Pictures\icon.jpeg">
+    <!-- Logo -->
+    <a href="">
+    <img class="logo" src="Pictures/icon.jpeg" alt="EcoGo logo">
+    </a>
 
-        <!-- Login, SignUp, about.... -->
-        <div class="right-side-navigation">
-            <nav class="menu">
-                <a href="#about">About Us</a>
-                <a href="#faq">FAQ</a>
-                <a href="#contact">Contact Us</a>
-            </nav>
-            <button class="right-side-navigation-button">Sign Up</button>
-            <button class="right-side-navigation-button">Login</button>
-        </div>
-    </div>
+    <!-- Hamburger Icon -->
+    <button class="hamburger" id="hamburger">
+      <img src="Pictures\hamburger-icon.png" alt="hamburger icon">
+    </button>
+
+  <!-- Navigation Links -->
+  <div class="right-side-navigation" id="nav-links">
+    <nav class="menu">
+      <a href="#about">About Us</a>
+      <a href="#faq">FAQ</a>
+      <a href="#contact">Contact Us</a>
+    </nav>
+    <button class="right-side-navigation-button">Sign Up</button>
+    <button class="right-side-navigation-button">Login</button>
+  </div>
+</div>
+
 
     <!-- Content -->
      <div class="big-content">
         <p class="welcome-word">Welcome to Eco GO</p>
      </div>
-     <div class="about-us">
-        <div class="about-us-content">
-            <p class="about-us-description">
-            We believe small actions can create big change. Our platform is dedicated to inspiring and empowering people to live more sustainably through simple, practical steps. From recycling programs and gardening projects to item swaps and conservation tips, we aim to make eco-friendly living accessible and enjoyable for everyone.
-            </p>
-        </div>
-        <div class="about-us-pictures">
-            <img class="about-us-picture" src="Pictures\recycling-pic.jpg">
-            <img class="about-us-picture" src="Pictures\gardening-pic.jpg">
-            <img class="about-us-picture" src="Pictures\conservation-pic.jpg">
-        </div>
-     </div>
+
+     <section>
+    <div class="content" id="about">
+      <img src="Pictures/recycling-pic.jpg" alt="Recycling">
+      <div class="text">
+        <h2>Recycling</h2>
+        <p>Recycling reduces waste and saves resources. Every small action helps create a cleaner future.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="content">
+      <img src="Pictures/gardening-pic.jpg" alt="Gardening">
+      <div class="text">
+        <h2>Gardening</h2>
+        <p>Gardening brings us closer to nature while reducing carbon footprints and providing fresh food.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="content">
+      <img src="Pictures/conservation-pic.jpg" alt="Conservation">
+      <div class="text">
+        <h2>Conservation</h2>
+        <p>Saving energy and resources today ensures a sustainable tomorrow for future generations.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+   <section id="faq">
+    <div class="content">
+      <div class="text">
+        <h2>FAQ</h2>
+        <details>
+          <summary>What is EcoGo?</summary>
+          <p>EcoGo is a simple initiative to inspire small, sustainable actions in daily life.</p>
+        </details>
+        <details>
+          <summary>How can I start recycling?</summary>
+          <p>Begin by separating paper, plastics, and glass at home. Check your local collection rules.</p>
+        </details>
+        <details>
+          <summary>Do I need a big garden to grow food?</summary>
+          <p>No. Start with herbs or small vegetables in containers on a balcony or windowsill.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact">
+    <div class="content">
+      <div class="text">
+        <h2>Contact Us</h2>
+        <form class="contact-form" action="#" method="post">
+          <div class="form-row">
+            <label for="name">Name</label>
+            <input id="name" name="name" type="text" placeholder="Your name" required>
+          </div>
+          <div class="form-row">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" placeholder="you@example.com" required>
+          </div>
+          <div class="form-row">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" rows="4" placeholder="How can we help?" required></textarea>
+          </div>
+          <button class="right-side-navigation-button" type="submit">Send</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span>© <span id="year"></span> EcoGo</span>
+      <a href="#about">About</a>
+      <a href="#faq">FAQ</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </footer>
+
+<script src="scripts/landingpage.js"></script>
+
+
+
 
 </body>
 </html>
