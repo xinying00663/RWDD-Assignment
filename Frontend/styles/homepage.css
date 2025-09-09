@@ -1,50 +1,49 @@
- .logo-icon a img{
-            width:100px;
-        }
-        .navigation-icon a img{
-            width:30px;
-        }
-        .logo-icon{
-            padding-top:10px;
-            padding-bottom:95px;
-            padding-left:10px;
-            padding-right:10px;
-    
-            
-        }
-        p{
-            font-size:10px;
-        }
-        .all {
-            display: flex;
-            flex-direction: column; 
-            justify-content:center;
-            align-items: center;    
-            min-height: 100vh;         
-            width: auto;           
-            background-color: #edf6ef; 
-            position: fixed;         
-            left: 0;
-            top: 0;
-        }
+.all{
+    display:flex;
+    flex-direction:column;
+    background-color:#edf6ef;
+    width:180px;
+    position:fixed;
+    border-radius:10px;
+    gap:100px;
+    height:100%;
+}
+.logo-icon a img{
+    width:100px;
+}
+.logo-icon{
+    display:flex;
+    justify-content:center;
+    padding-top:10px;
+}
+.navigation-icon img{
+    width:30px;
+}
+.navigation-button{
+    display:flex;
+    border-radius:12px;
+    flex-direction:column;
+    align-items:center;
+    text-decoration:none;
+    color:black;
+}
+.navigations{
+    display:flex;
+    flex-direction:column;
+    gap:100px;
+}
+.nav-top{
+    display:flex;
+    flex-direction:column;
+    gap:30px;
+}
+.nav-bottom{
+    display:flex;
+    flex-direction:column;
+}
 
-        .navigation-button {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 15px 0;
-            padding: 8px 12px;
-            border-radius: 12px;  /* rounded corners */
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            cursor: pointer;
-        }
-
-        .navigation-button:hover {
+.navigation-button:hover {
             background-color: rgba(0, 0, 0, 0.05); /* light grey like Canva */
             transform: scale(1.05); /* subtle zoom effect */
         }
 
-        .profile{
-            display:flex;
-            padding-top:85px;
-        }
