@@ -3,10 +3,10 @@
     flex-direction:column;
     background-color:#edf6ef;
     width:180px;
-    position:fixed;
     border-radius:10px;
     gap:100px;
     height:100%;
+    position:fixed;
 }
 .logo-icon a img{
     width:100px;
@@ -42,8 +42,8 @@
     flex-direction:column;
 }
 
-.navigation-button:hover {
-            background-color: rgba(0, 0, 0, 0.05); /* light grey like Canva */
-            transform: scale(1.05); /* subtle zoom effect */
+.navigation-button:hover,.navigation-button:focus {
+            background-color: rgba(0, 0, 0, 0.05); 
+            transform: scale(1.05); 
         }
 
