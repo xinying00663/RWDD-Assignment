@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoGo Inbox</title>
+    <link rel="stylesheet" href="styles/general.css">
+    <link rel="stylesheet" href="styles/sidebar.css">
+    <link rel="stylesheet" href="styles/searchbar.css">
+    <style>
+        :root {
+            --accent: #2d8d60;
+            --accent-dark: #1f6b48;
+            --accent-soft: #e7f4ec;
+            --surface: #ffffff;
+            --muted: #6c7c74;
+            --shadow: 0 22px 45px rgba(45, 141, 96, 0.1);
+        }
+
+        main {
+            margin-left: 220px;
+            padding: 48px 48px 72px;
+            min-height: 100vh;
+            background: linear-gradient(160deg, #f5fbf6 0%, #ffffff 60%);
+            display: flex;
+            flex-direction: column;
+            gap: 36px;
+        }
+
+        .inbox-card {
+            background: var(--surface);
+            border-radius: 28px;
+            box-shadow: var(--shadow);
+            padding: 36px 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+        }
+
+        .inbox-topbar {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .view-toggle {
+            display: inline-flex;
+            border-radius: 999px;
+            padding: 4px;
+            background: var(--accent-soft);
+            box-shadow: inset 0 0 0 1px rgba(45, 141, 96, 0.18);
+            gap: 4px;
+        }
+
+        .view-toggle button {
+            border: none;
+            border-radius: 999px;
+            padding: 8px 18px;
+            font-weight: 600;
+            background: transparent;
+            color: var(--accent-dark);
+            cursor: pointer;
+            transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .view-toggle button.active {
+            background: #214235;
+            color: #fff;
+            box-shadow: 0 10px 18px rgba(33, 66, 53, 0.25);
+        }
+
+
+        .conversation-list {
+            background: rgba(45, 141, 96, 0.08);
+            border-radius: 22px;
+            padding: 24px 22px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            box-shadow: inset 0 0 0 1px rgba(45, 141, 96, 0.08);
+        }
+
+        .list-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .list-header h2 {
+            font-size: 1.15rem;
+            color: #214235;
+        }
+
+        .filter-pills {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-pills button {
+            border: none;
+            border-radius: 999px;
+            padding: 8px 16px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.7);
+            color: #214235;
+            cursor: pointer;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .filter-pills button.active,
+        .filter-pills button:hover {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .conversation-items {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .conversation-item {
+            background: rgba(255, 255, 255, 0.72);
+            border-radius: 18px;
+            padding: 14px 16px;
+            display: flex;
+            flex-direction: column;
+            column-gap: 12px;
+            row-gap: 4px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .conversation-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 28px rgba(45, 141, 96, 0.18);
+        }
+
+        .conversation-item.active {
+            box-shadow: 0 18px 32px rgba(33, 66, 53, 0.22);
+            border: 1px solid rgba(33, 66, 53, 0.18);
+        }
+
+        .avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, rgba(45, 141, 96, 0.16), rgba(45, 141, 96, 0.34));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-dark);
+            font-weight: 700;
+        }
+
+        .conversation-item strong {
+            color: #214235;
+        }
+
+        .conversation-item p {
+            grid-column: 2;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .conversation-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            grid-column: 2;
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        .status-pill {
+            padding: 2px 10px;
+            border-radius: 999px;
+            font-weight: 600;
+        }
+
+        .status-pill.new {
+            background: rgba(45, 141, 96, 0.16);
+            color: var(--accent-dark);
+        }
+
+        .status-pill.waiting {
+            background: rgba(238, 186, 90, 0.3);
+            color: #935f12;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="landingPage.html">
+                <img src="Pictures/logo.jpeg" alt="EcoGo Logo">
+            </a>
+        </div>
+        <nav>
+            <a href="homePage.html">
+                <img src="Pictures/sidebar/recycle-sign.png" alt="Home Icon">
+                <p>Recycling Program</p>
+            </a>
+            <a href="energyPage.html">
+                <img src="Pictures/sidebar/lamp.png" alt="Energy Icon">
+                <p>Energy Conservation Tips</p>
+            </a>
+            <a href="communityPage.html">
+                <img src="Pictures/sidebar/garden.png" alt="Community Icon">
+                <p>Gardening Community</p>
+            </a>
+            <a href="#">
+                <img src="Pictures/sidebar/swap.png" alt="Swap Icon">
+                <p>Swap Items</p>
+            </a>
+            <a href="inboxPage.html" class="active">
+                <img src="Pictures/sidebar/inbox.png" alt="Inbox Icon">
+                <p>Inbox</p>
+            </a>
+        </nav>
+        <div class="profile">
+            <a href="userProfile.html">
+                <img src="Pictures/sidebar/user.png" alt="Profile Icon">
+                <p>User Profile</p>
+            </a>
+        </div>
+    </header>
+    <main>
+        <section class="inbox-card">
+            <div class="inbox-topbar">
+                <div class="search-container">
+                    <label for="message-search">Search messages</label>
+                    <input id="message-search" type="text" placeholder="Search by project, name, or keyword...">
+                </div>
+                <div class="view-toggle">
+                    <button class="active">Threads</button>
+                    <button>Archive</button>
+                </div>
+            </div>
+
+            
+                <aside class="conversation-list">
+                    <div class="list-header">
+                        <h2>Threads</h2>
+                        <span class="status-pill new">3 new</span>
+                    </div>
+                    <div class="filter-pills">
+                        <button class="active">All</button>
+                        <button>Messages</button>
+                        <button>Notifications</button>
+                    </div>
+                    <div class="conversation-items">
+                        <div class="conversation-item active">
+                            <div class="avatar">PR</div>
+                            <strong>Pocket Park Revival</strong>
+                            <div class="conversation-meta">
+                                <span>Just now</span>
+                                <span class="status-pill new">new</span>
+                            </div>
+                            <p>Need extra gloves for Saturday? Let us know headcount by Friday.</p>
+                        </div>
+                        <div class="conversation-item">
+                            <div class="avatar">HL</div>
+                            <strong>Herb Lab Volunteers</strong>
+                            <div class="conversation-meta">
+                                <span>2h ago</span>
+                                <span class="status-pill waiting">waiting</span>
+                            </div>
+                            <p>Weekly produce drop confirmed. Can you help document yields?</p>
+                        </div>
+                        <div class="conversation-item">
+                            <div class="avatar">SW</div>
+                            <strong>Swap HQ</strong>
+                            <div class="conversation-meta">
+                                <span>Yesterday</span>
+                            </div>
+                            <p>Lisa accepted your blender listing. Arrange meetup?</p>
+                        </div>
+                        <div class="conversation-item">
+                            <div class="avatar">CC</div>
+                            <strong>Compost Cooperative</strong>
+                            <div class="conversation-meta">
+                                <span>Mon</span>
+                            </div>
+                            <p>Reminder: bring brown materials for this weekend's turn.</p>
+                        </div>
+                    </div>
+                </aside>
+        </section>
+    </main>
+</body>
+</html>

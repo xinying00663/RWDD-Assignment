@@ -219,13 +219,13 @@
                 <img src="Pictures/sidebar/swap.png" alt="Home Icon">
                 <p>Swap Items</p>
             </a>
-            <a href="#">
+            <a href="inboxPage.html">
                 <img src="Pictures/sidebar/inbox.png" alt="Home Icon">
                 <p>Inbox</p>
             </a>
         </nav>
         <div class="profile">
-            <a href="#">
+            <a href="userProfile.html">
                 <img src="Pictures/sidebar/user.png" alt="Home Icon">
                 <p>User Profile</p>
             </a>
@@ -246,34 +246,27 @@
                     <label for="searchInput">Search places</label>
                     <input id="searchInput" class="search-box" type="text" placeholder="Search programmes, gardens, or addresses...">
                 </div>
-                <div class="map-wrapper">
-                    <div id="map"></div>
-                </div>
-                <div class="project-highlights">
-                    <article class="highlight-card">
-                        <h3>Rooftop Herb Lab</h3>
-                        <p>Weekly harvest and sharing on Thursday evenings with a pantry donation corner.</p>
-                        <ul>
-                            <li>Location: Solaris Dutamas</li>
-                            <li>Volunteers needed: 6</li>
-                        </ul>
-                    </article>
-                    <article class="highlight-card">
-                        <h3>Pocket Park Revival</h3>
-                        <p>Adopt a neglected lot and transform it with native pollinator plants.</p>
-                        <ul>
-                            <li>Location: Taman Desa</li>
-                            <li>Next workday: 24 August</li>
-                        </ul>
-                    </article>
-                    <article class="highlight-card">
-                        <h3>Compost Cooperative</h3>
-                        <p>Neighbourhood food scrap drop-off and monthly compost turn with training.</p>
-                        <ul>
-                            <li>Location: Bangsar South</li>
-                            <li>Bring: kitchen scraps &amp; browns</li>
-                        </ul>
-                    </article>
+                <div class="cards-container">
+                    <div class="card">
+                        <h3>Rainwater harvesting basics</h3>
+                        <p>Capture rain with food-grade barrels connected to your gutters and cut water usage by up to 40%.</p>
+                        <a href="#">Download the setup guide -></a>
+                    </div>
+                    <div class="card">
+                        <h3>Soil health boosters</h3>
+                        <p>Layer coffee grounds, dry leaves, and shredded cardboard to nourish raised beds naturally.</p>
+                        <a href="#">See the carbon-nitrogen chart -></a>
+                    </div>
+                    <div class="card">
+                        <h3>Community harvest table</h3>
+                        <p>Plan a monthly swap where neighbours trade herbs, seedlings, and extra produce.</p>
+                        <a href="#">Get the event checklist -></a>
+                    </div>
+                    <div class="card">
+                        <h3>Starter crops for shade</h3>
+                        <p>Bok choy, Brazilian spinach, and mint thrive on balconies with only a few hours of sunlight.</p>
+                        <a href="#">Browse planting calendar -></a>
+                    </div>
                 </div>
             </div>
             <div id="tips" class="tab-content">
@@ -306,7 +299,6 @@
             </div>
         </section>
     </main>
-    <script src="script/googleMap.js"></script>
     <script>
         function showTab(button, tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
@@ -323,6 +315,7 @@
             }
         }
     </script>
-    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAX23VSgysvFGdvQRAadSkUkhIvF9-B6Mo&libraries=places&callback=initMap"></script>
 </body>
 </html>
+
+
