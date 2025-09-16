@@ -11,32 +11,3 @@ body {
 .logo img {
     height: 50px;
 }
-:root {
-            --accent: #2d8d60;
-            --accent-dark: #1f6b48;
-            --accent-soft: #e7f4ec;
-            --surface: #ffffff;
-            --muted: #6c7c74;
-            --shadow: 0 22px 45px rgba(45, 141, 96, 0.1);
-        }
-
-        main {
-            margin-left: 220px;
-            padding: 48px 48px 72px;
-            min-height: 100vh;
-            background: linear-gradient(160deg, #f5fbf6 0%, #ffffff 60%);
-            display: flex;
-            flex-direction: column;
-            gap: 48px;
-        }
-
-       
-        .tabs-card {
-            background: var(--surface);
-            border-radius: 28px;
-            box-shadow: var(--shadow);
-            padding: 40px 44px 48px;
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-        }
