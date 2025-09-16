@@ -4,125 +4,144 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EcoGo</title>
-    <link rel="stylesheet" href="styles\landingpage.css">
-    <link rel="stylesheet" href="styles\general.css">
+    <link rel="stylesheet" href="styles/landingPage.css">
+    <link rel="stylesheet" href="styles/general.css">
 </head>
 <body>
-    <!-- Upper Part -->
-    <div class="upper-menu">
-    <!-- Logo -->
-    <a href="">
-    <img class="logo" src="Pictures/icon.jpeg" alt="EcoGo logo">
-    </a>
+    <!-- HEADER -->
+    <header>
+        <div class="logo">
+            <a href="landingPage.html">
+                <img src="Pictures/logo.jpeg" alt="EcoGo Logo">
+            </a>
+        </div>
+        <nav>
+            <a href="#about-us">About Us</a>
+            <a href="#faq">FAQ</a>
+            <a href="#contact-us">Contact Us</a>
+        </nav>
+        <div class="auth-buttons">
+            <a href="login.html">Login</a>
+        </div>
+    </header>
 
-    
-  <!-- Navigation Links -->
-  <div class="right-side-navigation" id="nav-links">
-    <nav class="menu">
-      <a href="#about">About Us</a>
-      <a href="#faq">FAQ</a>
-      <a href="#contact">Contact Us</a>
-    </nav>
-    <button class="right-side-navigation-button">Sign Up</button>
-    <button class="right-side-navigation-button">Login</button>
-  </div>
-</div>
+    <!-- MAIN CONTENT -->
+    <main>
+        <section id="about-us" class="about-us">
+            <h1>Welcome to EcoGo!</h1>
+            <p>Join Us in building a greener future.</p>
+            <a href="#">Get Started</a>
+        </section>
 
+        <section class="info-section">
+            <div class="text">
+            <h2>Recycling Programs</h2>
+            <p>Discover local recycling events and drop-off locations.</p>
+            <a href="#">Learn More</a>
+            </div>
+            <div class="image">
+                <img src="Pictures/landingPage/recycling-pic.jpg" alt="Recycling">
+            </div>
+        </section>
 
-    <!-- Content -->
-     <div class="big-content">
-        <p class="welcome-word">Welcome to Eco GO</p>
-     </div>
+        <section class="info-section reverse">
+            <div class="text">
+            <h2>Energy Saving Tips</h2>
+            <p>Learn how to reduce energy use at home and save money.</p>
+            <a href="#">Learn More</a>
+            </div>
+            <div class="image">
+                <img src="Pictures/landingPage/save-energy-pic.jpg" alt="Recycling">
+            </div>
+        </section>
 
-     <section>
-    <div class="content" id="about">
-      <img src="Pictures/recycling-pic.jpg" alt="Recycling">
-      <div class="text">
-        <h2>Recycling</h2>
-        <p>Recycling reduces waste and saves resources. Every small action helps create a cleaner future.</p>
-      </div>
-    </div>
-  </section>
+        <section class="info-section">
+            <div class="text">
+            <h2>Gardening Community</h2>
+            <p>Connect with other green thumbs, share advice, and grow together.</p>
+            <a href="#">Learn More</a>
+            </div>
+            <div class="image">
+                <img src="Pictures/landingPage/gardening-pic.jpg" alt="Gardening">
+            </div>
+        </section>
 
-  <section>
-    <div class="content">
-      <img src="Pictures/gardening-pic.jpg" alt="Gardening">
-      <div class="text">
-        <h2>Gardening</h2>
-        <p>Gardening brings us closer to nature while reducing carbon footprints and providing fresh food.</p>
-      </div>
-    </div>
-  </section>
+        <section class="info-section reverse">
+            <div class="text">
+            <h2>Swap Items</h2>
+            <p>Give unused items a second life — swap with the community!</p>
+            <a href="#">Learn More</a>
+            </div>
+            <div class="image">
+                <img src="Pictures/landingPage/swap-item-pic.jpg" alt="Swap Items">
+            </div>
+        </section>
 
-  <section>
-    <div class="content">
-      <img src="Pictures/conservation-pic.jpg" alt="Conservation">
-      <div class="text">
-        <h2>Conservation</h2>
-        <p>Saving energy and resources today ensures a sustainable tomorrow for future generations.</p>
-      </div>
-    </div>
-  </section>
+        <section id="faq" class="faq">
+            <h2>FAQ</h2>
+            <details>
+                <summary>How can I start recycling?</summary>
+                <p>Begin by separating paper, plastics, and glass at home. Check your local collection rules.</p>
+            </details>
+            <details>
+                <summary>What are some easy energy-saving tips?</summary>
+                <p>Use LED bulbs, unplug devices when not in use, and consider energy-efficient appliances.</p>
+            </details>
+            <details>
+                <summary>Do I need a big garden to grow food?</summary>
+                <p>No, you can grow food in small spaces using containers or vertical gardening techniques.</p>
+        </section>
 
-  <!-- FAQ Section -->
-   <section id="faq">
-    <div class="content">
-      <div class="text">
-        <h2>FAQ</h2>
-        <details>
-          <summary>What is EcoGo?</summary>
-          <p>EcoGo is a simple initiative to inspire small, sustainable actions in daily life.</p>
-        </details>
-        <details>
-          <summary>How can I start recycling?</summary>
-          <p>Begin by separating paper, plastics, and glass at home. Check your local collection rules.</p>
-        </details>
-        <details>
-          <summary>Do I need a big garden to grow food?</summary>
-          <p>No. Start with herbs or small vegetables in containers on a balcony or windowsill.</p>
-        </details>
-      </div>
-    </div>
-  </section>
+        <section id="contact-us" class="contact-us">
+            <h2>Contact Us</h2>
+            <form class="contact-form" action="#" method="post">
+            <div class="form-row">
+                <label for="name">Name</label>
+                <input id="name" name="name" type="text" placeholder="Your name" required>
+            </div>
+            <div class="form-row">
+                <label for="email">Email</label>
+                <input id="email" name="email" type="email" placeholder="you@example.com" required>
+            </div>
+            <div class="form-row">
+                <label for="message">Message</label>
+                <textarea id="message" name="message" rows="4" placeholder="How can we help?" required></textarea>
+            </div>
+            <button class="right-side-navigation-button" type="submit">Send</button>
+            </form>
+        </section>
+    </main>
 
-  <!-- Contact Section -->
-  <section id="contact">
-    <div class="content">
-      <div class="text">
-        <h2>Contact Us</h2>
-        <form class="contact-form" action="#" method="post">
-          <div class="form-row">
-            <label for="name">Name</label>
-            <input id="name" name="name" type="text" placeholder="Your name" required>
-          </div>
-          <div class="form-row">
-            <label for="email">Email</label>
-            <input id="email" name="email" type="email" placeholder="you@example.com" required>
-          </div>
-          <div class="form-row">
-            <label for="message">Message</label>
-            <textarea id="message" name="message" rows="4" placeholder="How can we help?" required></textarea>
-          </div>
-          <button class="right-side-navigation-button" type="submit">Send</button>
-        </form>
-      </div>
-    </div>
-  </section>
+    <footer class="site-footer">
+        <div class="footer-inner">
+        <span>© <span id="year"></span> EcoGo</span>
+        <a href="#about-us">About</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contact-us">Contact</a>
+        </div>
+    </footer>
+    <script>
+const sections = document.querySelectorAll("section[id]");
+const navLinks = document.querySelectorAll("nav a");
 
-  <!-- Footer -->
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <span>© <span id="year"></span> EcoGo</span>
-      <a href="#about">About</a>
-      <a href="#faq">FAQ</a>
-      <a href="#contact">Contact</a>
-    </div>
-  </footer>
+window.addEventListener("scroll", () => {
+  let current = "";
 
-<script src="scripts/landingpage.js"></script>
+  sections.forEach(section => {
+    const sectionTop = section.offsetTop - 120; // adjust for fixed header
+    const sectionHeight = section.offsetHeight;
+    if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
+      current = section.getAttribute("id");
+    }
+  });
 
-
-
-
+  navLinks.forEach(link => {
+    link.classList.remove("active");
+    if (link.getAttribute("href") === "#" + current) {
+      link.classList.add("active");
+    }
+  });
+});
+</script>
 </body>
 </html>

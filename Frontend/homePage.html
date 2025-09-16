@@ -5,44 +5,235 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="styles/general.css">
-    <link rel="stylesheet" href="styles/homepage.css">
+    <link rel="stylesheet" href="styles/sidebar.css">
     <style>
-        .layout{
-            display:flex;
-            min-height:100vh;
-            flex:1 auto;
+        :root {
+            --accent: #2d8d60;
+            --accent-dark: #1f6b48;
+            --accent-soft: #e7f4ec;
+            --surface: #ffffff;
+            --muted: #6c7c74;
+            --shadow: 0 22px 45px rgba(45, 141, 96, 0.1);
         }
-        .content{
-            flex:1;
-            display:flex;
-            justify-content:center;
-            align-items:center;
-            background-color:#f5f5f5;
+
+        main {
+            margin-left: 220px;
+            padding: 48px 48px 72px;
+            min-height: 100vh;
+            background: linear-gradient(160deg, #f5fbf6 0%, #ffffff 60%);
+            display: flex;
+            flex-direction: column;
+            gap: 48px;
         }
-        .home-image{
-            display:flex;
-            width:80%;
-            height:auto;
-            border-radius:15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+       
+        .tabs-card {
+            background: var(--surface);
+            border-radius: 28px;
+            box-shadow: var(--shadow);
+            padding: 40px 44px 48px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
         }
-        /* .sub-content{
-            display:flex;
-            flex-direction:column;
-        } */
+
+        .section-header h2 {
+            font-size: 2rem;
+            color: #214235;
+        }
+
+        .section-header p {
+            color: var(--muted);
+            margin-top: 8px;
+            line-height: 1.6;
+        }
+
+
+        .search-container {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 18px;
+            border-radius: 999px;
+            background: var(--accent-soft);
+            box-shadow: inset 0 0 0 1px rgba(45, 141, 96, 0.18);
+        }
+
+        .search-container label {
+            font-weight: 600;
+            color: var(--accent-dark);
+            font-size: 0.9rem;
+        }
+
+        .search-container input {
+            flex: 1 1 220px;
+            border: none;
+            background: transparent;
+            font-size: 1rem;
+            color: #214235;
+            outline: none;
+        }
+
+        .map-wrapper {
+            display: flex;
+            justify-content: center;
+        }
+
+        #map {
+            width: min(100%, 720px);
+            height: 420px;
+            border-radius: 26px;
+            border: 1px solid rgba(26, 49, 38, 0.08);
+            box-shadow: 0 22px 38px rgba(26, 49, 38, 0.22);
+        }
+
+        .project-highlights {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .highlight-card {
+            background: rgba(45, 141, 96, 0.08);
+            border-radius: 20px;
+            padding: 20px 22px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .highlight-card h3 {
+            color: #214235;
+            font-size: 1.15rem;
+        }
+
+        .highlight-card p {
+            color: var(--muted);
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .highlight-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .highlight-card ul li {
+            position: relative;
+            padding-left: 18px;
+            color: #2f5848;
+            font-size: 0.95rem;
+        }
+
+        .highlight-card ul li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent);
+        }
     </style>
 </head>
 <body>
-    <div class="layout">
-    <div id="sidebar"></div>
-    <div class="content">
-        <img class="home-image" src="Pictures/homepage/map-pic.jpg" alt="Home Image">
-        <div class="sub-content">
-            <img class="sub-home-image" src="Pictures\homepage\inbox.png" alt="Home Image">
-            <img class="sub-home-image" src="Pictures\homepage\inbox.png" alt="Home Image">
+    <header>
+        <div class="logo">
+            <a href="landingPage.html">
+                <img src="Pictures/logo.jpeg" alt="EcoGo Logo">
+            </a>
         </div>
-    </div>
-    </div>
-    <script src="scripts/sidebar.js"></script>
+        <nav>
+            <a href="homePage.html" class="active">
+                <img src="Pictures/sidebar/recycle-sign.png" alt="Home Icon">
+                <p>Recycling Program</p>
+            </a>
+            <a href="energyPage.html">
+                <img src="Pictures/sidebar/lamp.png" alt="Home Icon">
+                <p>Energy Conservation Tips</p>
+            </a>
+            <a href="communityPage.html">
+                <img src="Pictures/sidebar/garden.png" alt="Home Icon">
+                <p>Gardening Community</p>
+            </a>
+            <a href="#">
+                <img src="Pictures/sidebar/swap.png" alt="Home Icon">
+                <p>Swap Items</p>
+            </a>
+            <a href="#">
+                <img src="Pictures/sidebar/inbox.png" alt="Home Icon">
+                <p>Inbox</p>
+            </a>
+        </nav>
+        <div class="profile">
+            <a href="#">
+                <img src="Pictures/sidebar/user.png" alt="Home Icon">
+                <p>User Profile</p>
+            </a>
+        </div>
+    </header>
+    <main>
+    <section class="tabs-card">
+            <div class="section-header">
+                <h2>Community gardens near you</h2>
+                <p>Use the interactive map to see ongoing projects, connect with coordinators, and find the best time to volunteer. Switch to tips to pick up quick wins for your own plot.</p>
+            </div>
+                <div class="search-container">
+                    <label for="searchInput">Search places</label>
+                    <input id="searchInput" class="search-box" type="text" placeholder="Search programmes, gardens, or addresses...">
+                </div>
+                <div class="map-wrapper">
+                    <div id="map"></div>
+                </div>
+                <div class="section-header">
+                    <h2>Project highlights</h2>
+                <div class="project-highlights">
+                    <article class="highlight-card">
+                        <h3>Rooftop Herb Lab</h3>
+                        <p>Weekly harvest and sharing on Thursday evenings with a pantry donation corner.</p>
+                        <ul>
+                            <li>Location: Solaris Dutamas</li>
+                            <li>Volunteers needed: 6</li>
+                        </ul>
+                    </article>
+                    <article class="highlight-card">
+                        <h3>Pocket Park Revival</h3>
+                        <p>Adopt a neglected lot and transform it with native pollinator plants.</p>
+                        <ul>
+                            <li>Location: Taman Desa</li>
+                            <li>Next workday: 24 August</li>
+                        </ul>
+                    </article>
+                    <article class="highlight-card">
+                        <h3>Compost Cooperative</h3>
+                        <p>Neighbourhood food scrap drop-off and monthly compost turn with training.</p>
+                        <ul>
+                            <li>Location: Bangsar South</li>
+                            <li>Bring: kitchen scraps &amp; browns</li>
+                        </ul>
+                    </article>
+                    <article class="highlight-card">
+                        <h3>Pocket Park Revival</h3>
+                        <p>Adopt a neglected lot and transform it with native pollinator plants.</p>
+                        <ul>
+                            <li>Location: Taman Desa</li>
+                            <li>Next workday: 24 August</li>
+                        </ul>
+                    </article>
+                </div>
+                </div>
+    </main>
+    <script src="script/googleMap.js"></script>
+
+  <!-- Google Maps API -->
+  <script async
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAX23VSgysvFGdvQRAadSkUkhIvF9-B6Mo&libraries=places&callback=initMap">
+  </script>
 </body>
 </html>
