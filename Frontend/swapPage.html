@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoGo Swap Items</title>
+        <link rel="stylesheet" href="styles/general.css">
+    <link rel="stylesheet" href="styles/common.css">    
+    <link rel="stylesheet" href="styles/sidebar.css">
+    <link rel="stylesheet" href="styles/searchbar.css">
+    <link rel="stylesheet" href="styles/swapPage.css">
+    <link rel="stylesheet" href="styles/addButton.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="landingPage.html">
+                <img src="Pictures/logo.jpeg" alt="EcoGo Logo">
+            </a>
+        </div>
+        <nav>
+            <a href="homePage.html" class="active">
+                <img src="Pictures/sidebar/recycle-sign.png" alt="Home Icon">
+                <p>Recycling Program</p>
+            </a>
+            <a href="energyPage.html">
+                <img src="Pictures/sidebar/lamp.png" alt="Home Icon">
+                <p>Energy Conservation Tips</p>
+            </a>
+            <a href="communityPage.html">
+                <img src="Pictures/sidebar/garden.png" alt="Home Icon">
+                <p>Gardening Community</p>
+            </a>
+            <a href="swapPage.html">
+                <img src="Pictures/sidebar/swap.png" alt="Home Icon">
+                <p>Swap Items</p>
+            </a>
+            <a href="inboxPage.html">
+                <img src="Pictures/sidebar/inbox.png" alt="Home Icon">
+                <p>Inbox</p>
+            </a>
+        </nav>
+        <div class="profile">
+            <a href="userProfile.html">
+                <img src="Pictures/sidebar/user.png" alt="Home Icon">
+                <p>User Profile</p>
+            </a>
+        </div>
+    </header>
+    <main>
+        <section class="tabs-card">
+            <div class="section-header">
+                <h2>Swap items from your neighbours</h2>
+                <p>Browse the latest sustainable finds and trade for what you need without creating extra waste.</p>
+            </div>
+            <div class="swap-controls" role="region" aria-label="Sort swap items">
+                <label for="categoryFilter">Sort by category</label>
+                <select id="categoryFilter">
+                    <option value="all">Original order</option>
+                    <option value="home-grown">Home-grown first</option>
+                    <option value="eco-friendly">Eco-friendly first</option>
+                </select>
+            </div>
+            <div class="cards-container" id="swapItems">
+                <article class="card" data-category="home-grown">
+                    <div class="card-image">
+                        <img src="Pictures/landingPage/gardening-pic.jpg" alt="Balcony herb starter kit">
+                    </div>
+                    <div class="card-body">
+                        <span class="card-tag">Home-grown</span>
+                        <h3>Balcony Herb Starter Kit</h3>
+                        <p>Six organic basil and mint cuttings with compostable pots, rooted and ready for small spaces.</p>
+                        <a href="#">Message to swap -></a>
+                    </div>
+                </article>
+                <article class="card" data-category="eco-friendly">
+                    <div class="card-image">
+                        <img src="Pictures/landingPage/recycling-pic.jpg" alt="Reusable produce bags">
+                    </div>
+                    <div class="card-body">
+                        <span class="card-tag">Eco-friendly</span>
+                        <h3>Reusable Produce Bags</h3>
+                        <p>Set of eight mesh produce bags sewn from upcycled cotton curtains, freshly laundered.</p>
+                        <a href="#">Message to swap -></a>
+                    </div>
+                </article>
+                <article class="card" data-category="home-grown">
+                    <div class="card-image">
+                        <img src="Pictures/landingPage/swap-item-pic.jpg" alt="Compost worms starter colony">
+                    </div>
+                    <div class="card-body">
+                        <span class="card-tag">Home-grown</span>
+                        <h3>Compost Worm Starter Colony</h3>
+                        <p>Pint of red wigglers with bedding to kick-start a balcony vermicomposting bin.</p>
+                        <a href="#">Message to swap -></a>
+                    </div>
+                </article>
+                <article class="card" data-category="eco-friendly">
+                    <div class="card-image">
+                        <img src="Pictures/landingPage/save-energy-pic.jpg" alt="Upcycled glass storage jars">
+                    </div>
+                    <div class="card-body">
+                        <span class="card-tag">Eco-friendly</span>
+                        <h3>Upcycled Glass Storage Jars</h3>
+                        <p>Five airtight jars with bamboo lids, perfect for refilling dry goods at the bulk store.</p>
+                        <a href="#">Message to swap -></a>
+                    </div>
+                </article>
+            </div>
+        </section>
+        <button class="add-button">+</button>
+    </main>
+    <script>
+        (function () {
+            const filter = document.getElementById('categoryFilter');
+            const container = document.getElementById('swapItems');
+            if (!filter || !container) {
+                return;
+            }
+
+            const originalCards = Array.from(container.querySelectorAll('.card')).map((card, index) => ({
+                card,
+                originalIndex: index
+            }));
+
+            function sortByCategory(category) {
+                const entries = [...originalCards];
+                if (category === 'home-grown' || category === 'eco-friendly') {
+                    const targetCategory = category;
+                    entries.sort((a, b) => {
+                        const aMatch = a.card.dataset.category === targetCategory ? 0 : 1;
+                        const bMatch = b.card.dataset.category === targetCategory ? 0 : 1;
+                        if (aMatch !== bMatch) {
+                            return aMatch - bMatch;
+                        }
+                        return a.originalIndex - b.originalIndex;
+                    });
+                } else {
+                    entries.sort((a, b) => a.originalIndex - b.originalIndex);
+                }
+
+                container.innerHTML = '';
+                entries.forEach(({ card }) => container.appendChild(card));
+            }
+
+            filter.addEventListener('change', (event) => {
+                sortByCategory(event.target.value);
+            });
+        })();
+    </script>
+</body>
+</html>
