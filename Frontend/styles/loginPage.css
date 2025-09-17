@@ -1,0 +1,79 @@
+body { 
+      font-family: system-ui, Arial; 
+      display:flex; 
+      align-items:center; 
+      justify-content:center; 
+      min-height:100vh; 
+      background:#f3f6f4; 
+      margin:0; 
+    }
+    .card { 
+      background:#fff; 
+      padding:28px; 
+      border-radius:12px; 
+      box-shadow:0 10px 30px rgba(0, 0, 0, 0.08); 
+      width:360px; 
+    }
+    .card h2{
+      text-align:center;
+    }
+    label { 
+      display:block; 
+      margin-top:12px; 
+      font-weight:600; 
+      color:#234; 
+    }
+    input { 
+      width:100%; 
+      padding:10px 12px; 
+      margin-top:8px; 
+      border-radius:8px; 
+      border:1px solid #ddd; 
+      box-sizing:border-box; 
+    }
+    button { 
+      margin-top:14px; 
+      width:100%; 
+      padding:10px; 
+      border-radius:10px; 
+      border:0; 
+      cursor:pointer; 
+      font-weight:700; 
+    }
+    .primary { 
+      background:#135d26; 
+      color:#fff; 
+    }
+    .google-btn { 
+      display:flex; 
+      gap:10px; 
+      align-items:center; 
+      justify-content:center; 
+      background:#fff; 
+      border:1px solid #ddd; 
+      color:#222; 
+    }
+    .small { 
+      font-size:0.9rem; 
+      color:#666; 
+      margin-top:8px; 
+      text-align:center;
+     }
+    a { 
+      color:#2d8d60; 
+      text-decoration:none; 
+      font-weight:600; 
+    }
+    .row { 
+      display:flex; 
+      gap:8px; 
+      justify-content:space-between; 
+      align-items:center; 
+      margin-top:8px; 
+    }
+    #msg { 
+      margin-top:10px; 
+      font-size:0.9rem; 
+      color:#b02; 
+      min-height:18px; 
+    }

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="styles/loginPage.css">
+</head>
+<body>
+    <div class="card">
+    <h2>Sign in</h2>
+
+    <form id="loginForm">
+      <label for="email">Email</label>
+      <input id="email" type="email" required />
+
+      <label for="password">Password</label>
+      <input id="password" type="password" required />
+
+      <button class="primary" type="submit">Sign in</button>
+    </form>
+
+    <button id="googleSignIn" class="google-btn" style="margin-top:10px;">
+      <img src="Pictures/loginPage/google.png" alt="" width="18" />
+      Sign in with Google
+    </button>
+
+    <div class="row">
+      <a href="#" id="forgotLink">Forgot password?</a>
+      <a href="#" id="signupLink">Create account</a>
+    </div>
+
+    <div id="msg" aria-live="polite"></div>
+    <div class="small">By signing in you agree to our terms.</div>
+  </div>
+</body>
+
+</html>
