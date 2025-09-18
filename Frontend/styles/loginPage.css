@@ -77,3 +77,12 @@ body {
       color:#b02; 
       min-height:18px; 
     }
+
+.secondary { 
+      background:#f0f4f1; 
+      color:#214235; 
+      border:1px solid #c8d5cc; 
+    }
+.secondary:hover { 
+      background:#e2ebe5; 
+    }

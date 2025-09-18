@@ -21,6 +21,7 @@
     border: none;
     border-radius: 999px;
     padding: 10px 42px 10px 18px;
+    min-width: 220px;
     font-size: 0.95rem;
     font-weight: 600;
     color: #214235;
@@ -42,8 +43,17 @@
 
 .media-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 320px));
     gap: 24px;
+    justify-content: flex-start;
+    align-content: flex-start;
+}
+
+@media (max-width: 720px) {
+    .media-grid {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        justify-content: stretch;
+    }
 }
 
 .media-card {
@@ -52,6 +62,9 @@
     overflow: hidden;
     box-shadow: inset 0 0 0 1px rgba(33, 66, 53, 0.05);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }
 
 .media-card:hover {
@@ -98,6 +111,7 @@
     flex-direction: column;
     gap: 10px;
     padding: 18px;
+    flex: 1 1 auto;
 }
 
 .card-tag {
@@ -121,6 +135,10 @@
     color: var(--muted, #6c7c74);
     line-height: 1.5;
     font-size: 0.95rem;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
 }
 
 .card-meta {
@@ -135,6 +153,9 @@
 
 .card-meta .uploader {
     font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .card-meta .duration {

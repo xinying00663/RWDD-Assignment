@@ -9,43 +9,28 @@
     line-height: 1.6;
 }
 
-.media-grid .media-card[data-category="video"] .media-indicator {
+.media-grid .media-card[data-category="projects"] .media-indicator {
+    background: rgba(45, 141, 96, 0.88);
+}
+
+.media-grid .media-card[data-category="tips"] .media-indicator {
     background: rgba(26, 83, 77, 0.85);
 }
 
-.media-grid .media-card[data-category="gallery"] .media-indicator {
-    background: rgba(45, 141, 96, 0.82);
+.media-grid .media-card[data-category="projects"] .card-tag {
+    background: rgba(45, 141, 96, 0.2);
+    color: #145237;
 }
 
-.media-grid .media-card[data-category="swap"] .media-indicator {
-    background: rgba(238, 186, 90, 0.92);
-    color: #3f2a0a;
+.media-grid .media-card[data-category="tips"] .card-tag {
+    background: rgba(26, 83, 77, 0.18);
+    color: #0d3a31;
 }
 
-.media-grid .uploader {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.media-grid .uploader::before {
+.media-grid .card-meta .uploader::before {
     content: "";
     width: 24px;
     height: 24px;
     border-radius: 50%;
     background: linear-gradient(135deg, rgba(45, 141, 96, 0.2), rgba(45, 141, 96, 0.45));
-}
-
-.media-grid .media-card[data-category="swap"] .card-tag {
-    background: rgba(238, 186, 90, 0.26);
-    color: #6d3d05;
-}
-
-.media-grid .media-card[data-category="gallery"] .card-tag {
-    background: rgba(45, 141, 96, 0.18);
-}
-
-.media-grid .media-card[data-category="video"] .card-tag {
-    background: rgba(33, 66, 53, 0.22);
-    color: #fff;
 }
