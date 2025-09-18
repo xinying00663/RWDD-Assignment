@@ -1,21 +1,47 @@
-(function () {
-    const storageKey = "ecogoProfile";
+﻿(function () {
+    const storageKey = "ecogoUsers";
 
-    function readProfile() {
+    function defaultState() {
+        return { accounts: [], activeEmail: null };
+    }
+
+    function readState() {
         try {
             const raw = localStorage.getItem(storageKey);
-            return raw ? JSON.parse(raw) : {};
+            if (!raw) {
+                return defaultState();
+            }
+            const parsed = JSON.parse(raw);
+            if (!Array.isArray(parsed.accounts)) {
+                parsed.accounts = [];
+            }
+            if (typeof parsed.activeEmail !== "string") {
+                parsed.activeEmail = null;
+            }
+            return parsed;
         } catch (err) {
-            console.warn("Unable to parse profile data", err);
-            return {};
+            console.warn("Unable to parse stored state", err);
+            return defaultState();
         }
     }
 
-    function persistProfile(updates) {
-        const current = readProfile();
-        const merged = Object.assign({}, current, updates);
-        localStorage.setItem(storageKey, JSON.stringify(merged));
-        return merged;
+    function writeState(nextState) {
+        localStorage.setItem(storageKey, JSON.stringify(nextState));
+        return nextState;
+    }
+
+    function findAccount(state, email) {
+        return state.accounts.find((account) => account.email === email) || null;
+    }
+
+    function setText(node, text) {
+        if (node) {
+            node.textContent = text;
+        }
+    }
+
+    function clearText(node) {
+        setText(node, "");
     }
 
     function initialiseSignupForm() {
@@ -28,36 +54,51 @@
 
         form.addEventListener("submit", (event) => {
             event.preventDefault();
-            errorNode.textContent = "";
+            clearText(errorNode);
 
             if (!form.reportValidity()) {
                 return;
             }
 
+            const email = form.email.value.trim().toLowerCase();
             const password = form.password.value.trim();
             const confirmPassword = form.confirmPassword.value.trim();
             const termsAccepted = form.terms.checked;
 
             if (password !== confirmPassword) {
-                errorNode.textContent = "Passwords do not match.";
+                setText(errorNode, "Passwords do not match.");
                 return;
             }
 
             if (!termsAccepted) {
-                errorNode.textContent = "You must accept the community guidelines to continue.";
+                setText(errorNode, "You must accept the community guidelines to continue.");
                 return;
             }
 
-            const record = {
-                fullName: form.fullName.value.trim(),
-                city: form.city.value.trim(),
-                email: form.email.value.trim().toLowerCase(),
-                interest: form.interest.value,
-                createdAt: new Date().toISOString()
+            const state = readState();
+
+            if (findAccount(state, email)) {
+                setText(errorNode, "An account with this email already exists.");
+                return;
+            }
+
+            const account = {
+                email,
+                password,
+                createdAt: new Date().toISOString(),
+                profile: null
             };
 
-            persistProfile({ signUp: record });
-            window.location.href = "profileSetup.html";
+            state.accounts.push(account);
+            state.activeEmail = email;
+
+            try {
+                writeState(state);
+                window.location.href = "profileSetup.html";
+            } catch (err) {
+                console.error("Unable to save signup information", err);
+                setText(errorNode, "We couldn't save your details. Please try again.");
+            }
         });
     }
 
@@ -71,69 +112,66 @@
         const summaryName = document.getElementById("profileSummaryName");
         const summaryEmail = document.getElementById("profileSummaryEmail");
         const summaryCity = document.getElementById("profileSummaryCity");
-        const sideCity = document.getElementById("sideCityLabel");
 
-        const state = readProfile();
-        if (!state.signUp) {
+        const state = readState();
+        const activeEmail = state.activeEmail;
+
+        if (!activeEmail) {
             window.location.href = "signup.html";
             return;
         }
 
-        summaryName.textContent = state.signUp.fullName;
-        summaryEmail.textContent = state.signUp.email;
-        summaryCity.textContent = `Based in ${state.signUp.city}`;
-        sideCity.textContent = state.signUp.city;
+        const account = findAccount(state, activeEmail);
 
-        if (state.profile) {
-            form.householdSize.value = state.profile.householdSize || "";
-            form.dwelling.value = state.profile.dwelling || "";
-            const goals = new Set(state.profile.goals || []);
-            form.querySelectorAll("input[name='goals']").forEach((input) => {
-                input.checked = goals.has(input.value);
-            });
-            const contribution = state.profile.contribution || "";
-            if (contribution) {
-                const target = form.querySelector(`input[name='contribution'][value='${contribution}']`);
-                if (target) {
-                    target.checked = true;
-                }
-            }
-            form.skills.value = state.profile.skills || "";
-            form.energyAlerts.checked = Boolean(state.profile.energyAlerts);
+        if (!account) {
+            state.activeEmail = null;
+            writeState(state);
+            window.location.href = "signup.html";
+            return;
+        }
+
+        const existingProfile = account.profile || {};
+
+        setText(summaryEmail, account.email || "");
+        setText(summaryName, existingProfile.fullName || "Add your name below");
+        setText(summaryCity, existingProfile.city ? `Based in ${existingProfile.city}` : "Tell us where you are based");
+
+        if (existingProfile.fullName) {
+            form.fullName.value = existingProfile.fullName;
+        }
+
+        if (existingProfile.city) {
+            form.city.value = existingProfile.city;
+        }
+
+        if (typeof existingProfile.skills === "string") {
+            form.skills.value = existingProfile.skills;
         }
 
         form.addEventListener("submit", (event) => {
             event.preventDefault();
-            errorNode.textContent = "";
+            clearText(errorNode);
 
             if (!form.reportValidity()) {
                 return;
             }
 
-            const selectedGoals = Array.from(form.querySelectorAll("input[name='goals']:checked"), (input) => input.value);
-            if (selectedGoals.length === 0) {
-                errorNode.textContent = "Choose at least one goal so we can tailor your tips.";
-                return;
-            }
-
-            const contributionField = form.querySelector("input[name='contribution']:checked");
-            if (!contributionField) {
-                errorNode.textContent = "Select how you would like to contribute.";
-                return;
-            }
-
             const profileRecord = {
-                householdSize: form.householdSize.value,
-                dwelling: form.dwelling.value,
-                goals: selectedGoals,
-                contribution: contributionField.value,
+                fullName: form.fullName.value.trim(),
+                city: form.city.value.trim(),
                 skills: form.skills.value.trim(),
-                energyAlerts: form.energyAlerts.checked,
-                completedAt: new Date().toISOString()
+                updatedAt: new Date().toISOString()
             };
 
-            persistProfile({ profile: profileRecord });
-            window.location.href = "homePage.html";
+            account.profile = profileRecord;
+
+            try {
+                writeState(state);
+                window.location.href = "homePage.html";
+            } catch (err) {
+                console.error("Unable to save profile", err);
+                setText(errorNode, "We couldn't save your profile. Please try again.");
+            }
         });
     }
 
