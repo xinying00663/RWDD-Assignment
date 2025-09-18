@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Your EcoGo Profile</title>
+    <link rel="stylesheet" href="styles/auth.css">
+</head>
+<body class="auth-body">
+    <main class="auth-shell">
+        <section class="auth-card">
+            <header>
+                <a class="brand" href="landingPage.html">
+                    <img src="Pictures/logo.jpeg" alt="EcoGo logo">
+                    EcoGo Collective
+                </a>
+                <h1>Tell us about your home</h1>
+                <p>We use these details to recommend the right programs, swaps, and neighbours for you. You can update them anytime from your profile.</p>
+            </header>
+            <div class="profile-summary" id="profileSummary">
+                <strong>Welcome back!</strong>
+                <span id="profileSummaryName"></span>
+                <span id="profileSummaryEmail"></span>
+                <span id="profileSummaryCity"></span>
+            </div>
+            <form id="profileForm" class="auth-form" novalidate>
+                <div class="form-row">
+                    <label for="householdSize">Household size</label>
+                    <select id="householdSize" name="householdSize" required>
+                        <option value="" selected disabled>Select one</option>
+                        <option value="living-solo">Just me</option>
+                        <option value="two">Two people</option>
+                        <option value="family">Three to five</option>
+                        <option value="extended">More than five</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <label for="dwelling">Dwelling type</label>
+                    <select id="dwelling" name="dwelling" required>
+                        <option value="" selected disabled>Select one</option>
+                        <option value="apartment">Apartment or condo</option>
+                        <option value="landed">Landed house</option>
+                        <option value="shared">Shared living</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <label>What are your sustainability goals this month?</label>
+                    <div class="checkbox-row">
+                        <label><input type="checkbox" name="goals" value="energy"> Lower my electricity bill</label>
+                        <label><input type="checkbox" name="goals" value="food"> Grow or cook more sustainably</label>
+                        <label><input type="checkbox" name="goals" value="waste"> Reduce household waste</label>
+                        <label><input type="checkbox" name="goals" value="community"> Host or join a community event</label>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <label>How can you contribute?</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="contribution" value="volunteer" required> Volunteer time</label>
+                        <label><input type="radio" name="contribution" value="resources"> Share tools or resources</label>
+                        <label><input type="radio" name="contribution" value="mentor"> Offer guidance or mentoring</label>
+                        <label><input type="radio" name="contribution" value="learner"> I am here to learn</label>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <label for="skills">Anything else we should know?</label>
+                    <textarea id="skills" name="skills" rows="3" placeholder="Add notes about skills, availability, or accessibility needs..."></textarea>
+                </div>
+                <div class="form-row toggle-row">
+                    <div>
+                        <strong>Energy alerts</strong>
+                        <p>Receive reminders before peak tariff hours and tailored conservation tips.</p>
+                    </div>
+                    <input type="checkbox" id="energyAlerts" name="energyAlerts" checked>
+                </div>
+                <p id="profileError" class="auth-error" aria-live="polite"></p>
+                <div class="actions">
+                    <button type="submit">Save and explore EcoGo</button>
+                    <footer>Need to change something? <a href="signup.html">Update your sign up info</a></footer>
+                </div>
+            </form>
+        </section>
+        <aside class="auth-side">
+            <h2>Next up</h2>
+            <ul>
+                <li>Browse energy tips and project videos customised to your goals.</li>
+                <li>Find gardeners and eco-enthusiasts near <span id="sideCityLabel">your area</span>.</li>
+                <li>Track your swaps, likes, and event attendance in one dashboard.</li>
+            </ul>
+        </aside>
+    </main>
+    <script src="script/auth.js" defer></script>
+</body>
+</html>
