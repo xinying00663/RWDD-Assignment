@@ -138,3 +138,61 @@
         .card a:hover {
             text-decoration: underline;
         }
+
+        .card-image {
+    overflow: hidden;
+            border-radius: 16px;
+    aspect-ratio: 4 / 3;
+}
+
+.card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.swap-controls {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    align-self: flex-start;
+    padding: 14px 18px;
+    border-radius: 999px;
+    background: rgba(45, 141, 96, 0.08);
+    box-shadow: inset 0 0 0 1px rgba(45, 141, 96, 0.1);
+}
+
+.swap-controls label {
+    font-weight: 600;
+    color: var(--accent-dark);
+    font-size: 0.95rem;
+}
+
+.swap-controls select {
+    appearance: none;
+    -webkit-appearance: none;
+    border: none;
+    border-radius: 999px;
+    padding: 10px 42px 10px 18px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #214235;
+    background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23214335' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 18px center / 12px;
+    box-shadow: 0 10px 18px rgba(33, 66, 53, 0.12);
+    cursor: pointer;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.swap-controls select:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 16px 24px rgba(33, 66, 53, 0.18);
+}
+
+.swap-controls select:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+.swap-controls option {
+    font-weight: 500;
+}
