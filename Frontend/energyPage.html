@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="styles/addButton.css">
     <link rel="stylesheet" href="styles/energyPage.css">
 </head>
-<body>
+<body data-page="energy">
     <header>
         <div class="logo">
             <a href="landingPage.html">
@@ -59,7 +59,7 @@
                     <option value="all">Everything</option>
                     <option value="tutorial">Tutorial videos</option>
                     <option value="habit">Daily habits</option>
-                    <option value="planning">Planning & checklists</option>
+                    <option value="planning">Planning &amp; checklists</option>
                 </select>
             </div>
             <div class="media-grid" id="energyGrid">
@@ -93,7 +93,7 @@
                     <a class="media-card__link" href="mediaDetail.html"
                        data-page="energy"
                        data-title="Fridge efficiency checklist"
-                       data-description="Download the printable checklist to tune your fridge & freezer for optimal efficiency in humid climates."
+                       data-description="Download the printable checklist to tune your fridge &amp; freezer for optimal efficiency in humid climates."
                        data-category="planning"
                        data-media-type="image"
                        data-media-src="Pictures/landingPage/recycling-pic.jpg"
@@ -167,8 +167,12 @@
                 </article>
             </div>
         </section>
-        <button class="add-button">+</button>
+        <button type="button" class="add-button" aria-label="Submit energy tip">+</button>
     </main>
+    <script src="script/session.js" defer></script>
+    <script src="script/submissionStore.js" defer></script>
+    <script src="script/addButtonAccess.js" defer></script>
     <script src="script/mediaFeed.js" defer></script>
+    <script src="script/renderSubmissions.js" defer></script>
 </body>
 </html>

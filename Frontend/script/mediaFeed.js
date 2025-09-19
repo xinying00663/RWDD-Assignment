@@ -8,9 +8,8 @@
             return;
         }
 
-        const cards = Array.from(grid.querySelectorAll(".media-card"));
-
         function applyFilter(value) {
+            const cards = Array.from(grid.querySelectorAll(".media-card"));
             cards.forEach((card) => {
                 const matches = value === "all" || card.dataset.category === value;
                 card.style.display = matches ? "" : "none";
@@ -22,10 +21,14 @@
             applyFilter(event.target.value);
         });
 
+        select.ecogoApplyFilter = applyFilter;
         applyFilter(select.value || "all");
     }
 
     function captureMediaSelection(link) {
+        if (!link) {
+            return;
+        }
         link.addEventListener("click", () => {
             const payload = {
                 page: link.dataset.page || "",
@@ -44,6 +47,21 @@
         });
     }
 
-    document.querySelectorAll(".media-filter").forEach(handleFilter);
-    document.querySelectorAll(".media-card__link").forEach(captureMediaSelection);
+    function refreshFilters() {
+        document.querySelectorAll(".media-filter").forEach((select) => {
+            if (typeof select.ecogoApplyFilter === "function") {
+                select.ecogoApplyFilter(select.value || "all");
+            }
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll(".media-filter").forEach(handleFilter);
+        document.querySelectorAll(".media-card__link").forEach(captureMediaSelection);
+    });
+
+    window.ecogoMediaFeed = {
+        refresh: refreshFilters,
+        registerLink: captureMediaSelection
+    };
 })();

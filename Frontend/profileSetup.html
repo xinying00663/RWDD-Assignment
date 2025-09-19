@@ -19,25 +19,32 @@
             </header>
             <form id="profileForm" class="auth-form" novalidate>
                 <div class="form-row">
-                        <label for="username">Username</label>
-                        <input id="username" name="username" type="text" placeholder="Jamie Lim" required>
-                    </div>
-                    <div class="form-row">
-                        <label for="fullName">Full name</label>
-                        <input id="fullName" name="fullName" type="text" placeholder="Jamie Lim" required>
-                    </div>
-                    <div class="form-row">
-                        <label for="phoneNumber">Phone number</label>
-                        <input id="phoneNumber" name="phoneNumber" type="tel" placeholder="+60 12-345 6789" required>
-                    </div>
-                    <div class="form-row">
-                        <label for="city">City or neighbourhood</label>
-                        <input id="city" name="city" type="text" placeholder="Kuala Lumpur" required>
-                    </div>
+                    <label for="username">Username</label>
+                    <input id="username" name="username" type="text" placeholder="Jamie Lim" required>
+                </div>
+                <div class="form-row">
+                    <label for="fullName">Full name</label>
+                    <input id="fullName" name="fullName" type="text" placeholder="Jamie Lim" required>
+                </div>
+                <div class="form-row">
+                    <label for="phoneNumber">Phone number</label>
+                    <input id="phoneNumber" name="phoneNumber" type="tel" placeholder="+60 12-345 6789" required>
+                </div>
+                <div class="form-row">
+                    <label for="city">City or neighbourhood</label>
+                    <input id="city" name="city" type="text" placeholder="Kuala Lumpur" required>
+                </div>
+                <div class="form-row">
+                    <label for="accountRole">Account type</label>
+                    <select id="accountRole" name="accountRole" required>
+                        <option value="member">Community member</option>
+                        <option value="admin">EcoGo team (admin)</option>
+                    </select>
+                </div>
                 <div class="form-row">
                     <label for="skills">Anything else we should know?</label>
                     <textarea id="skills" name="skills" rows="3" placeholder="Add notes about skills, availability, or accessibility needs..."></textarea>
-                    </div>
+                </div>
                 <p id="profileError" class="auth-error" aria-live="polite"></p>
                 <div class="actions">
                     <button type="submit">Save and explore EcoGo</button>

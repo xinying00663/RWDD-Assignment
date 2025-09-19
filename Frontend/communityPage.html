@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="styles/addButton.css">
     <link rel="stylesheet" href="styles/communityPage.css">
 </head>
-<body>
+<body data-page="community">
     <header>
         <div class="logo">
             <a href="landingPage.html">
@@ -90,7 +90,7 @@
                 <article class="media-card" data-category="projects">
                     <a class="media-card__link" href="mediaDetail.html"
                        data-page="community"
-                       data-title="Pocket park before & after"
+                       data-title="Pocket park before &amp; after"
                        data-description="See how the Block C crew reclaimed a dumping ground and now harvests 30 kg of produce monthly."
                        data-category="projects"
                        data-media-type="image"
@@ -103,7 +103,7 @@
                         </div>
                         <div class="card-body">
                             <span class="card-tag">Projects</span>
-                            <h3>Pocket park before & after</h3>
+                            <h3>Pocket park before &amp; after</h3>
                             <p>Tap to see the raised beds, rainwater capture, and compost loop they set up in six months.</p>
                             <div class="card-meta">
                                 <span class="uploader">By Block C Collective</span>
@@ -165,9 +165,12 @@
                 </article>
             </div>
         </section>
-        <button class="add-button">+</button>
+        <button type="button" class="add-button" aria-label="Share with the community">+</button>
     </main>
+    <script src="script/session.js" defer></script>
+    <script src="script/submissionStore.js" defer></script>
+    <script src="script/addButtonAccess.js" defer></script>
     <script src="script/mediaFeed.js" defer></script>
+    <script src="script/renderSubmissions.js" defer></script>
 </body>
 </html>
-

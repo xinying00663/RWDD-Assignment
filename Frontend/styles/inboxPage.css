@@ -101,11 +101,6 @@
             box-shadow: 0 16px 28px rgba(45, 141, 96, 0.18);
         }
 
-        .conversation-item.active {
-            box-shadow: 0 18px 32px rgba(33, 66, 53, 0.22);
-            border: 1px solid rgba(33, 66, 53, 0.18);
-        }
-
         .avatar {
             width: 44px;
             height: 44px;

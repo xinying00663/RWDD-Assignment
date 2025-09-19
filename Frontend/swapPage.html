@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EcoGo Swap Items</title>
-        <link rel="stylesheet" href="styles/general.css">
-    <link rel="stylesheet" href="styles/common.css">    
+    <link rel="stylesheet" href="styles/general.css">
+    <link rel="stylesheet" href="styles/common.css">
     <link rel="stylesheet" href="styles/sidebar.css">
     <link rel="stylesheet" href="styles/searchbar.css">
     <link rel="stylesheet" href="styles/swapPage.css">
     <link rel="stylesheet" href="styles/addButton.css">
 </head>
-<body>
+<body data-page="swap">
     <header>
         <div class="logo">
             <a href="landingPage.html">
@@ -19,7 +19,7 @@
             </a>
         </div>
         <nav>
-            <a href="homePage.html" class="active">
+            <a href="homePage.html">
                 <img src="Pictures/sidebar/recycle-sign.png" alt="Home Icon">
                 <p>Recycling Program</p>
             </a>
@@ -31,7 +31,7 @@
                 <img src="Pictures/sidebar/garden.png" alt="Home Icon">
                 <p>Gardening Community</p>
             </a>
-            <a href="swapPage.html">
+            <a href="swapPage.html" class="active">
                 <img src="Pictures/sidebar/swap.png" alt="Home Icon">
                 <p>Swap Items</p>
             </a>
@@ -70,7 +70,7 @@
                         <span class="card-tag">Home-grown</span>
                         <h3>Balcony Herb Starter Kit</h3>
                         <p>Six organic basil and mint cuttings with compostable pots, rooted and ready for small spaces.</p>
-                        <a href="#">Message to swap -></a>
+                        <a href="#">Message to swap -&gt;</a>
                     </div>
                 </article>
                 <article class="card" data-category="eco-friendly">
@@ -81,7 +81,7 @@
                         <span class="card-tag">Eco-friendly</span>
                         <h3>Reusable Produce Bags</h3>
                         <p>Set of eight mesh produce bags sewn from upcycled cotton curtains, freshly laundered.</p>
-                        <a href="#">Message to swap -></a>
+                        <a href="#">Message to swap -&gt;</a>
                     </div>
                 </article>
                 <article class="card" data-category="home-grown">
@@ -92,7 +92,7 @@
                         <span class="card-tag">Home-grown</span>
                         <h3>Compost Worm Starter Colony</h3>
                         <p>Pint of red wigglers with bedding to kick-start a balcony vermicomposting bin.</p>
-                        <a href="#">Message to swap -></a>
+                        <a href="#">Message to swap -&gt;</a>
                     </div>
                 </article>
                 <article class="card" data-category="eco-friendly">
@@ -103,50 +103,17 @@
                         <span class="card-tag">Eco-friendly</span>
                         <h3>Upcycled Glass Storage Jars</h3>
                         <p>Five airtight jars with bamboo lids, perfect for refilling dry goods at the bulk store.</p>
-                        <a href="#">Message to swap -></a>
+                        <a href="#">Message to swap -&gt;</a>
                     </div>
                 </article>
             </div>
         </section>
-        <button class="add-button">+</button>
+        <button type="button" class="add-button" aria-label="List a swap item">+</button>
     </main>
-    <script>
-        (function () {
-            const filter = document.getElementById('categoryFilter');
-            const container = document.getElementById('swapItems');
-            if (!filter || !container) {
-                return;
-            }
-
-            const originalCards = Array.from(container.querySelectorAll('.card')).map((card, index) => ({
-                card,
-                originalIndex: index
-            }));
-
-            function sortByCategory(category) {
-                const entries = [...originalCards];
-                if (category === 'home-grown' || category === 'eco-friendly') {
-                    const targetCategory = category;
-                    entries.sort((a, b) => {
-                        const aMatch = a.card.dataset.category === targetCategory ? 0 : 1;
-                        const bMatch = b.card.dataset.category === targetCategory ? 0 : 1;
-                        if (aMatch !== bMatch) {
-                            return aMatch - bMatch;
-                        }
-                        return a.originalIndex - b.originalIndex;
-                    });
-                } else {
-                    entries.sort((a, b) => a.originalIndex - b.originalIndex);
-                }
-
-                container.innerHTML = '';
-                entries.forEach(({ card }) => container.appendChild(card));
-            }
-
-            filter.addEventListener('change', (event) => {
-                sortByCategory(event.target.value);
-            });
-        })();
-    </script>
+    <script src="script/session.js" defer></script>
+    <script src="script/submissionStore.js" defer></script>
+    <script src="script/addButtonAccess.js" defer></script>
+    <script src="script/swapPage.js" defer></script>
+    <script src="script/renderSubmissions.js" defer></script>
 </body>
 </html>
