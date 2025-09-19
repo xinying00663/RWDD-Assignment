@@ -1,21 +1,5 @@
 let map;
 
-function viewDetails(program) {
-  document.getElementById("modal").style.display = "block";
-  if (program === "recycling") {
-    document.getElementById("modal-title").innerText = "Recycling Drive";
-    document.getElementById("modal-desc").innerText = "Bring recyclables to Community Hall, 21 Sept, 10 AM.";
-  }
-  if (program === "energy") {
-    document.getElementById("modal-title").innerText = "Energy Saving Workshop";
-    document.getElementById("modal-desc").innerText = "Learn simple energy conservation tips at Green Center, 25 Sept.";
-  }
-}
-
-function closeModal() {
-  document.getElementById("modal").style.display = "none";
-}
-
 function initMap() {
   // Center map on Kuala Lumpur
   const center = { lat: 3.1390, lng: 101.6869 };
@@ -76,3 +60,4 @@ function initMap() {
     map.fitBounds(bounds);
   });
 }
+
