@@ -141,7 +141,7 @@ header {
             text-align: center;
             background-color: #e9f5e9;
         }
-        .faq details{ 
+        .faq details, .contact-us details{ 
             font-size:20px;
             margin:30px 0; 
             background:transparent;
@@ -156,7 +156,7 @@ header {
             color:#14532d; 
             text-align:center;
         }
-        .faq details p{ 
+        .faq details p, .contact-us details p{ 
             margin-top:10px;
             text-align:center;
         }
@@ -176,12 +176,12 @@ header {
         }
 
         label { 
-            font-size:25px;
+            font-size:30px;
             font-weight: 600; 
         }
 
         input, textarea {
-            padding: 15px 17px;
+            padding: 25px 17px;
             border: 1px solid #c7e9c7;
             border-radius: 8px;
             background: #fff;
