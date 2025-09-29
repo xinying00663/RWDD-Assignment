@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="styles/common.css">
     <link rel="stylesheet" href="styles/sidebar.css">
     <link rel="stylesheet" href="styles/searchbar.css">
+    <link rel="stylesheet" href="styles/mediaFeed.css">
     <link rel="stylesheet" href="styles/swapPage.css">
     <link rel="stylesheet" href="styles/addButton.css">
 </head>
@@ -53,57 +54,57 @@
                 <h2>Swap items from your neighbours</h2>
                 <p>Browse the latest sustainable finds and trade for what you need without creating extra waste.</p>
             </div>
-            <div class="swap-controls" role="region" aria-label="Sort swap items">
+            <div class="filter-controls swap-controls" role="region" aria-label="Sort swap items">
                 <label for="categoryFilter">Sort by category</label>
-                <select id="categoryFilter">
+                <select id="categoryFilter" class="media-filter" data-target="swapItems">
                     <option value="all">Original order</option>
                     <option value="home-grown">Home-grown first</option>
                     <option value="eco-friendly">Eco-friendly first</option>
                 </select>
             </div>
-            <div class="cards-container" id="swapItems">
-                <article class="card" data-category="home-grown">
-                    <div class="card-image">
+            <div class="media-grid" id="swapItems">
+                <article class="media-card swap-card" data-category="home-grown">
+                    <div class="card-media">
                         <img src="Pictures/landingPage/gardening-pic.jpg" alt="Balcony herb starter kit">
                     </div>
                     <div class="card-body">
                         <span class="card-tag">Home-grown</span>
                         <h3>Balcony Herb Starter Kit</h3>
                         <p>Six organic basil and mint cuttings with compostable pots, rooted and ready for small spaces.</p>
-                        <a href="#">Message to swap -&gt;</a>
+                        <a class="swap-card__cta" href="#">Message to swap</a>
                     </div>
                 </article>
-                <article class="card" data-category="eco-friendly">
-                    <div class="card-image">
+                <article class="media-card swap-card" data-category="eco-friendly">
+                    <div class="card-media">
                         <img src="Pictures/landingPage/recycling-pic.jpg" alt="Reusable produce bags">
                     </div>
                     <div class="card-body">
                         <span class="card-tag">Eco-friendly</span>
                         <h3>Reusable Produce Bags</h3>
                         <p>Set of eight mesh produce bags sewn from upcycled cotton curtains, freshly laundered.</p>
-                        <a href="#">Message to swap -&gt;</a>
+                        <a class="swap-card__cta" href="#">Message to swap</a>
                     </div>
                 </article>
-                <article class="card" data-category="home-grown">
-                    <div class="card-image">
+                <article class="media-card swap-card" data-category="home-grown">
+                    <div class="card-media">
                         <img src="Pictures/landingPage/swap-item-pic.jpg" alt="Compost worms starter colony">
                     </div>
                     <div class="card-body">
                         <span class="card-tag">Home-grown</span>
                         <h3>Compost Worm Starter Colony</h3>
                         <p>Pint of red wigglers with bedding to kick-start a balcony vermicomposting bin.</p>
-                        <a href="#">Message to swap -&gt;</a>
+                        <a class="swap-card__cta" href="#">Message to swap</a>
                     </div>
                 </article>
-                <article class="card" data-category="eco-friendly">
-                    <div class="card-image">
+                <article class="media-card swap-card" data-category="eco-friendly">
+                    <div class="card-media">
                         <img src="Pictures/landingPage/save-energy-pic.jpg" alt="Upcycled glass storage jars">
                     </div>
                     <div class="card-body">
                         <span class="card-tag">Eco-friendly</span>
                         <h3>Upcycled Glass Storage Jars</h3>
                         <p>Five airtight jars with bamboo lids, perfect for refilling dry goods at the bulk store.</p>
-                        <a href="#">Message to swap -&gt;</a>
+                        <a class="swap-card__cta" href="#">Message to swap</a>
                     </div>
                 </article>
             </div>
