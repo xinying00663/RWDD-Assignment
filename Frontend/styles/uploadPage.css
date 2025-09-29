@@ -31,7 +31,8 @@
 }
 
 .upload-form input,
-.upload-form textarea {
+.upload-form textarea,
+.upload-form select {
     border: 1px solid rgba(33, 66, 53, 0.18);
     border-radius: 18px;
     padding: 14px 16px;
@@ -42,13 +43,59 @@
     transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
 }
 
+.upload-form select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding-right: 48px;
+    background: #ffffff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23214335' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 18px center / 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.upload-form select::-ms-expand {
+    display: none;
+}
+
+.upload-form input[type="file"] {
+    padding: 10px 16px;
+}
+
+.upload-form input[type="file"]::file-selector-button {
+    margin-right: 14px;
+    padding: 10px 18px;
+    border-radius: 999px;
+    border: none;
+    background: rgba(45, 141, 96, 0.14);
+    color: var(--accent-dark, #1f6b48);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.upload-form input[type="file"]:hover::file-selector-button {
+    background: rgba(45, 141, 96, 0.22);
+}
+
+.upload-form input[type="file"]:focus::file-selector-button,
+.upload-form input[type="file"]:focus-visible::file-selector-button {
+    outline: none;
+    background: rgba(45, 141, 96, 0.28);
+}
+
+.upload-form input[type="file"]::file-selector-button:active {
+    transform: translateY(0);
+    background: rgba(45, 141, 96, 0.32);
+}
+
 .upload-form input::placeholder,
 .upload-form textarea::placeholder {
     color: rgba(33, 66, 53, 0.5);
 }
 
 .upload-form input:focus,
-.upload-form textarea:focus {
+.upload-form textarea:focus,
+.upload-form select:focus {
     outline: none;
     border-color: var(--accent, #2d8d60);
     box-shadow: 0 0 0 3px rgba(45, 141, 96, 0.18);
@@ -72,6 +119,13 @@
     color: var(--muted, #6c7c74);
     font-size: 0.95rem;
 }
+
+.input-help {
+    margin-top: 6px;
+    font-size: 0.85rem;
+    color: rgba(33, 66, 53, 0.65);
+}
+
 .upload-form__actions {
     display: inline-flex;
     align-items: center;
