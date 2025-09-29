@@ -75,7 +75,7 @@
 .upload-form__actions {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     flex-wrap: wrap;
 }
 
@@ -83,10 +83,10 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 12px 26px;
+    padding: 12px 24px;
     border-radius: 999px;
-    border: 1px solid rgba(45, 141, 96, 0.25);
-    background: rgba(45, 141, 96, 0.12);
+    border: 1px solid rgba(45, 141, 96, 0.18);
+    background: rgba(45, 141, 96, 0.08);
     color: var(--accent-dark, #1f6b48);
     font-weight: 600;
     letter-spacing: 0.01em;
@@ -96,7 +96,7 @@
 
 .button-cancel:hover,
 .button-cancel:focus {
-    background: rgba(45, 141, 96, 0.2);
+    background: rgba(45, 141, 96, 0.16);
     color: var(--accent-dark, #1f6b48);
 }
 
@@ -106,7 +106,7 @@
 }
 
 .button-cancel:active {
-    background: rgba(45, 141, 96, 0.28);
+    background: rgba(45, 141, 96, 0.22);
 }
 
 .upload-form button[type="submit"] {
@@ -150,12 +150,16 @@
         align-items: stretch;
     }
 
-    .upload-form button[type="submit"] {
+    .upload-form__actions {
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .upload-form__actions .button-cancel,
+    .upload-form__actions button[type="submit"] {
         width: 100%;
         justify-content: center;
     }
 }
-
-
-
-
