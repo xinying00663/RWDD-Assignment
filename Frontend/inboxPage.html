@@ -47,7 +47,7 @@
         </div>
     </header>
     <main>
-        <section class="tabs-card">
+        <section class="tabs-card inbox-layout">
             <div class="inbox-topbar">
                 <div class="search-container">
                     <label for="message-search">Search messages</label>
@@ -58,8 +58,7 @@
                     <button>Archive</button>
                 </div>
             </div>
-
-            
+            <div class="inbox-columns">
                 <section class="conversation-list">
                     <div class="list-header">
                         <h2>Threads</h2>
@@ -70,44 +69,28 @@
                         <button>Messages</button>
                         <button>Notifications</button>
                     </div>
-                    <div class="conversation-items">
-                        <div class="conversation-item">
-                            <div class="avatar">PR</div>
-                            <strong>Pocket Park Revival</strong>
-                            <div class="conversation-meta">
-                                <span>Just now</span>
-                                <span class="status-pill new">new</span>
-                            </div>
-                            <p>Need extra gloves for Saturday? Let us know headcount by Friday.</p>
-                        </div>
-                        <div class="conversation-item">
-                            <div class="avatar">HL</div>
-                            <strong>Herb Lab Volunteers</strong>
-                            <div class="conversation-meta">
-                                <span>2h ago</span>
-                                <span class="status-pill waiting">waiting</span>
-                            </div>
-                            <p>Weekly produce drop confirmed. Can you help document yields?</p>
-                        </div>
-                        <div class="conversation-item">
-                            <div class="avatar">SW</div>
-                            <strong>Swap HQ</strong>
-                            <div class="conversation-meta">
-                                <span>Yesterday</span>
-                            </div>
-                            <p>Lisa accepted your blender listing. Arrange meetup?</p>
-                        </div>
-                        <div class="conversation-item">
-                            <div class="avatar">CC</div>
-                            <strong>Compost Cooperative</strong>
-                            <div class="conversation-meta">
-                                <span>Mon</span>
-                            </div>
-                            <p>Reminder: bring brown materials for this weekend's turn.</p>
-                        </div>
+                    <div class="conversation-items" id="conversationItems">
+                        <!-- Conversation items will be dynamically inserted here -->
                     </div>
                 </section>
+                <section class="chatbox" id="chatbox">
+                    <div class="chatbox-header">
+                        <button onclick="goBack()">&larr; Back</button>
+                        <h2 id="chatTitle">Chat</h2>
+                    </div>
+
+                    <div class="chat-messages" id="chatMessages"></div>
+
+                    <div class="chat-input">
+                        <input type="text" id="messageInput" placeholder="Type a message...">
+                        <button onclick="sendMessage()">Send</button>
+                    </div>
                 </section>
+            </div>
+        </section>
     </main>
+   <script src="script/inboxPage.js"></script>
+
+
 </body>
 </html>

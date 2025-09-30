@@ -1,3 +1,5 @@
+//ALL HARDCODED DATA FOR PROGRAMS IS STORED IN THIS FILE
+// This is a simple approach for a static site without a backend or CMS
 const programData = {
     "rooftop-herb-lab": {
         badge: "Urban farming",
