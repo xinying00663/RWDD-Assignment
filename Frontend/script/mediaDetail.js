@@ -224,9 +224,29 @@
         return wrapper;
     }
 
+    function createBackButton(data) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "detail-back-button";
+        button.textContent = "Go back";
+        button.addEventListener("click", () => {
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                window.location.href = data.page === "community" ? "communityPage.html" : "energyPage.html";
+            }
+        });
+        return button;
+    }
+
     function renderDetail(data) {
         const shell = document.createElement("div");
         shell.className = "detail-shell";
+
+        const nav = document.createElement("div");
+        nav.className = "detail-nav";
+        nav.appendChild(createBackButton(data));
+        shell.appendChild(nav);
 
         const { wrapper: mediaWrapper, element: mediaElement } = renderMediaElement(data);
         shell.appendChild(mediaWrapper);
@@ -253,19 +273,6 @@
         actions.className = "detail-actions";
         const likeButton = setupLikeButton(actions, data);
         setupFullscreenButton(actions, mediaElement);
-
-        const backButton = document.createElement("button");
-        backButton.type = "button";
-        backButton.className = "fullscreen-button";
-        backButton.textContent = "Go back";
-        backButton.addEventListener("click", () => {
-            if (window.history.length > 1) {
-                window.history.back();
-            } else {
-                window.location.href = data.page === "community" ? "communityPage.html" : "energyPage.html";
-            }
-        });
-        actions.appendChild(backButton);
         body.appendChild(actions);
 
         body.appendChild(renderCommentsSection(data));
