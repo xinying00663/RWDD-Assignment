@@ -1,8 +1,25 @@
 <?php
-$host="localhost";
-$name="EcoGo";
-$user="your_username";
-$password="your_password";
+declare(strict_types=1);
+
+session_start();
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    header('Allow: POST');
+    header('Content-Type: application/json');
+    echo json_encode([
+        'success' => false,
+        'message' => 'Only POST requests are supported for login.'
+    ]);
+    exit;
+}
+
+header('Content-Type: application/json');
+
+$host = 'localhost';
+$database = 'EcoGo';
+$username = 'your_username';
+$password = 'your_password';
 
 //Connect to database
 try{
