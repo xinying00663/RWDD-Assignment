@@ -121,7 +121,6 @@ header {
             text-decoration: none;
             transition: background-color 0.3s ease;
         }
-
         .image {
             flex:1;
             text-align: center;
@@ -228,3 +227,4 @@ header {
         .site-footer a:hover{ 
             background:rgba(167,243,208,0.15); 
         }
+        
