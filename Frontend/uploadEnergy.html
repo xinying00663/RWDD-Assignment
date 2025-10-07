@@ -10,7 +10,12 @@
     <link rel="stylesheet" href="styles/uploadPage.css">
 </head>
 <body data-page="energy-upload">
-    <header>
+    <button class="sidebar-toggle" type="button" data-sidebar-toggle aria-controls="sidebar" aria-expanded="false">
+        <span class="sidebar-toggle__icon" aria-hidden="true"></span>
+        <span class="sr-only">Toggle navigation</span>
+    </button>
+    <div class="sidebar-backdrop" id="sidebarBackdrop" hidden></div>
+    <header id="sidebar" class="sidebar" aria-label="Primary navigation">
         <div class="logo">
             <a href="landingPage.html">
                 <img src="Pictures/logo.jpeg" alt="EcoGo Logo">
@@ -97,5 +102,6 @@
             </form>
         </section>
     </main>
+    <script src="script/sidebar.js" defer></script>
 </body>
 </html>
