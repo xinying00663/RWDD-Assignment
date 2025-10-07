@@ -38,6 +38,7 @@
                 mediaType: link.dataset.mediaType || "image",
                 mediaSrc: link.dataset.mediaSrc || "",
                 poster: link.dataset.poster || "",
+                mediaMime: link.dataset.mediaMime || "",
                 alt: link.dataset.alt || "",
                 duration: link.dataset.duration || "",
                 uploader: link.dataset.uploader || "EcoGo Community",

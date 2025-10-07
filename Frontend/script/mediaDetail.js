@@ -53,7 +53,7 @@
             if (data.mediaSrc) {
                 const source = document.createElement("source");
                 source.src = data.mediaSrc;
-                source.type = "video/mp4";
+                source.type = data.mediaMime || "video/mp4";
                 video.appendChild(source);
             } else {
                 const placeholder = document.createElement("div");
