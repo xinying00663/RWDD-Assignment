@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List a Swap Item</title>
+    <link rel="stylesheet" href="styles/general.css">
+    <link rel="stylesheet" href="styles/common.css">
+    <link rel="stylesheet" href="styles/sidebar.css">
+    <link rel="stylesheet" href="styles/uploadPage.css">
+</head>
+<body data-page="swap-upload">
+    <button class="sidebar-toggle" type="button" data-sidebar-toggle aria-controls="sidebar" aria-expanded="false">
+        <span class="sidebar-toggle__icon" aria-hidden="true"></span>
+        <span class="sr-only">Toggle navigation</span>
+    </button>
+    <div class="sidebar-backdrop" id="sidebarBackdrop" hidden></div>
+    <header id="sidebar" class="sidebar" aria-label="Primary navigation">
+        <div class="logo">
+            <a href="landingPage.html">
+                <img src="Pictures/logo.jpeg" alt="EcoGo Logo">
+            </a>
+        </div>
+        <nav>
+            <a href="homePage.html">
+                <img src="Pictures/sidebar/recycle-sign.png" alt="Recycling icon">
+                <p>Recycling Program</p>
+            </a>
+            <a href="energyPage.html">
+                <img src="Pictures/sidebar/lamp.png" alt="Energy icon">
+                <p>Energy Conservation Tips</p>
+            </a>
+            <a href="communityPage.html">
+                <img src="Pictures/sidebar/garden.png" alt="Community icon">
+                <p>Gardening Community</p>
+            </a>
+            <a href="swapPage.html" class="active">
+                <img src="Pictures/sidebar/swap.png" alt="Swap icon">
+                <p>Swap Items</p>
+            </a>
+            <a href="inboxPage.html">
+                <img src="Pictures/sidebar/inbox.png" alt="Inbox icon">
+                <p>Inbox</p>
+            </a>
+        </nav>
+        <div class="profile">
+            <a href="userProfile.html">
+                <img src="Pictures/sidebar/user.png" alt="Profile icon">
+                <p>User Profile</p>
+            </a>
+        </div>
+    </header>
+    <main>
+        <section class="tabs-card upload-card">
+            <div class="section-header">
+                <h2>List a swap item</h2>
+                <p>Share a photo or short clip of what you'd like to swap and let neighbours know what you're hoping for in return.</p>
+            </div>
+            <form class="upload-form" action="#" method="post">
+                <div class="upload-form__grid">
+                    <div class="input-group">
+                        <label for="swapTitle">Item name</label>
+                        <input type="text" id="swapTitle" name="swapTitle" placeholder="e.g. Balcony herb starter kit" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="swapCategory">Category</label>
+                        <select id="swapCategory" name="swapCategory" required>
+                            <option value="home-grown">Home-grown</option>
+                            <option value="eco-friendly">Eco-friendly</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="swapCondition">Condition</label>
+                        <input type="text" id="swapCondition" name="swapCondition" placeholder="e.g. Rooted cuttings, lightly used">
+                    </div>
+                    <div class="input-group">
+                        <label for="swapPreferred">Preferred exchange</label>
+                        <input type="text" id="swapPreferred" name="swapPreferred" placeholder="e.g. Open to seeds or compost bins">
+                    </div>
+                    <div class="input-group input-group--full">
+                        <label for="swapMedia">Upload media</label>
+                        <input type="file" id="swapMedia" name="swapMedia" accept="image/*,video/*" required>
+                        <p class="input-help">Select clear images or short videos (max 250&nbsp;MB) to help neighbours see the item.</p>
+                    </div>
+                    <div class="input-group input-group--full">
+                        <label for="swapDetails">Item details</label>
+                        <textarea id="swapDetails" name="swapDetails" rows="5" placeholder="Tell people what makes this item special and any pick-up info." required></textarea>
+                    </div>
+                </div>
+                <div class="upload-form__footer">
+                    <p class="helper-text">We'll publish your listing once it meets community swap guidelines.</p>
+                    <div class="upload-form__actions">
+                        <button type="button" class="button-cancel" onclick="window.location.href='swapPage.html'">Cancel</button>
+                        <button type="submit">Post listing</button>
+                    </div>
+                </div>
+            </form>
+        </section>
+    </main>
+    <script src="script/sidebar.js" defer></script>
+</body>
+</html>

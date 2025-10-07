@@ -11,7 +11,12 @@
     <link rel="stylesheet" href="styles/userProfile.css">
 </head>
 <body>
-    <header>
+    <button class="sidebar-toggle" type="button" data-sidebar-toggle aria-controls="sidebar" aria-expanded="false">
+        <span class="sidebar-toggle__icon" aria-hidden="true"></span>
+        <span class="sr-only">Toggle navigation</span>
+    </button>
+    <div class="sidebar-backdrop" id="sidebarBackdrop" hidden></div>
+    <header id="sidebar" class="sidebar" aria-label="Primary navigation">
         <div class="logo">
             <a href="landingPage.html">
                 <img src="Pictures/logo.jpeg" alt="EcoGo Logo">
@@ -30,7 +35,7 @@
                 <img src="Pictures/sidebar/garden.png" alt="Community Icon">
                 <p>Gardening Community</p>
             </a>
-            <a href="#">
+            <a href="swapPage.html">
                 <img src="Pictures/sidebar/swap.png" alt="Swap Icon">
                 <p>Swap Items</p>
             </a>
@@ -51,14 +56,16 @@
             <div class="identity">
                 <div class="profile-avatar">JL</div>
                 <div>
-                    <h1>Jamie Lim</h1>
+                    <h1 class="username">Jamie</h1>
+                    <p class="fullName">Jamie Lim</p>
+                    <p class="gender">Female</p>
                     <p class="value">abc@gmail.com</p>
                     <p class="value">+60 12-345 6789</p>
                     <p class="location">Kuala Lumpur, Malaysia</p>
                     <p class="bio">Jamie coordinates neighbourhood clean-ups, rooftop garden builds, and resource swaps for EcoGo. Passionate about inclusive spaces, she mentors new volunteers and tracks project impact across the Klang Valley.</p>
                     <div class="hero-actions">
-                        <button class="primary">Share update</button>
-                        <button class="secondary">Edit profile</button>
+                        <button class="primary">Edit profile</button>
+                        <button class="secondary" onclick="window.href='landingPage.html'">Logout</button>
                     </div>
                 </div>
             </div>
@@ -147,5 +154,6 @@
                     </div>
                 </div>
     </main>
+    <script src="script/sidebar.js" defer></script>
 </body>
 </html>

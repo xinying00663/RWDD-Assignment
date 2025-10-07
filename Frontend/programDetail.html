@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoGo Program Details</title>
+    <link rel="stylesheet" href="styles/general.css">
+    <link rel="stylesheet" href="styles/common.css">
+    <link rel="stylesheet" href="styles/sidebar.css">
+    <link rel="stylesheet" href="styles/programDetail.css">
+</head>
+<body>
+    <button class="sidebar-toggle" type="button" data-sidebar-toggle aria-controls="sidebar" aria-expanded="false">
+        <span class="sidebar-toggle__icon" aria-hidden="true"></span>
+        <span class="sr-only">Toggle navigation</span>
+    </button>
+    <div class="sidebar-backdrop" id="sidebarBackdrop" hidden></div>
+    <header id="sidebar" class="sidebar" aria-label="Primary navigation">
+        <div class="logo">
+            <a href="landingPage.html">
+                <img src="Pictures/logo.jpeg" alt="EcoGo Logo">
+            </a>
+        </div>
+        <nav>
+            <a href="homePage.html" class="active">
+                <img src="Pictures/sidebar/recycle-sign.png" alt="Home Icon">
+                <p>Recycling Program</p>
+            </a>
+            <a href="energyPage.html">
+                <img src="Pictures/sidebar/lamp.png" alt="Energy Icon">
+                <p>Energy Conservation Tips</p>
+            </a>
+            <a href="communityPage.html">
+                <img src="Pictures/sidebar/garden.png" alt="Community Icon">
+                <p>Gardening Community</p>
+            </a>
+            <a href="swapPage.html">
+                <img src="Pictures/sidebar/swap.png" alt="Swap Icon">
+                <p>Swap Items</p>
+            </a>
+            <a href="inboxPage.html">
+                <img src="Pictures/sidebar/inbox.png" alt="Inbox Icon">
+                <p>Inbox</p>
+            </a>
+        </nav>
+        <div class="profile">
+            <a href="userProfile.html">
+                <img src="Pictures/sidebar/user.png" alt="Profile Icon">
+                <p>User Profile</p>
+            </a>
+        </div>
+    </header>
+    <main>
+        <div id="programView">
+            <section class="program-hero">
+                <nav class="breadcrumbs" aria-label="Program breadcrumbs">
+                    <a href="homePage.html">Recycling Programs</a>
+                    <span aria-hidden="true">&gt;</span>
+                    <span id="programBreadcrumb">Program details</span>
+                </nav>
+                <div class="hero-badge" id="programBadge"></div>
+                <h1 id="programTitle">Program title</h1>
+                <p class="hero-summary" id="programSummary"></p>
+                <div class="hero-meta">
+                    <div class="hero-meta__item">
+                        <span class="hero-meta__label">Duration</span>
+                        <span class="hero-meta__value" id="programDuration"></span>
+                    </div>
+                    <div class="hero-meta__item">
+                        <span class="hero-meta__label">Meet-ups</span>
+                        <span class="hero-meta__value" id="programCommitment"></span>
+                    </div>
+                    <div class="hero-meta__item">
+                        <span class="hero-meta__label">Location</span>
+                        <span class="hero-meta__value" id="programLocation"></span>
+                    </div>
+                </div>
+                <div class="hero-actions">
+                    <a class="primary-cta" href="#register">Register now</a>
+                    <a class="secondary-cta" href="homePage.html">Back to programs</a>
+                </div>
+            </section>
+            <section class="program-body">
+                <article class="program-panel">
+                    <h2>What you will do</h2>
+                    <ul class="program-outcomes" id="programOutcomes"></ul>
+                </article>
+                <article class="program-panel">
+                    <h2>Weekly plan</h2>
+                    <div class="schedule-grid" id="programSchedule"></div>
+                </article>
+                <article class="program-panel">
+                    <h2>What to know before you join</h2>
+                    <div class="info-grid" id="programResources"></div>
+                </article>
+            </section>
+            <section class="coordinator">
+                <h2>Program coordinator</h2>
+                <div class="coordinator-card">
+                    <div class="coordinator-details">
+                        <h3 id="coordinatorName">Coordinator name</h3>
+                        <p id="coordinatorRole">Coordinator role</p>
+                    </div>
+                    <ul class="coordinator-contact">
+                        <li><span>Phone</span><a id="coordinatorPhone" href="tel:">Phone number</a></li>
+                        <li><span>Email</span><a id="coordinatorEmail" href="mailto:">Email address</a></li>
+                    </ul>
+                </div>
+            </section>
+            <section class="program-register" id="register">
+                <h2>Reserve your spot</h2>
+                <p class="register-intro">Complete the form and the coordinator will reach out with onboarding details for the <span id="registerProgramName"></span>.</p>
+                <form class="register-form" id="programRegisterForm">
+                    <div class="form-field">
+                        <label for="participantName">Full name</label>
+                        <input type="text" id="participantName" name="participantName" placeholder="e.g. Nur Aisyah" required>
+                    </div>
+                    <div class="form-field">
+                        <label for="participantEmail">Email</label>
+                        <input type="email" id="participantEmail" name="participantEmail" placeholder="you@example.com" required>
+                    </div>
+                    <div class="form-field">
+                        <label for="participantPhone">Phone number</label>
+                        <input type="tel" id="participantPhone" name="participantPhone" placeholder="e.g. +60 12-345 6789">
+                    </div>
+                    <div class="form-field form-field--checkbox">
+                        <input type="checkbox" id="consent" name="consent" required>
+                        <label for="consent">I agree to follow the EcoGo volunteer guidelines and will be contacted by the coordinator.</label>
+                    </div>
+                    <button type="submit" class="primary-cta">Submit registration</button>
+                    <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+                </form>
+            </section>
+        </div>
+        <section class="program-fallback" id="programFallback" hidden>
+            <h1>We could not find that program</h1>
+            <p>The link might be outdated. Browse the <a href="homePage.html">Recycling Programs</a> to pick an active initiative.</p>
+        </section>
+    </main>
+    <script src="script/sidebar.js" defer></script>
+    <script src="script/programDetail.js" defer></script>
+</body>
+</html>

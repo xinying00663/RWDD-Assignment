@@ -8,11 +8,15 @@
     <link rel="stylesheet" href="styles/common.css">  
     <link rel="stylesheet" href="styles/sidebar.css">
     <link rel="stylesheet" href="styles/searchbar.css">
-    <link rel="stylesheet" href="styles/homePage.css">
-    <link rel="stylesheet" href="styles/media.css">
+    <link rel="stylesheet" href="styles/homePage.css
 </head>
-<body>
-    <header>
+<body data-page="recycling">
+    <button class="sidebar-toggle" type="button" data-sidebar-toggle aria-controls="sidebar" aria-expanded="false">
+        <span class="sidebar-toggle__icon" aria-hidden="true"></span>
+        <span class="sr-only">Toggle navigation</span>
+    </button>
+    <div class="sidebar-backdrop" id="sidebarBackdrop" hidden></div>
+    <header id="sidebar" class="sidebar" aria-label="Primary navigation">
         <div class="logo">
             <a href="landingPage.html">
                 <img src="Pictures/logo.jpeg" alt="EcoGo Logo">
@@ -31,7 +35,7 @@
                 <img src="Pictures/sidebar/garden.png" alt="Home Icon">
                 <p>Gardening Community</p>
             </a>
-            <a href="#">
+            <a href="swapPage.html">
                 <img src="Pictures/sidebar/swap.png" alt="Home Icon">
                 <p>Swap Items</p>
             </a>
@@ -48,56 +52,95 @@
         </div>
     </header>
     <main>
-    <section class="tabs-card">
+        <section class="welcome-card">
+            <h1>Welcome back, <span id="profileSummaryName">Jamie</span></h1>
+        </section>
+        <section class="tabs-card">
             <div class="section-header">
                 <h2>Recycling Programs</h2>
                 <p>Use the interactive map to see ongoing projects, connect with coordinators, and find the best time to volunteer. Switch to tips to pick up quick wins for your own plot.</p>
             </div>
-                <div class="search-container">
-                    <label for="searchInput">Search places</label>
-                    <input id="searchInput" class="search-box" type="text" placeholder="Search programmes, gardens, or addresses...">
-                </div>
-                <div class="map-wrapper">
-                    <div id="map"></div>
-                </div>
-                <div class="section-header">
-                    <h2>Project highlights</h2>
-                </div>
-                <div class="project-highlights">
-                    <article class="highlight-card">
-                        <h3>Rooftop Herb Lab</h3>
-                        <p>Weekly harvest and sharing on Thursday evenings with a pantry donation corner.</p>
-                        <ul>
-                            <li>Location: Solaris Dutamas</li>
-                            <li>Volunteers needed: 6</li>
-                        </ul>
-                    </article>
-                    <article class="highlight-card">
-                        <h3>Pocket Park Revival</h3>
-                        <p>Adopt a neglected lot and transform it with native pollinator plants.</p>
-                        <ul>
-                            <li>Location: Taman Desa</li>
-                            <li>Next workday: 24 August</li>
-                        </ul>
-                    </article>
-                    <article class="highlight-card">
-                        <h3>Compost Cooperative</h3>
-                        <p>Neighbourhood food scrap drop-off and monthly compost turn with training.</p>
-                        <ul>
-                            <li>Location: Bangsar South</li>
-                            <li>Bring: kitchen scraps &amp; browns</li>
-                        </ul>
-                    </article>
-                    <article class="highlight-card">
-                        <h3>Pocket Park Revival</h3>
-                        <p>Adopt a neglected lot and transform it with native pollinator plants.</p>
-                        <ul>
-                            <li>Location: Taman Desa</li>
-                            <li>Next workday: 24 August</li>
-                        </ul>
-                    </article>
-                </div>
+            <div class="search-container">
+                <label for="searchInput">Search places</label>
+                <input id="searchInput" class="search-box" type="text" placeholder="Search programmes, gardens, or addresses...">
+            </div>
+            <div class="map-wrapper">
+                <div id="map"></div>
+            </div>
+            <div class="section-header">
+                <h2>Programs you can join</h2>
+                <p>Select an initiative to learn more, meet the coordinator, and secure your spot.</p>
+            </div>
+            <div class="project-highlights program-grid">
+                <article class="highlight-card program-card">
+                    <div class="program-card__meta">
+                        <span class="program-card__tag">Urban farming</span>
+                        <span class="program-card__duration">4-week series</span>
+                    </div>
+                    <h3>Rooftop Herb Lab</h3>
+                    <p>Grow culinary herbs in the city while learning soil-free techniques and sharing harvest tips.</p>
+                    <ul>
+                        <li>Location: Solaris Dutamas</li>
+                        <li>Meets: Thursday evenings</li>
+                    </ul>
+                    <div class="program-card__actions">
+                        <a class="program-card__link" href="programDetail.html?program=rooftop-herb-lab">View details &amp; register</a>
+                        <span class="program-card__spots">6 spots left</span>
+                    </div>
+                </article>
+                <article class="highlight-card program-card">
+                    <div class="program-card__meta">
+                        <span class="program-card__tag">Community composting</span>
+                        <span class="program-card__duration">Monthly meetups</span>
+                    </div>
+                    <h3>Compost Cooperative</h3>
+                    <p>Turn kitchen scraps into nutrient-rich compost with neighbours and learn hands-on bin management.</p>
+                    <ul>
+                        <li>Location: Bangsar South</li>
+                        <li>Next meetup: 7 September</li>
+                    </ul>
+                    <div class="program-card__actions">
+                        <a class="program-card__link" href="programDetail.html?program=compost-cooperative">View details &amp; register</a>
+                        <span class="program-card__spots">12 households onboard</span>
+                    </div>
+                </article>
+                <article class="highlight-card program-card">
+                    <div class="program-card__meta">
+                        <span class="program-card__tag">Zero waste</span>
+                        <span class="program-card__duration">Weekend blitz</span>
+                    </div>
+                    <h3>Riverbank Cleanup Sprint</h3>
+                    <p>Help restore the Sungai Batu riverbank with waste audits, sorting stations, and citizen science.</p>
+                    <ul>
+                        <li>Staging point: Taman Desa jetty</li>
+                        <li>Next action day: 24 August</li>
+                    </ul>
+                    <div class="program-card__actions">
+                        <a class="program-card__link" href="programDetail.html?program=riverbank-cleanup">View details &amp; register</a>
+                        <span class="program-card__spots">18 volunteers needed</span>
+                    </div>
+                </article>
+                <article class="highlight-card program-card">
+                    <div class="program-card__meta">
+                        <span class="program-card__tag">Circular economy</span>
+                        <span class="program-card__duration">One-day activation</span>
+                    </div>
+                    <h3>Plastic-Free Market Day</h3>
+                    <p>Co-host workshops and stalls that help weekend shoppers reduce single-use plastics.</p>
+                    <ul>
+                        <li>Venue: TTDI Community Hall</li>
+                        <li>Volunteer shift: 9 AM - 3 PM</li>
+                    </ul>
+                    <div class="program-card__actions">
+                        <a class="program-card__link" href="programDetail.html?program=plastic-free-market">View details &amp; register</a>
+                        <span class="program-card__spots">4 stall slots open</span>
+                    </div>
+                </article>
+            </div>
+        </section>
+        <button type="button" class="add-button" aria-label="Add new program" onclick="window.location.href='upload.html'">+</button>
     </main>
+    <script src="script/sidebar.js" defer></script>
     <script src="script/googleMap.js"></script>
 
   <!-- Google Maps API -->
@@ -106,13 +149,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-

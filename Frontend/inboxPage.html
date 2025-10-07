@@ -11,7 +11,12 @@
     <link rel="stylesheet" href="styles/inboxPage.css">
 </head>
 <body>
-    <header>
+    <button class="sidebar-toggle" type="button" data-sidebar-toggle aria-controls="sidebar" aria-expanded="false">
+        <span class="sidebar-toggle__icon" aria-hidden="true"></span>
+        <span class="sr-only">Toggle navigation</span>
+    </button>
+    <div class="sidebar-backdrop" id="sidebarBackdrop" hidden></div>
+    <header id="sidebar" class="sidebar" aria-label="Primary navigation">
         <div class="logo">
             <a href="landingPage.html">
                 <img src="Pictures/logo.jpeg" alt="EcoGo Logo">
@@ -30,7 +35,7 @@
                 <img src="Pictures/sidebar/garden.png" alt="Community Icon">
                 <p>Gardening Community</p>
             </a>
-            <a href="#">
+            <a href="swapPage.html">
                 <img src="Pictures/sidebar/swap.png" alt="Swap Icon">
                 <p>Swap Items</p>
             </a>
@@ -47,20 +52,14 @@
         </div>
     </header>
     <main>
-        <section class="inbox-card">
+        <section class="tabs-card inbox-layout">
             <div class="inbox-topbar">
                 <div class="search-container">
                     <label for="message-search">Search messages</label>
                     <input id="message-search" type="text" placeholder="Search by project, name, or keyword...">
                 </div>
-                <div class="view-toggle">
-                    <button class="active">Threads</button>
-                    <button>Archive</button>
-                </div>
             </div>
-        </section>
-
-            
+            <div class="inbox-columns">
                 <section class="conversation-list">
                     <div class="list-header">
                         <h2>Threads</h2>
@@ -71,43 +70,29 @@
                         <button>Messages</button>
                         <button>Notifications</button>
                     </div>
-                    <div class="conversation-items">
-                        <div class="conversation-item active">
-                            <div class="avatar">PR</div>
-                            <strong>Pocket Park Revival</strong>
-                            <div class="conversation-meta">
-                                <span>Just now</span>
-                                <span class="status-pill new">new</span>
-                            </div>
-                            <p>Need extra gloves for Saturday? Let us know headcount by Friday.</p>
-                        </div>
-                        <div class="conversation-item">
-                            <div class="avatar">HL</div>
-                            <strong>Herb Lab Volunteers</strong>
-                            <div class="conversation-meta">
-                                <span>2h ago</span>
-                                <span class="status-pill waiting">waiting</span>
-                            </div>
-                            <p>Weekly produce drop confirmed. Can you help document yields?</p>
-                        </div>
-                        <div class="conversation-item">
-                            <div class="avatar">SW</div>
-                            <strong>Swap HQ</strong>
-                            <div class="conversation-meta">
-                                <span>Yesterday</span>
-                            </div>
-                            <p>Lisa accepted your blender listing. Arrange meetup?</p>
-                        </div>
-                        <div class="conversation-item">
-                            <div class="avatar">CC</div>
-                            <strong>Compost Cooperative</strong>
-                            <div class="conversation-meta">
-                                <span>Mon</span>
-                            </div>
-                            <p>Reminder: bring brown materials for this weekend's turn.</p>
-                        </div>
+                    <div class="conversation-items" id="conversationItems">
+                        <!-- Conversation items will be dynamically inserted here -->
                     </div>
                 </section>
+                <section class="chatbox" id="chatbox">
+                    <div class="chatbox-header">
+                        <button onclick="goBack()">&larr; Back</button>
+                        <h2 id="chatTitle">Chat</h2>
+                    </div>
+
+                    <div class="chat-messages" id="chatMessages"></div>
+
+                    <div class="chat-input">
+                        <input type="text" id="messageInput" placeholder="Type a message...">
+                        <button onclick="sendMessage()">Send</button>
+                    </div>
+                </section>
+            </div>
+        </section>
     </main>
+   <script src="script/sidebar.js" defer></script>
+   <script src="script/inboxPage.js" defer></script>
+
+
 </body>
 </html>

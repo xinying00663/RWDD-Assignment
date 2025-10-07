@@ -1,46 +1,53 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>EcoGo Energy Playbook</title>
     <link rel="stylesheet" href="styles/general.css">
-    <link rel="stylesheet" href="styles/common.css">  
+    <link rel="stylesheet" href="styles/common.css">
     <link rel="stylesheet" href="styles/sidebar.css">
-    <link rel="stylesheet" href="styles/searchbar.css">
+    <link rel="stylesheet" href="styles/mediaFeed.css">
+    <link rel="stylesheet" href="styles/addButton.css">
     <link rel="stylesheet" href="styles/energyPage.css">
-<body>
-    <header>
+</head>
+<body data-page="energy">
+    <button class="sidebar-toggle" type="button" data-sidebar-toggle aria-controls="sidebar" aria-expanded="false">
+        <span class="sidebar-toggle__icon" aria-hidden="true"></span>
+        <span class="sr-only">Toggle navigation</span>
+    </button>
+    <div class="sidebar-backdrop" id="sidebarBackdrop" hidden></div>
+    <header id="sidebar" class="sidebar" aria-label="Primary navigation">
         <div class="logo">
             <a href="landingPage.html">
                 <img src="Pictures/logo.jpeg" alt="EcoGo Logo">
             </a>
         </div>
         <nav>
-            <a href="homePage.html" class="active">
+            <a href="homePage.html">
                 <img src="Pictures/sidebar/recycle-sign.png" alt="Home Icon">
                 <p>Recycling Program</p>
             </a>
-            <a href="energyPage.html">
-                <img src="Pictures/sidebar/lamp.png" alt="Home Icon">
+            <a href="energyPage.html" class="active">
+                <img src="Pictures/sidebar/lamp.png" alt="Energy Icon">
                 <p>Energy Conservation Tips</p>
             </a>
             <a href="communityPage.html">
-                <img src="Pictures/sidebar/garden.png" alt="Home Icon">
+                <img src="Pictures/sidebar/garden.png" alt="Community Icon">
                 <p>Gardening Community</p>
             </a>
-            <a href="#">
-                <img src="Pictures/sidebar/swap.png" alt="Home Icon">
+            <a href="swapPage.html">
+                <img src="Pictures/sidebar/swap.png" alt="Swap Icon">
                 <p>Swap Items</p>
             </a>
             <a href="inboxPage.html">
-                <img src="Pictures/sidebar/inbox.png" alt="Home Icon">
+                <img src="Pictures/sidebar/inbox.png" alt="Inbox Icon">
                 <p>Inbox</p>
             </a>
         </nav>
         <div class="profile">
             <a href="userProfile.html">
-                <img src="Pictures/sidebar/user.png" alt="Home Icon">
+                <img src="Pictures/sidebar/user.png" alt="Profile Icon">
                 <p>User Profile</p>
             </a>
         </div>
@@ -48,44 +55,152 @@
     <main>
         <section class="tabs-card">
             <div class="section-header">
-                <h2>Community gardens near you</h2>
-                <p>Use the interactive map to see ongoing projects, connect with coordinators, and find the best time to volunteer. Switch to tips to pick up quick wins for your own plot.</p>
+                <h2>Energy wins you can try this week</h2>
+                <p>Browse quick tutorials and community-tested ideas to trim your bill without expensive upgrades. Filter by the area you need help with and dive deeper for step-by-step guides.</p>
             </div>
-        <div class="search-container">
-                    <label for="tipsSearchInput">Search tips</label>
-                    <input id="tipsSearchInput" class="search-box" type="text" placeholder="Search tips...">
-                    </div>
-                <div class="cards-container">
-                    <div class="card">
-                        <h3>Rainwater harvesting basics</h3>
-                        <p>Capture rain with food-grade barrels connected to your gutters and cut water usage by up to 40%.</p>
-                        <a href="#">Download the setup guide -></a>
-                    </div>
-                    <div class="card">
-                        <h3>Soil health boosters</h3>
-                        <p>Layer coffee grounds, dry leaves, and shredded cardboard to nourish raised beds naturally.</p>
-                        <a href="#">See the carbon-nitrogen chart -></a>
-                    </div>
-                    <div class="card">
-                        <h3>Community harvest table</h3>
-                        <p>Plan a monthly swap where neighbours trade herbs, seedlings, and extra produce.</p>
-                        <a href="#">Get the event checklist -></a>
-                    </div>
-                    <div class="card">
-                        <h3>Starter crops for shade</h3>
-                        <p>Bok choy, Brazilian spinach, and mint thrive on balconies with only a few hours of sunlight.</p>
-                        <a href="#">Browse planting calendar -></a>
-                    </div>
-                </div>
+            <div class="filter-controls" role="region" aria-label="Filter energy resources">
+                <label for="energyFilter">Show</label>
+                <select id="energyFilter" class="media-filter" data-target="energyGrid">
+                    <option value="all">Everything</option>
+                    <option value="tutorial">Tutorial videos</option>
+                    <option value="habit">Daily habits</option>
+                    <option value="planning">Planning &amp; checklists</option>
+                </select>
+            </div>
+            <div class="media-grid" id="energyGrid">
+                <article class="media-card" data-category="tutorial">
+                    <a class="media-card__link" href="mediaDetail.html"
+                       data-page="energy"
+                       data-title="Apartment solar starter kit"
+                       data-description="Understand if portable balcony solar makes sense for your flat, how to get permissions, and wire it safely."
+                       data-category="tutorial"
+                       data-media-type="video"
+                       data-media-src="media/energy-apartment-solar.mp4"
+                       data-poster="Pictures/landingPage/save-energy-pic.jpg"
+                       data-duration="06:12"
+                       data-uploader="EcoGo Energy Lab">
+                        <div class="card-media">
+                            <video src="media/energy-apartment-solar.mp4" poster="Pictures/landingPage/save-energy-pic.jpg" muted loop playsinline></video>
+                            <span class="media-indicator">Video</span>
+                        </div>
+                        <div class="card-body">
+                            <span class="card-tag">Tutorial</span>
+                            <h3>Apartment solar starter kit</h3>
+                            <p>See how Farah shaved 22% off her common-area usage with foldable panels and a plug-in inverter.</p>
+                            <div class="card-meta">
+                                <span class="duration">6 min watch</span>
+                                <span>Updated 2 days ago</span>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+                <article class="media-card" data-category="planning">
+                    <a class="media-card__link" href="mediaDetail.html"
+                       data-page="energy"
+                       data-title="Fridge efficiency checklist"
+                       data-description="Download the printable checklist to tune your fridge &amp; freezer for optimal efficiency in humid climates."
+                       data-category="planning"
+                       data-media-type="image"
+                       data-media-src="Pictures/landingPage/recycling-pic.jpg"
+                       data-alt="Fridge efficiency checklist infographic"
+                       data-uploader="EcoGo Energy Lab">
+                        <div class="card-media">
+                            <img src="Pictures/landingPage/recycling-pic.jpg" alt="Fridge efficiency checklist infographic">
+                            <span class="media-indicator">Guide</span>
+                        </div>
+                        <div class="card-body">
+                            <span class="card-tag">Checklist</span>
+                            <h3>Fridge efficiency checklist</h3>
+                            <p>Keep perishables safe while cutting standby power with these climate-specific adjustments.</p>
+                            <div class="card-meta">
+                                <span>Printable PDF</span>
+                                <span>Shared by EcoGo Energy Lab</span>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+                <article class="media-card" data-category="habit">
+                    <a class="media-card__link" href="mediaDetail.html"
+                       data-page="energy"
+                       data-title="Night cooling walkthrough"
+                       data-description="Learn how Adrian precools his flat and uses cross-ventilation so the AC stays off most evenings."
+                       data-category="habit"
+                       data-media-type="video"
+                       data-media-src="media/energy-night-cooling.mp4"
+                       data-poster="Pictures/landingPage/swap-item-pic.jpg"
+                       data-duration="04:03"
+                       data-uploader="EcoGo Energy Lab">
+                        <div class="card-media">
+                            <video src="media/energy-night-cooling.mp4" poster="Pictures/landingPage/swap-item-pic.jpg" muted loop playsinline></video>
+                            <span class="media-indicator">Video</span>
+                        </div>
+                        <div class="card-body">
+                            <span class="card-tag">Habit</span>
+                            <h3>Night cooling walkthrough</h3>
+                            <p>Balance humidity, airflow, and blinds timing with this evening routine for high-rise homes.</p>
+                            <div class="card-meta">
+                                <span class="duration">4 min watch</span>
+                                <span>Popular this week</span>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+                <article class="media-card" data-category="planning">
+                    <a class="media-card__link" href="mediaDetail.html"
+                       data-page="energy"
+                       data-title="Bulk appliance buy-in"
+                       data-description="Coordinate a group order for energy efficient appliances and unlock community rebates."
+                       data-category="planning"
+                       data-media-type="image"
+                       data-media-src="Pictures/landingPage/gardening-pic.jpg"
+                       data-alt="Neighbours planning a bulk appliance buy"
+                       data-uploader="Resident Energy Circle">
+                        <div class="card-media">
+                            <img src="Pictures/landingPage/gardening-pic.jpg" alt="Neighbours planning a bulk appliance buy">
+                            <span class="media-indicator">Playbook</span>
+                        </div>
+                        <div class="card-body">
+                            <span class="card-tag">Planning</span>
+                            <h3>Bulk appliance buy-in</h3>
+                            <p>Use our cost calculator and outreach scripts to organise your own neighbourhood bulk buy.</p>
+                            <div class="card-meta">
+                                <span>Template bundle</span>
+                                <span>Shared by Resident Energy Circle</span>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+                <article class="media-card" data-category="habit">
+                    <a class="media-card__link" href="mediaDetail.html"
+                       data-page="energy"
+                       data-title="Night cooling walkthrough"
+                       data-description="Learn how Adrian precools his flat and uses cross-ventilation so the AC stays off most evenings."
+                       data-category="habit"
+                       data-media-type="video"
+                       data-media-src="media/energy-night-cooling.mp4"
+                       data-poster="Pictures/landingPage/swap-item-pic.jpg"
+                       data-duration="04:03"
+                       data-uploader="EcoGo Energy Lab">
+                        <div class="card-media">
+                            <video src="media/energy-night-cooling.mp4" poster="Pictures/landingPage/swap-item-pic.jpg" muted loop playsinline></video>
+                            <span class="media-indicator">Video</span>
+                        </div>
+                        <div class="card-body">
+                            <span class="card-tag">Habit</span>
+                            <h3>Night cooling walkthrough</h3>
+                            <p>Balance humidity, airflow, and blinds timing with this evening routine for high-rise homes.</p>
+                            <div class="card-meta">
+                                <span class="duration">4 min watch</span>
+                                <span>Popular this week</span>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+            </div>
         </section>
+        <button type="button" class="add-button" aria-label="Submit energy tip" onclick="window.location.href='uploadEnergy.html'">+</button>
     </main>
-    <script>
-        function toggleDropdown() {
-  document.getElementById("dropdownMenu").style.display =
-    document.getElementById("dropdownMenu").style.display === "block"
-      ? "none"
-      : "block";
-}
-    </script>
+    <script src="script/sidebar.js" defer></script>
+    <script src="script/mediaFeed.js" defer></script>
 </body>
 </html>

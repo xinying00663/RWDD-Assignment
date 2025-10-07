@@ -1,0 +1,18 @@
+        .add-button {
+      position: fixed;   /* stays in the same place even when scrolling */
+      bottom: 20px;      /* distance from bottom */
+      right: 20px;       /* distance from right */
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      font-size: 30px;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    }
+
+    .add-button:hover {
+      background-color: #45a049;
+    }

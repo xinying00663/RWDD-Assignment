@@ -1,47 +1,53 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EcoGo Gardening Community</title>
     <link rel="stylesheet" href="styles/general.css">
-    <link rel="stylesheet" href="styles/common.css">    
+    <link rel="stylesheet" href="styles/common.css">
     <link rel="stylesheet" href="styles/sidebar.css">
-    <link rel="stylesheet" href="styles/searchbar.css">
+    <link rel="stylesheet" href="styles/mediaFeed.css">
+    <link rel="stylesheet" href="styles/addButton.css">
     <link rel="stylesheet" href="styles/communityPage.css">
 </head>
-<body>
-    <header>
+<body data-page="community">
+    <button class="sidebar-toggle" type="button" data-sidebar-toggle aria-controls="sidebar" aria-expanded="false">
+        <span class="sidebar-toggle__icon" aria-hidden="true"></span>
+        <span class="sr-only">Toggle navigation</span>
+    </button>
+    <div class="sidebar-backdrop" id="sidebarBackdrop" hidden></div>
+    <header id="sidebar" class="sidebar" aria-label="Primary navigation">
         <div class="logo">
             <a href="landingPage.html">
                 <img src="Pictures/logo.jpeg" alt="EcoGo Logo">
             </a>
         </div>
         <nav>
-            <a href="homePage.html" class="active">
+            <a href="homePage.html">
                 <img src="Pictures/sidebar/recycle-sign.png" alt="Home Icon">
                 <p>Recycling Program</p>
             </a>
             <a href="energyPage.html">
-                <img src="Pictures/sidebar/lamp.png" alt="Home Icon">
+                <img src="Pictures/sidebar/lamp.png" alt="Energy Icon">
                 <p>Energy Conservation Tips</p>
             </a>
-            <a href="communityPage.html">
-                <img src="Pictures/sidebar/garden.png" alt="Home Icon">
+            <a href="communityPage.html" class="active">
+                <img src="Pictures/sidebar/garden.png" alt="Community Icon">
                 <p>Gardening Community</p>
             </a>
-            <a href="#">
-                <img src="Pictures/sidebar/swap.png" alt="Home Icon">
+            <a href="swapPage.html">
+                <img src="Pictures/sidebar/swap.png" alt="Swap Icon">
                 <p>Swap Items</p>
             </a>
             <a href="inboxPage.html">
-                <img src="Pictures/sidebar/inbox.png" alt="Home Icon">
+                <img src="Pictures/sidebar/inbox.png" alt="Inbox Icon">
                 <p>Inbox</p>
             </a>
         </nav>
         <div class="profile">
             <a href="userProfile.html">
-                <img src="Pictures/sidebar/user.png" alt="Home Icon">
+                <img src="Pictures/sidebar/user.png" alt="Profile Icon">
                 <p>User Profile</p>
             </a>
         </div>
@@ -49,88 +55,124 @@
     <main>
         <section class="tabs-card">
             <div class="section-header">
-                <h2>Community gardens near you</h2>
-                <p>Use the interactive map to see ongoing projects, connect with coordinators, and find the best time to volunteer. Switch to tips to pick up quick wins for your own plot.</p>
+                <h2>Gardens, swaps, and stories from your neighbours</h2>
+                <p>Watch skill shares, explore project galleries, and meet growers who are transforming unused corners into thriving spaces.</p>
             </div>
-            <div class="tabs">
-                <button class="tab-btn active" onclick="showTab(this, 'projects')">Projects</button>
-                <button class="tab-btn" onclick="showTab(this, 'tips')">Tips</button>
+            <div class="filter-controls" role="region" aria-label="Filter community stories">
+                <label for="communityFilter">Show</label>
+                <select id="communityFilter" class="media-filter" data-target="communityGrid">
+                    <option value="projects">Projects</option>
+                    <option value="tips">Tips</option>
+                </select>
             </div>
-            <div id="projects" class="tab-content active">
-                <div class="search-container">
-                    <label for="searchInput">Search places</label>
-                    <input id="searchInput" class="search-box" type="text" placeholder="Search programmes, gardens, or addresses...">
-                </div>
-                <div class="cards-container">
-                    <div class="card">
-                        <h3>Rainwater harvesting basics</h3>
-                        <p>Capture rain with food-grade barrels connected to your gutters and cut water usage by up to 40%.</p>
-                        <a href="#">Download the setup guide -></a>
-                    </div>
-                    <div class="card">
-                        <h3>Soil health boosters</h3>
-                        <p>Layer coffee grounds, dry leaves, and shredded cardboard to nourish raised beds naturally.</p>
-                        <a href="#">See the carbon-nitrogen chart -></a>
-                    </div>
-                    <div class="card">
-                        <h3>Community harvest table</h3>
-                        <p>Plan a monthly swap where neighbours trade herbs, seedlings, and extra produce.</p>
-                        <a href="#">Get the event checklist -></a>
-                    </div>
-                    <div class="card">
-                        <h3>Starter crops for shade</h3>
-                        <p>Bok choy, Brazilian spinach, and mint thrive on balconies with only a few hours of sunlight.</p>
-                        <a href="#">Browse planting calendar -></a>
-                    </div>
-                </div>
-            </div>
-            <div id="tips" class="tab-content">
-                <div class="search-container">
-                    <label for="tipsSearchInput">Search tips</label>
-                    <input id="tipsSearchInput" class="search-box" type="text" placeholder="Search tips...">
-                    </div>
-                <div class="cards-container">
-                    <div class="card">
-                        <h3>Rainwater harvesting basics</h3>
-                        <p>Capture rain with food-grade barrels connected to your gutters and cut water usage by up to 40%.</p>
-                        <a href="#">Download the setup guide -></a>
-                    </div>
-                    <div class="card">
-                        <h3>Soil health boosters</h3>
-                        <p>Layer coffee grounds, dry leaves, and shredded cardboard to nourish raised beds naturally.</p>
-                        <a href="#">See the carbon-nitrogen chart -></a>
-                    </div>
-                    <div class="card">
-                        <h3>Community harvest table</h3>
-                        <p>Plan a monthly swap where neighbours trade herbs, seedlings, and extra produce.</p>
-                        <a href="#">Get the event checklist -></a>
-                    </div>
-                    <div class="card">
-                        <h3>Starter crops for shade</h3>
-                        <p>Bok choy, Brazilian spinach, and mint thrive on balconies with only a few hours of sunlight.</p>
-                        <a href="#">Browse planting calendar -></a>
-                    </div>
-                </div>
+            <div class="media-grid" id="communityGrid">
+                <article class="media-card" data-category="projects">
+                    <a class="media-card__link" href="mediaDetail.html"
+                       data-page="community"
+                       data-title="Rooftop herb bed build-along"
+                       data-description="Follow Asha&apos;s weekend build to transform a 12 m^2 rooftop into a self-watering herb bed using reclaimed pallets."
+                       data-category="projects"
+                       data-media-type="video"
+                       data-media-src="media/community-herb-bed.mp4"
+                       data-poster="Pictures/landingPage/gardening-pic.jpg"
+                       data-duration="08:47"
+                       data-uploader="Asha Kaur">
+                        <div class="card-media">
+                            <video src="media/community-herb-bed.mp4" poster="Pictures/landingPage/gardening-pic.jpg" muted loop playsinline></video>
+                            <span class="media-indicator">Project</span>
+                        </div>
+                        <div class="card-body">
+                            <span class="card-tag">Projects</span>
+                            <h3>Rooftop herb bed build-along</h3>
+                            <p>Asha shows each step, from lining to drip trays, and shares a soil mix recipe for heat tolerance.</p>
+                            <div class="card-meta">
+                                <span class="uploader">By Asha Kaur</span>
+                                <span class="duration">9 min watch</span>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+                <article class="media-card" data-category="projects">
+                    <a class="media-card__link" href="mediaDetail.html"
+                       data-page="community"
+                       data-title="Pocket park before &amp; after"
+                       data-description="See how the Block C crew reclaimed a dumping ground and now harvests 30 kg of produce monthly."
+                       data-category="projects"
+                       data-media-type="image"
+                       data-media-src="Pictures/landingPage/save-energy-pic.jpg"
+                       data-alt="Pocket park transformation collage"
+                       data-uploader="Block C Collective">
+                        <div class="card-media">
+                            <img src="Pictures/landingPage/save-energy-pic.jpg" alt="Pocket park transformation collage">
+                            <span class="media-indicator">Project</span>
+                        </div>
+                        <div class="card-body">
+                            <span class="card-tag">Projects</span>
+                            <h3>Pocket park before &amp; after</h3>
+                            <p>Tap to see the raised beds, rainwater capture, and compost loop they set up in six months.</p>
+                            <div class="card-meta">
+                                <span class="uploader">By Block C Collective</span>
+                                <span>22 neighbours watching</span>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+                <article class="media-card" data-category="tips">
+                    <a class="media-card__link" href="mediaDetail.html"
+                       data-page="community"
+                       data-title="Seed swap morning checklist"
+                       data-description="Browse the catalogue of cuttings, seeds, and tools up for grabs at Amani&apos;s monthly swap and learn how to host your own."
+                       data-category="tips"
+                       data-media-type="image"
+                       data-media-src="Pictures/landingPage/swap-item-pic.jpg"
+                       data-alt="Seed swap table loaded with seedlings"
+                       data-uploader="Amani Farouk">
+                        <div class="card-media">
+                            <img src="Pictures/landingPage/swap-item-pic.jpg" alt="Seed swap table loaded with seedlings">
+                            <span class="media-indicator">Tip</span>
+                        </div>
+                        <div class="card-body">
+                            <span class="card-tag">Tips</span>
+                            <h3>Seed swap morning checklist</h3>
+                            <p>Discover what&apos;s in season, how to reserve a tray, and where to drop off your extras.</p>
+                            <div class="card-meta">
+                                <span class="uploader">By Amani Farouk</span>
+                                <span>Updated yesterday</span>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+                <article class="media-card" data-category="tips">
+                    <a class="media-card__link" href="mediaDetail.html"
+                       data-page="community"
+                       data-title="Balcony compost troubleshooting"
+                       data-description="Carmen answers common questions about odour control, pests, and harvesting compact compost bins."
+                       data-category="tips"
+                       data-media-type="video"
+                       data-media-src="media/community-compost.mp4"
+                       data-poster="Pictures/landingPage/recycling-pic.jpg"
+                       data-duration="05:19"
+                       data-uploader="Carmen Lee">
+                        <div class="card-media">
+                            <video src="media/community-compost.mp4" poster="Pictures/landingPage/recycling-pic.jpg" muted loop playsinline></video>
+                            <span class="media-indicator">Tip</span>
+                        </div>
+                        <div class="card-body">
+                            <span class="card-tag">Tips</span>
+                            <h3>Balcony compost troubleshooting</h3>
+                            <p>Get tips to keep your bin aerobic and productive even in tiny shaded balconies.</p>
+                            <div class="card-meta">
+                                <span class="uploader">By Carmen Lee</span>
+                                <span class="duration">5 min watch</span>
+                            </div>
+                        </div>
+                    </a>
+                </article>
             </div>
         </section>
+        <button type="button" class="add-button" aria-label="Share with the community" onclick="window.location.href='uploadCommunity.html'">+</button>
     </main>
-    <script>
-        function showTab(button, tabId) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-
-            document.getElementById(tabId).classList.add('active');
-            button.classList.add('active');
-
-            if (tabId === 'projects' && window.map) {
-                setTimeout(() => {
-                    google.maps.event.trigger(map, 'resize');
-                    map.setCenter({ lat: 3.1390, lng: 101.6869 });
-                }, 200);
-            }
-        }
-    </script>
+    <script src="script/sidebar.js" defer></script>
+    <script src="script/mediaFeed.js" defer></script>
 </body>
 </html>
-
-

@@ -1,51 +1,60 @@
-header {
-            display:flex;
-            flex-direction:column;
-            width:220px;
-            height:100vh;
-            position:fixed;
-            top:0;
-            left:0;
-            padding:20px 10px;
-        }
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    width: var(--sidebar-width, 220px);
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 24px 16px;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    z-index: 1000;
+}
 
-        .logo{
-            text-align:center;
-            margin-bottom:30px;
-        }
-        nav{
-            display:flex;
-            flex-direction:column;
-            gap:20px;
-            flex-grow:1;
-        }
+.sidebar .logo {
+    text-align: center;
+    margin-bottom: 32px;
+}
 
-        nav a, .profile a {
-            display: flex;
-            flex-direction:column;
-            align-items: center;
-            text-decoration: none;
-            color: #333;
-            padding: 15px 10px;;
-            border-radius: 8px;
-            transition: background 0.3s ease;
-        }
+.sidebar nav {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    flex-grow: 1;
+}
 
-        nav a:hover, .profile a:hover {
-            background-color: #c6e9d6;
-        }
+.sidebar nav a,
+.sidebar .profile a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #333;
+    padding: 15px 10px;
+    border-radius: 12px;
+    transition: background 0.3s ease, transform 0.2s ease;
+    text-align: center;
+}
 
-        nav a img, .profile a img {
-            height: 24px;
-            margin:0 0 6px 0;
-        }
+.sidebar nav a:hover,
+.sidebar .profile a:hover {
+    background-color: #c6e9d6;
+    transform: translateY(-1px);
+}
+
+.sidebar nav a.active {
+    background-color: #2d8d60;
+    color: #ffffff;
+}
+
+.sidebar nav a img,
+.sidebar .profile a img {
+    height: 24px;
+    margin-bottom: 6px;
+}
 
         .profile {
             margin-top: auto;
         }
-
-@media screen and(max-width="600px"){
-    header {
-        display: block;
-    }
-}

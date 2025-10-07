@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm Swap</title>
+    <link rel="stylesheet" href="styles/general.css">
+    <link rel="stylesheet" href="styles/common.css">
+    <link rel="stylesheet" href="styles/sidebar.css">
+    <link rel="stylesheet" href="styles/uploadPage.css">
+    <link rel="stylesheet" href="styles/swapConfirm.css">
+</head>
+<body data-page="swap-confirm">
+    <button class="sidebar-toggle" type="button" data-sidebar-toggle aria-controls="sidebar" aria-expanded="false">
+        <span class="sidebar-toggle__icon" aria-hidden="true"></span>
+        <span class="sr-only">Toggle navigation</span>
+    </button>
+    <div class="sidebar-backdrop" id="sidebarBackdrop" hidden></div>
+    <header id="sidebar" class="sidebar" aria-label="Primary navigation">
+        <div class="logo">
+            <a href="landingPage.html">
+                <img src="Pictures/logo.jpeg" alt="EcoGo Logo">
+            </a>
+        </div>
+        <nav>
+            <a href="homePage.html">
+                <img src="Pictures/sidebar/recycle-sign.png" alt="Recycling icon">
+                <p>Recycling Program</p>
+            </a>
+            <a href="energyPage.html">
+                <img src="Pictures/sidebar/lamp.png" alt="Energy icon">
+                <p>Energy Conservation Tips</p>
+            </a>
+            <a href="communityPage.html">
+                <img src="Pictures/sidebar/garden.png" alt="Community icon">
+                <p>Gardening Community</p>
+            </a>
+            <a href="swapPage.html" class="active">
+                <img src="Pictures/sidebar/swap.png" alt="Swap icon">
+                <p>Swap Items</p>
+            </a>
+            <a href="inboxPage.html">
+                <img src="Pictures/sidebar/inbox.png" alt="Inbox icon">
+                <p>Inbox</p>
+            </a>
+        </nav>
+        <div class="profile">
+            <a href="userProfile.html">
+                <img src="Pictures/sidebar/user.png" alt="Profile icon">
+                <p>User Profile</p>
+            </a>
+        </div>
+    </header>
+    <main>
+        <section class="tabs-card swap-confirm-card" aria-labelledby="swapConfirmHeading">
+            <div class="section-header">
+                <h2 id="swapConfirmHeading">Swap for <span id="selectedItemTitle">this item</span></h2>
+                <p>Share what you can offer in return so the owner can review and confirm the swap.</p>
+            </div>
+            <div class="swap-confirm__content">
+                <article class="swap-confirm__item" aria-live="polite">
+                    <div class="swap-confirm__media">
+                        <img id="selectedItemImage" src="Pictures/landingPage/swap-item-pic.jpg" alt="Selected swap item">
+                    </div>
+                    <div class="swap-confirm__details">
+                        <span class="swap-confirm__tag" id="selectedItemTag">Swap item</span>
+                        <h3 id="selectedItemName">Selected swap item</h3>
+                        <p id="selectedItemDescription">Choose a listing from the swap feed to see the details here.</p>
+                    </div>
+                </article>
+                <form id="swapOfferForm" class="upload-form swap-confirm__form" action="#" method="post" enctype="multipart/form-data">
+                    <div class="upload-form__grid">
+                        <div class="input-group input-group--full">
+                            <label for="offerMedia">Upload your item photo</label>
+                            <input type="file" id="offerMedia" name="offerMedia" accept="image/*" required>
+                            <p class="input-help">Share a clear image so your neighbour can confirm the swap quickly.</p>
+                        </div>
+                        <div class="input-group">
+                            <label for="offerTitle">Your item name</label>
+                            <input type="text" id="offerTitle" name="offerTitle" placeholder="e.g. Handwoven market tote" required>
+                        </div>
+                        <div class="input-group input-group--full">
+                            <label for="offerDescription">Describe your item</label>
+                            <textarea id="offerDescription" name="offerDescription" rows="5" placeholder="Explain the condition, pick-up timing, or what makes it a good swap." required></textarea>
+                        </div>
+                        <div class="input-group input-group--full">
+                            <label for="offerNotes">Message to the owner (optional)</label>
+                            <textarea id="offerNotes" name="offerNotes" rows="4" placeholder="Add extra context or propose a meeting spot."></textarea>
+                        </div>
+                    </div>
+                    <div class="upload-form__footer">
+                        <p class="helper-text">We'll notify the owner of <span id="selectedItemNameInline">this item</span> once you confirm.</p>
+                        <div class="upload-form__actions">
+                            <button type="button" class="button-cancel" onclick="window.location.href='swapPage.html'">Back to swap feed</button>
+                            <button type="submit">Confirm swap request</button>
+                        </div>
+                    </div>
+                    <div class="swap-confirm__success" id="swapConfirmSuccess" role="status" aria-live="polite" tabindex="-1">
+                        <strong>Swap request sent!</strong>
+                        <p>We'll let you know in your inbox when the owner responds.</p>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+    <script src="script/sidebar.js" defer></script>
+    <script src="script/swapConfirm.js" defer></script>
+</body>
+</html>
