@@ -158,25 +158,3 @@
     border-style: dashed;
     border-color: rgba(26, 49, 38, 0.24);
 }
-
-.program-card--upload {
-    border-style: dashed;
-    border-color: rgba(26, 49, 38, 0.28);
-    box-shadow: 0 16px 30px rgba(26, 49, 38, 0.12);
-    padding-top: 44px;
-}
-
-.program-card--upload .program-card__tag {
-    background: rgba(45, 141, 96, 0.2);
-}
-
-.program-card__posted {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #214235;
-}
-
-.program-card__posted-time {
-    font-size: 0.85rem;
-    color: var(--muted);
-}
