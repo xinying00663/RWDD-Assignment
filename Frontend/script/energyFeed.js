@@ -4,6 +4,44 @@
 (function () {
     const STORAGE_KEY = "ecogoEnergyUploads";
     const FLASH_KEY = "ecogoEnergyUploadFlash";
+    const SEED_ENERGY_TIPS = [
+        {
+            category: "tutorial",
+            title: "Fan-first cooling guide",
+            summary: "Cut AC runtime in half with a three-step evening airflow routine that keeps the whole flat comfortable.",
+            detailDescription: "Position box fans for cross ventilation, precool bedrooms before dusk, and layer in ceiling fan direction changes once the sun sets.",
+            mediaType: "image",
+            mediaSrc: "Pictures/landingPage/save-energy-pic.jpg",
+            imageAlt: "Living room with energy efficient fans running",
+            tagLabel: "Tutorial",
+            mediaIndicator: "Guide",
+            metaNotes: ["Estimated savings: 12%", "Time: 20 minutes", "Tools: 2 box fans"]
+        },
+        {
+            category: "habit",
+            title: "Laundry off-peak playbook",
+            summary: "Shift wash cycles to community off-peak hours and share drying racks to slash energy usage.",
+            detailDescription: "Set weekly reminders, rotate drying rack reservations, and batch cold washes so neighbours can join in the savings.",
+            mediaType: "image",
+            mediaSrc: "Pictures/landingPage/save-energy-pic.jpg",
+            imageAlt: "Laundry room with energy efficient appliances",
+            tagLabel: "Daily habit",
+            mediaIndicator: "Checklist",
+            metaNotes: ["Peak shift: 7pm–9pm", "Shared tools: 4 racks"]
+        },
+        {
+            category: "planning",
+            title: "Kitchen appliance tune-up",
+            summary: "Plan a weekend blitz to seal air leaks, recalibrate ovens, and dust coils for long term efficiency.",
+            detailDescription: "Follow the printable worksheet to inspect weather stripping, align door seals, and measure fridge temps for optimal performance.",
+            mediaType: "image",
+            mediaSrc: "Pictures/landingPage/save-energy-pic.jpg",
+            imageAlt: "Person cleaning refrigerator coils to improve efficiency",
+            tagLabel: "Planning",
+            mediaIndicator: "Playbook",
+            metaNotes: ["Group effort", "Supplies under $10"]
+        }
+    ];
 
     function categoryLabel(value) {
         switch (value) {
@@ -245,10 +283,7 @@
      * Renders the seeded catalogue entries, if available.
      */
     function renderSeedEntries(grid) {
-        if (!window.ecogoContentCatalog || typeof window.ecogoContentCatalog.listEnergyTips !== "function") {
-            return false;
-        }
-        const seeds = window.ecogoContentCatalog.listEnergyTips();
+        const seeds = SEED_ENERGY_TIPS;
         if (!Array.isArray(seeds) || !seeds.length) {
             return false;
         }

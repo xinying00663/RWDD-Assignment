@@ -2,10 +2,32 @@
  * Handles swap card interactions and navigation to the confirm page.
  */
 (function () {
+    var SELECTION_KEY = "ecogoSelectedSwap";
+
     function buildDestination(link) {
         var rawHref = link.getAttribute("href") || "swapConfirm.html";
         var questionIndex = rawHref.indexOf("?");
         return questionIndex === -1 ? rawHref : rawHref.slice(0, questionIndex);
+    }
+
+    function persistSelection(payload) {
+        if (!payload) {
+            return false;
+        }
+        try {
+            var record = {
+                title: payload.title || "",
+                description: payload.description || "",
+                category: payload.category || "",
+                image: payload.image || "",
+                timestamp: Date.now()
+            };
+            localStorage.setItem(SELECTION_KEY, JSON.stringify(record));
+            return true;
+        } catch (error) {
+            console.warn("EcoGo swap: unable to store selection", error);
+            return false;
+        }
     }
 
     function redirectWithCardData(link) {
@@ -15,7 +37,6 @@
             return;
         }
 
-        var params = new URLSearchParams();
         var titleElement = card.querySelector("h3");
         var descriptionElement = card.querySelector("p");
         var imageEl = card.querySelector("img");
@@ -31,6 +52,13 @@
         var image =
             card.dataset.itemImage || (imageEl ? imageEl.getAttribute("src") : "");
 
+        var destination = buildDestination(link);
+        if (persistSelection({ title: title, description: description, category: category, image: image })) {
+            window.location.href = destination;
+            return;
+        }
+
+        var params = new URLSearchParams();
         params.set("title", title);
         if (description) {
             params.set("description", description);
@@ -38,11 +66,10 @@
         if (category) {
             params.set("category", category);
         }
-        if (image) {
+        if (image && image.length < 1024) {
             params.set("image", image);
         }
 
-        var destination = buildDestination(link);
         var query = params.toString();
         window.location.href = query ? destination + "?" + query : destination;
     }

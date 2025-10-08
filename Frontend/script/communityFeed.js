@@ -4,6 +4,41 @@
 (function () {
     const STORAGE_KEY = "ecogoCommunityUploads";
     const FLASH_KEY = "ecogoCommunityUploadFlash";
+    const SEED_COMMUNITY_STORIES = [
+        {
+            category: "projects",
+            title: "Balcony herb wall",
+            summary: "Three neighbours turned a bare corridor wall into a thriving herb tower using reclaimed pallets.",
+            detailDescription: "Swap tips on companion planting, see how drip irrigation was rigged from reused bottles, and learn which herbs thrive in low light hallways.",
+            mediaType: "image",
+            mediaSrc: "Pictures/landingPage/gardening-pic.jpg",
+            imageAlt: "Community members arranging plants on a vertical garden wall",
+            tagLabel: "Projects",
+            metaNotes: ["Vertical garden", "Reused pallets", "Shared harvest"]
+        },
+        {
+            category: "tips",
+            title: "Soil rescue toolkit",
+            summary: "A quick guide to reviving tired planter soil with common pantry scraps and leaf mould.",
+            detailDescription: "Follow the three day refresh to aerate, layer in compost teas, and reintroduce microbes without spending on new potting mix.",
+            mediaType: "image",
+            mediaSrc: "Pictures/landingPage/gardening-pic.jpg",
+            imageAlt: "Close up of hands mixing compost into soil",
+            tagLabel: "Tips",
+            metaNotes: ["30 minute prep", "No-cost inputs"]
+        },
+        {
+            category: "projects",
+            title: "Courtyard pollinator path",
+            summary: "Residents mapped out a mini meadow that keeps bees moving between balcony planters.",
+            detailDescription: "See plant lists for each flowering season, step-by-step bed preparation, and how the team coordinated watering schedules.",
+            mediaType: "image",
+            mediaSrc: "Pictures/landingPage/gardening-pic.jpg",
+            imageAlt: "Blooming courtyard garden filled with pollinator friendly flowers",
+            tagLabel: "Projects",
+            metaNotes: ["Native species", "Pollinator friendly"]
+        }
+    ];
 
     function categoryLabel(value) {
         switch (value) {
@@ -241,10 +276,7 @@
      * Renders the seeded community stories, returning true when cards are added.
      */
     function renderSeedEntries(grid) {
-        if (!window.ecogoContentCatalog || typeof window.ecogoContentCatalog.listCommunityStories !== "function") {
-            return false;
-        }
-        const seeds = window.ecogoContentCatalog.listCommunityStories();
+        const seeds = SEED_COMMUNITY_STORIES;
         if (!Array.isArray(seeds) || !seeds.length) {
             return false;
         }
