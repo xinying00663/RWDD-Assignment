@@ -16,6 +16,9 @@
         }
     }
 
+    /**
+     * Builds the media preview for swap cards.
+     */
     function createMediaElement(entry) {
         const wrapper = document.createElement("div");
         wrapper.className = "card-media";
@@ -23,6 +26,9 @@
         if (entry.mediaType === "video") {
             const video = document.createElement("video");
             video.src = entry.mediaSrc;
+            if (entry.poster) {
+                video.poster = entry.poster;
+            }
             video.muted = true;
             video.loop = true;
             video.playsInline = true;
@@ -31,7 +37,7 @@
         } else {
             const image = document.createElement("img");
             image.src = entry.mediaSrc;
-            image.alt = entry.title || "Swap item image";
+            image.alt = entry.imageAlt || entry.title || "Swap item image";
             wrapper.appendChild(image);
         }
 
@@ -118,6 +124,40 @@
         return article;
     }
 
+    /**
+     * Creates a seeded swap listing so the board is populated on first load.
+     */
+    function createSeedSwapCard(seed) {
+        const article = document.createElement("article");
+        article.className = "media-card swap-card";
+        article.dataset.category = seed.category || "home-grown";
+        article.dataset.itemTitle = seed.title || "";
+        article.dataset.itemDescription = seed.description || "";
+        article.dataset.itemImage = seed.imageSrc || FALLBACK_IMAGE;
+
+        article.appendChild(
+            createMediaElement({
+                mediaType: "image",
+                mediaSrc: seed.imageSrc || FALLBACK_IMAGE,
+                title: seed.title || "Swap listing",
+                imageAlt: seed.imageAlt || seed.title || ""
+            })
+        );
+
+        const { body, link } = createCardBody({
+            category: seed.category || "home-grown",
+            title: seed.title,
+            details: seed.description
+        });
+        article.appendChild(body);
+
+        if (window.ecogoSwap && typeof window.ecogoSwap.registerLink === "function") {
+            window.ecogoSwap.registerLink(link);
+        }
+
+        return article;
+    }
+
     function createFlashBanner(data) {
         const banner = document.createElement("div");
         banner.className = "feed-flash feed-flash--swap";
@@ -136,11 +176,32 @@
         }
     }
 
+    /**
+     * Renders the seeded swap listings and returns true when entries were added.
+     */
+    function renderSeedEntries(grid) {
+        if (!window.ecogoContentCatalog || typeof window.ecogoContentCatalog.listSwapListings !== "function") {
+            return false;
+        }
+        const seeds = window.ecogoContentCatalog.listSwapListings();
+        if (!Array.isArray(seeds) || !seeds.length) {
+            return false;
+        }
+        const fragment = document.createDocumentFragment();
+        seeds.forEach((seed) => {
+            fragment.appendChild(createSeedSwapCard(seed));
+        });
+        grid.appendChild(fragment);
+        return true;
+    }
+
     document.addEventListener("DOMContentLoaded", () => {
         const grid = document.getElementById("swapItems");
         if (!grid) {
             return;
         }
+
+        let shouldRefresh = renderSeedEntries(grid);
 
         const listings = window.ecogoUploads.loadEntries(STORAGE_KEY);
         if (listings.length) {
@@ -149,6 +210,10 @@
                 fragment.appendChild(createSwapCard(entry));
             });
             grid.prepend(fragment);
+            shouldRefresh = true;
+        }
+
+        if (shouldRefresh) {
             refreshFilters();
         }
 
