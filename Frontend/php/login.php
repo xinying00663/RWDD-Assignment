@@ -1,21 +1,8 @@
 <?php
 
-$host = 'localhost';
-$database = 'EcoGo';
-$username = 'your_username';
-$password = 'your_password';
+include "connect.php";
 
-//Connect to database
-try{
-    $pdo=new PDO("mysql:host=$host;dbname=$name",$user,$password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
-}catch(PDOException $e){
-    error_log("Database connection failed:".$e->getMessage());
-    http_response_code(500);
-    echo json_encode(["success"=>false,"message"=>"Database connection failed"]);
-    exit;
-}
-
+session_start();
 if($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST["action"])){
   $response=["success"=>false,"message"=>""];
 
@@ -45,7 +32,8 @@ if($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST["action"])){
 
           $response["success"]=true;
           $response["message"]="Your account has been created successfully.";
-          $response["userID"]=$user["id"];
+          $response["user_id"]=$user["id"];
+          $response["redirect"]="homePage.html";
         }else{
           $response["message"]="Invalid email or password.";
         }
