@@ -1,14 +1,13 @@
 -- Users Table
 CREATE TABLE Users (
     UserID INT AUTO_INCREMENT PRIMARY KEY,
-    Username VARCHAR(200) NOT NULL,
     Full_Name VARCHAR(200) NOT NULL,
     BirthDate DATE,
     Gender ENUM('Male','Female','Other'),
     Email VARCHAR(200) UNIQUE NOT NULL,
     Username VARCHAR(200) UNIQUE NOT NULL,
     Password VARCHAR(200) NOT NULL,
-    Phone_Number VARCHAR(200),
+    Phone_Number VARCHAR(200) NOT NULL,
     City_or_Neighbourhood VARCHAR(200),
     Additional_Info VARCHAR(200),
     Join_Date DATETIME,
