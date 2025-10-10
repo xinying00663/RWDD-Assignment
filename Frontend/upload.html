@@ -10,9 +10,14 @@
     <link rel="stylesheet" href="styles/uploadPage.css">
 </head>
 <body data-page="upload">
-    <header>
+    <button class="sidebar-toggle" type="button" data-sidebar-toggle aria-controls="sidebar" aria-expanded="false">
+        <span class="sidebar-toggle__icon" aria-hidden="true"></span>
+        <span class="sr-only">Toggle navigation</span>
+    </button>
+    <div class="sidebar-backdrop" id="sidebarBackdrop" hidden></div>
+    <header id="sidebar" class="sidebar" aria-label="Primary navigation">
         <div class="logo">
-            <a href="landingPage.html">
+            <a href="homePage.html">
                 <img src="Pictures/logo.jpeg" alt="EcoGo Logo">
             </a>
         </div>
@@ -74,6 +79,47 @@
                         <textarea id="eventDescription" name="eventDescription" rows="5" placeholder="Share the schedule, needed supplies, or special instructions." required></textarea>
                     </div>
                 </div>
+                <!-- Coordinator contact fields so neighbours know who will follow up -->
+                <div class="upload-form__section">
+                    <h3>Program coordinator</h3>
+                    <p class="helper-text">These details appear on the program page so volunteers can reach you directly.</p>
+                    <div class="upload-form__grid">
+                        <div class="input-group">
+                            <label for="coordinatorName">Coordinator name</label>
+                            <input type="text" id="coordinatorName" name="coordinatorName" placeholder="e.g. Amina Rahman">
+                        </div>
+                        <div class="input-group">
+                            <label for="coordinatorEmail">Coordinator email</label>
+                            <input type="email" id="coordinatorEmail" name="coordinatorEmail" placeholder="organiser@example.com">
+                        </div>
+                        <div class="input-group">
+                            <label for="coordinatorPhone">Coordinator phone</label>
+                            <input type="tel" id="coordinatorPhone" name="coordinatorPhone" placeholder="e.g. +60 12-345 6789">
+                        </div>
+                    </div>
+                </div>
+                <!-- Dynamic sections let organisers add custom panels like weekly plans or equipment lists -->
+                <div class="upload-form__section">
+                    <div class="section-header">
+                        <h3>Program sections</h3>
+                        <p>Add as many sections as you need &mdash; weekly plans, preparation tips, or anything else.</p>
+                    </div>
+                    <div class="dynamic-sections" data-section-list></div>
+                    <button type="button" class="button-secondary" data-section-add>Add section</button>
+                    <template id="program-section-template">
+                        <div class="dynamic-section" data-section>
+                            <div class="input-group input-group--full">
+                                <label>Section title</label>
+                                <input type="text" name="sectionTitle" placeholder="e.g. Weekly plan">
+                            </div>
+                            <div class="input-group input-group--full">
+                                <label>Section details</label>
+                                <textarea name="sectionDescription" rows="4" placeholder="Describe the timing, key activities, or important notes."></textarea>
+                            </div>
+                            <button type="button" class="button-remove" data-section-remove>Remove section</button>
+                        </div>
+                    </template>
+                </div>
                 <div class="upload-form__footer">
                     <p class="helper-text">We'll surface your submission on the community feed once approved.</p>
                     <div class="upload-form__actions">
@@ -84,6 +130,9 @@
             </form>
         </section>
     </main>
+    <script src="script/sidebar.js" defer></script>
+    <script src="script/uploadShared.js" defer></script>
+    <script src="script/uploadPrograms.js" defer></script>
 </body>
 </html>
 

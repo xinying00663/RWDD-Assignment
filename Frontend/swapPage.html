@@ -13,9 +13,14 @@
     <link rel="stylesheet" href="styles/addButton.css">
 </head>
 <body data-page="swap">
-    <header>
+    <button class="sidebar-toggle" type="button" data-sidebar-toggle aria-controls="sidebar" aria-expanded="false">
+        <span class="sidebar-toggle__icon" aria-hidden="true"></span>
+        <span class="sr-only">Toggle navigation</span>
+    </button>
+    <div class="sidebar-backdrop" id="sidebarBackdrop" hidden></div>
+    <header id="sidebar" class="sidebar" aria-label="Primary navigation">
         <div class="logo">
-            <a href="landingPage.html">
+            <a href="homePage.html">
                 <img src="Pictures/logo.jpeg" alt="EcoGo Logo">
             </a>
         </div>
@@ -63,54 +68,17 @@
                 </select>
             </div>
             <div class="media-grid" id="swapItems">
-                <article class="media-card swap-card" data-category="home-grown">
-                    <div class="card-media">
-                        <img src="Pictures/landingPage/gardening-pic.jpg" alt="Balcony herb starter kit">
-                    </div>
-                    <div class="card-body">
-                        <span class="card-tag">Home-grown</span>
-                        <h3>Balcony Herb Starter Kit</h3>
-                        <p>Six organic basil and mint cuttings with compostable pots, rooted and ready for small spaces.</p>
-                        <a class="swap-card__cta" href="#">Message to swap</a>
-                    </div>
-                </article>
-                <article class="media-card swap-card" data-category="eco-friendly">
-                    <div class="card-media">
-                        <img src="Pictures/landingPage/recycling-pic.jpg" alt="Reusable produce bags">
-                    </div>
-                    <div class="card-body">
-                        <span class="card-tag">Eco-friendly</span>
-                        <h3>Reusable Produce Bags</h3>
-                        <p>Set of eight mesh produce bags sewn from upcycled cotton curtains, freshly laundered.</p>
-                        <a class="swap-card__cta" href="#">Message to swap</a>
-                    </div>
-                </article>
-                <article class="media-card swap-card" data-category="home-grown">
-                    <div class="card-media">
-                        <img src="Pictures/landingPage/swap-item-pic.jpg" alt="Compost worms starter colony">
-                    </div>
-                    <div class="card-body">
-                        <span class="card-tag">Home-grown</span>
-                        <h3>Compost Worm Starter Colony</h3>
-                        <p>Pint of red wigglers with bedding to kick-start a balcony vermicomposting bin.</p>
-                        <a class="swap-card__cta" href="#">Message to swap</a>
-                    </div>
-                </article>
-                <article class="media-card swap-card" data-category="eco-friendly">
-                    <div class="card-media">
-                        <img src="Pictures/landingPage/save-energy-pic.jpg" alt="Upcycled glass storage jars">
-                    </div>
-                    <div class="card-body">
-                        <span class="card-tag">Eco-friendly</span>
-                        <h3>Upcycled Glass Storage Jars</h3>
-                        <p>Five airtight jars with bamboo lids, perfect for refilling dry goods at the bulk store.</p>
-                        <a class="swap-card__cta" href="#">Message to swap</a>
-                    </div>
-                </article>
+                <!-- Swap listings are injected by script/swapFeed.js -->
             </div>
         </section>
         <button type="button" class="add-button" aria-label="List a swap item" onclick="window.location.href='uploadSwap.html'">+</button>
     </main>
+    <script src="script/sidebar.js" defer></script>
+    <script src="script/mediaFeed.js" defer></script>
+    <script src="script/uploadShared.js" defer></script>
     <script src="script/swapPage.js" defer></script>
+    <script src="script/swapFeed.js" defer></script>
 </body>
 </html>
+
+

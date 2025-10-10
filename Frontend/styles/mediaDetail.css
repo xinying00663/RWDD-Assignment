@@ -1,8 +1,9 @@
 .detail-main {
-    margin-left: 220px;
-    padding: 48px 48px 72px;
+    margin-left: var(--sidebar-width, 220px);
+    padding: 48px 56px 72px;
     min-height: 100vh;
     background: linear-gradient(160deg, #f5fbf6 0%, #ffffff 60%);
+    transition: margin-left 0.3s ease, padding 0.3s ease;
 }
 
 .detail-shell {
@@ -226,21 +227,20 @@
     text-decoration: none;
 }
 
-@media (max-width: 720px) {
+@media (max-width: 1024px) {
     .detail-main {
         margin-left: 0;
-        padding: 32px 20px 56px;
+        padding: 92px 32px 60px;
+    }
+}
+
+@media (max-width: 720px) {
+    .detail-main {
+        padding: 92px 22px 56px;
     }
 
     .detail-nav {
         padding: 20px 20px 0;
-    }
-
-    header {
-        position: static;
-        width: 100%;
-        height: auto;
-        flex-direction: row;
     }
 
     .detail-shell {

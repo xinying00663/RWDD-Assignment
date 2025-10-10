@@ -1,149 +1,158 @@
-//ALL HARDCODED DATA FOR PROGRAMS IS STORED IN THIS FILE
-// This is a simple approach for a static site without a backend or CMS
-const programData = {
-    "rooftop-herb-lab": {
-        badge: "Urban farming",
-        title: "Rooftop Herb Lab",
-        summary: "Co-create a rooftop herb garden, learn soil-free irrigation tricks, and send home fresh bundles every week.",
-        duration: "4-week series",
-        commitment: "Thursdays - 6:30 PM to 8:30 PM",
-        location: "Solaris Dutamas, Level 7 rooftop garden",
-        outcomes: [
-            "Install and maintain wicking beds that stay hydrated even through hot spells.",
-            "Experiment with heat-tolerant herb varieties and interchangeable soil mixes.",
-            "Package weekly herb bundles for 18 surrounding households and a community pantry."
-        ],
-        schedule: [
-            { title: "Week 1 - Setup and systems", detail: "Assemble the beds, lay the irrigation, and assign plant care rotations." },
-            { title: "Week 2 - Planting lab", detail: "Trial herb pairings, companion plants, and organic pest deterrents." },
-            { title: "Week 3 - Harvest and prep", detail: "Learn quick-harvest techniques and packaging for pantry deliveries." },
-            { title: "Week 4 - Share and celebrate", detail: "Host an open evening to share tips with neighbours and recruit new caretakers." }
-        ],
-        resources: [
-            { title: "What to bring", detail: "Reusable produce bags, gardening gloves, hat, and drinking water." },
-            { title: "Group size", detail: "Up to 12 volunteers per session with rotating care teams." },
-            { title: "Impact goal", detail: "Supply fresh herbs to 18 households and a local food bank each month." }
-        ],
-        coordinator: {
-            name: "Asha Kaur",
-            role: "Rooftop garden lead volunteer",
-            email: "asha.kaur@ecogo.my",
-            phone: "+60 19-555-0182"
-        },
-        roles: [
-            "Plant care rotation",
-            "Workshop facilitator",
-            "Harvest packaging and delivery support"
-        ]
-    },
-    "compost-cooperative": {
-        badge: "Community composting",
-        title: "Compost Cooperative",
-        summary: "Turn neighbourhood scraps into nutrient-rich compost while learning low-odor systems you can replicate at home.",
-        duration: "Monthly meetups",
-        commitment: "First Saturday - 8:30 AM to 11:30 AM",
-        location: "Bangsar South community kitchen",
-        outcomes: [
-            "Build and maintain hot compost piles that balance greens and browns year-round.",
-            "Run a community drop-off station with clear signage, sorting, and contamination checks.",
-            "Measure compost maturity and bag finished compost for community gardens."
-        ],
-        schedule: [
-            { title: "08:30 - Drop-off crew", detail: "Guide residents, weigh incoming scraps, and log participation." },
-            { title: "09:30 - Turning team", detail: "Layer browns, monitor temperature, and manage moisture levels." },
-            { title: "10:30 - Skill share", detail: "Mini workshops on bokashi, vermicomposting, and balcony bins." }
-        ],
-        resources: [
-            { title: "What to wear", detail: "Closed shoes and clothes you do not mind getting compost on." },
-            { title: "Tools ready", detail: "Pitchforks, moisture meters, weigh scales, and cured compost sifters provided." },
-            { title: "Community reach", detail: "Serving 42 households with free compost refills every quarter." }
-        ],
-        coordinator: {
-            name: "Farid Rahman",
-            role: "Zero-waste program coordinator",
-            email: "farid.rahman@ecogo.my",
-            phone: "+60 17-880-4421"
-        },
-        roles: [
-            "Drop-off concierge",
-            "Temperature tracker",
-            "Workshop note taker"
-        ]
-    },
-    "riverbank-cleanup": {
-        badge: "Zero waste",
-        title: "Riverbank Cleanup Sprint",
-        summary: "Restore the Sungai Batu riverbank with targeted waste audits, sorting stations, and citizen science sampling.",
-        duration: "Weekend blitz",
-        commitment: "Saturday - 7:30 AM to 12:30 PM",
-        location: "Taman Desa jetty meetup point",
-        outcomes: [
-            "Collect, sort, and catalogue riverbank litter for the city council data portal.",
-            "Set up hydration, safety, and waste segregation stations for fellow volunteers.",
-            "Map hotspots that require ongoing monitoring and habitat restoration."
-        ],
-        schedule: [
-            { title: "07:30 - Briefing", detail: "Safety overview, team assignments, and equipment handoff." },
-            { title: "08:00 - Cleanup waves", detail: "Three 45-minute cleanup sprints with rapid-sort stations." },
-            { title: "11:00 - Waste audit", detail: "Log findings, prep council report, and plan follow-up actions." }
-        ],
-        resources: [
-            { title: "Provided gear", detail: "Grabbers, gloves, waders, buckets, first-aid, and sunscreen." },
-            { title: "Fitness level", detail: "Suited for active volunteers comfortable walking uneven ground." },
-            { title: "Impact goal", detail: "Clear 180 kg of waste and submit a hotspot report by end of day." }
-        ],
-        coordinator: {
-            name: "Melissa Tan",
-            role: "River stewardship lead",
-            email: "melissa.tan@ecogo.my",
-            phone: "+60 16-220-9420"
-        },
-        roles: [
-            "Sorting station lead",
-            "Safety marshal",
-            "Data logger"
-        ]
-    },
-    "plastic-free-market": {
-        badge: "Circular economy",
-        title: "Plastic-Free Market Day",
-        summary: "Host interactive booths that help weekend shoppers swap single-use plastics for reusable habits and tools.",
-        duration: "One-day activation",
-        commitment: "Sunday - 8:00 AM to 4:00 PM",
-        location: "TTDI Community Hall forecourt",
-        outcomes: [
-            "Design engaging booths that let shoppers try refill and reuse systems.",
-            "Facilitate micro-workshops on upcycling, food storage, and zero-waste shopping.",
-            "Collect pledges from visitors to reduce plastics and track progress post-event."
-        ],
-        schedule: [
-            { title: "08:00 - Setup crew", detail: "Assemble booths, signage, refill taps, and zero-waste toolkit." },
-            { title: "10:00 - Market open", detail: "Engage shoppers, demo reuse swaps, and capture pledge stories." },
-            { title: "15:00 - Wrap and debrief", detail: "Pack down stations, tally pledges, and plan follow-up support." }
-        ],
-        resources: [
-            { title: "Booth support", detail: "All signage, refill dispensers, and sample products supplied." },
-            { title: "Volunteer perks", detail: "Lunch, zero-waste starter kit, and transport stipend provided." },
-            { title: "Impact goal", detail: "Sign up 120 shoppers to commit to a reusable habit for 30 days." }
-        ],
-        coordinator: {
-            name: "Nadia Chong",
-            role: "Circular economy campaigner",
-            email: "nadia.chong@ecogo.my",
-            phone: "+60 11-777-9034"
-        },
-        roles: [
-            "Workshop facilitator",
-            "Story collector",
-            "Booth logistics"
-        ]
-    }
-};
+﻿// Program detail renderer for both pre-seeded and community-submitted recycling programs.
+// Seeded data is supplied by window.ecogoProgramCatalog; community uploads are read from localStorage.
 
+// Retrieves a seeded program entry from the shared catalog, if available.
+function loadSeedProgram(id) {
+    if (!id || !window.ecogoProgramCatalog || typeof window.ecogoProgramCatalog.getProgram !== "function") {
+        return null;
+    }
+    return window.ecogoProgramCatalog.getProgram(id);
+}
+
+// Storage key shared with the upload form so we can surface community submissions here.
+const COMMUNITY_STORAGE_KEY = "ecogoRecyclingPrograms";
+const COMMUNITY_BADGE = "Community submission";
+
+// Reads the recycling program uploads from localStorage and locates the entry by id.
+function loadCommunityProgram(id) {
+    if (!id) {
+        return null;
+    }
+    try {
+        const raw = localStorage.getItem(COMMUNITY_STORAGE_KEY);
+        if (!raw) {
+            return null;
+        }
+        const parsed = JSON.parse(raw);
+        if (!Array.isArray(parsed)) {
+            return null;
+        }
+        return parsed.find((entry) => entry && entry.id === id) || null;
+    } catch (error) {
+        console.warn("Program detail: unable to read community submissions", error);
+        return null;
+    }
+}
+
+// Produces a friendly date label using the stored date range (if available).
+function buildCommunityDateLabel(entry) {
+    if (!entry) {
+        return "";
+    }
+    if (entry.dateLabel) {
+        return entry.dateLabel;
+    }
+    const start = entry.startDate;
+    const end = entry.endDate;
+    if (start && end) {
+        return `${start} - ${end}`;
+    }
+    if (start) {
+        return `Starts ${start}`;
+    }
+    if (end) {
+        return `Until ${end}`;
+    }
+    return "";
+}
+
+// Normalises a community-submitted entry so the rest of the view logic can treat it like seed data.
+function transformCommunityProgram(entry) {
+    const dateLabel = buildCommunityDateLabel(entry);
+    const summary = entry.description || "This organiser has not shared additional details yet.";
+    const location = entry.location || "Location to be confirmed";
+    const coordinatorDetails = entry.coordinator || {};
+    const sections = Array.isArray(entry.sections) ? entry.sections : [];
+    const customSections = sections
+        .map((section, index) => {
+            if (!section) {
+                return null;
+            }
+            const heading = (section.heading || "").toString().trim();
+            const details = (section.details || "").toString().trim();
+            if (!heading && !details) {
+                return null;
+            }
+            return {
+                heading: heading || `Additional details ${index + 1}`,
+                details
+            };
+        })
+        .filter(Boolean);
+
+    return {
+        badge: COMMUNITY_BADGE,
+        title: entry.name || "Community recycling program",
+        summary,
+        duration: dateLabel || "Schedule to be confirmed",
+        commitment: dateLabel || "Check back for the confirmed timing.",
+        location,
+        outcomes: summary ? [summary] : [],
+        schedule: [],
+        resources: [
+            { title: "When", detail: dateLabel || "To be confirmed" },
+            { title: "Where", detail: location }
+        ],
+        coordinator: {
+            name: coordinatorDetails.name || "Community organiser",
+            role: "Community submission",
+            email: coordinatorDetails.email || "",
+            phone: coordinatorDetails.phone || ""
+        },
+        roles: ["Volunteer participant"],
+        isCommunity: true,
+        customSections
+    };
+}
+
+// Hides the surrounding panel when no meaningful content is available.
+function togglePanelVisibility(contentRoot, shouldShow) {
+    if (!contentRoot) {
+        return;
+    }
+    const panel = contentRoot.closest(".program-panel");
+    if (!panel) {
+        return;
+    }
+    panel.hidden = !shouldShow;
+}
+
+// Creates additional program panels for any custom sections supplied by community organisers.
+function renderCustomSections(sections) {
+    if (!Array.isArray(sections) || !sections.length) {
+        return;
+    }
+    const body = document.querySelector(".program-body");
+    if (!body) {
+        return;
+    }
+    sections.forEach((section) => {
+        const panel = document.createElement("article");
+        panel.className = "program-panel program-panel--community";
+
+        const heading = document.createElement("h2");
+        heading.textContent = section.heading;
+
+        const paragraph = document.createElement("p");
+        paragraph.textContent = section.details || "More information coming soon.";
+
+        panel.append(heading, paragraph);
+        body.appendChild(panel);
+    });
+}
+
+// Populate the program detail page once the DOM skeleton is ready.
 document.addEventListener("DOMContentLoaded", () => {
     const params = new URLSearchParams(window.location.search);
     const requestedId = params.get("program") || "rooftop-herb-lab";
-    const program = programData[requestedId];
+    let program = loadSeedProgram(requestedId);
+
+    if (!program) {
+        const communityProgram = loadCommunityProgram(requestedId);
+        if (communityProgram) {
+            program = transformCommunityProgram(communityProgram);
+        }
+    }
 
     const programView = document.getElementById("programView");
     const fallback = document.getElementById("programFallback");
@@ -167,7 +176,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     document.title = `${program.title} | EcoGo Program Details`;
-
     const badgeEl = document.getElementById("programBadge");
     const titleEl = document.getElementById("programTitle");
     const summaryEl = document.getElementById("programSummary");
@@ -188,30 +196,32 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const outcomesEl = document.getElementById("programOutcomes");
     if (outcomesEl) {
-        outcomesEl.innerHTML = program.outcomes
-            .map((item) => `<li>${item}</li>`)
-            .join("");
-    }
-
-    const scheduleEl = document.getElementById("programSchedule");
-    if (scheduleEl) {
-        scheduleEl.innerHTML = program.schedule
-            .map(
-                (entry) =>
-                    `<div class="schedule-card"><h3>${entry.title}</h3><p>${entry.detail}</p></div>`
-            )
-            .join("");
+        const hasOutcomes = Array.isArray(program.outcomes) && program.outcomes.length > 0;
+        if (hasOutcomes) {
+            outcomesEl.innerHTML = program.outcomes
+                .map((item) => `<li>${item}</li>`)
+                .join("");
+        } else {
+            togglePanelVisibility(outcomesEl, false);
+        }
     }
 
     const resourcesEl = document.getElementById("programResources");
     if (resourcesEl) {
-        resourcesEl.innerHTML = program.resources
-            .map(
-                (resource) =>
-                    `<div class="info-card"><h3>${resource.title}</h3><p>${resource.detail}</p></div>`
-            )
-            .join("");
+        const hasResources = Array.isArray(program.resources) && program.resources.length > 0;
+        if (hasResources) {
+            resourcesEl.innerHTML = program.resources
+                .map(
+                    (resource) =>
+                        `<div class="info-card"><h3>${resource.title}</h3><p>${resource.detail}</p></div>`
+                )
+                .join("");
+        } else {
+            togglePanelVisibility(resourcesEl, false);
+        }
     }
+
+    renderCustomSections(program.customSections);
 
     const coordinatorName = document.getElementById("coordinatorName");
     const coordinatorRole = document.getElementById("coordinatorRole");
@@ -221,15 +231,24 @@ document.addEventListener("DOMContentLoaded", () => {
     if (coordinatorName) coordinatorName.textContent = program.coordinator.name;
     if (coordinatorRole) coordinatorRole.textContent = program.coordinator.role;
     if (coordinatorEmail) {
-        coordinatorEmail.textContent = program.coordinator.email;
-        coordinatorEmail.href = `mailto:${program.coordinator.email}`;
+        if (program.coordinator.email) {
+            coordinatorEmail.textContent = program.coordinator.email;
+            coordinatorEmail.href = `mailto:${program.coordinator.email}`;
+        } else {
+            coordinatorEmail.textContent = "Email not provided";
+            coordinatorEmail.removeAttribute("href");
+        }
     }
-    if (coordinatorPhone) {
+    if (coordinatorPhone && program.coordinator.phone) {
         coordinatorPhone.textContent = program.coordinator.phone;
         const telValue = program.coordinator.phone.replace(/\s+/g, "");
         coordinatorPhone.href = `tel:${telValue}`;
+    } else if (coordinatorPhone) {
+        coordinatorPhone.textContent = "To be shared after confirmation";
+        coordinatorPhone.removeAttribute("href");
     }
 
+    // Prepare the role dropdown so volunteers can pick how they would like to help.
     const roleSelect = document.getElementById("preferredRole");
     if (roleSelect) {
         const options = [
@@ -243,6 +262,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const statusEl = document.getElementById("formStatus");
 
     if (form) {
+        // Handle inline confirmation instead of posting to a backend.
         form.addEventListener("submit", (event) => {
             event.preventDefault();
             const formData = new FormData(form);

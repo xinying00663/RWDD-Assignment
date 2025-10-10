@@ -1,45 +1,156 @@
-header {
-            display:flex;
-            flex-direction:column;
-            width:220px;
-            height:100vh;
-            position:fixed;
-            top:0;
-            left:0;
-            padding:20px 10px;
-        }
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    width: var(--sidebar-width, 220px);
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 24px 16px;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    z-index: 1000;
+}
 
-        .logo{
-            text-align:center;
-            margin-bottom:30px;
-        }
-        nav{
-            display:flex;
-            flex-direction:column;
-            gap:20px;
-            flex-grow:1;
-        }
+.sidebar .logo {
+    text-align: center;
+    margin-bottom: 32px;
+}
 
-        nav a, .profile a {
-            display: flex;
-            flex-direction:column;
-            align-items: center;
-            text-decoration: none;
-            color: #333;
-            padding: 15px 10px;;
-            border-radius: 8px;
-            transition: background 0.3s ease;
-        }
+.sidebar nav {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    flex-grow: 1;
+}
 
-        nav a:hover, .profile a:hover {
-            background-color: #c6e9d6;
-        }
+.sidebar nav a,
+.sidebar .profile a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #333;
+    padding: 15px 10px;
+    border-radius: 12px;
+    transition: background 0.3s ease, transform 0.2s ease;
+    text-align: center;
+}
 
-        nav a img, .profile a img {
-            height: 24px;
-            margin:0 0 6px 0;
-        }
+.sidebar nav a:hover,
+.sidebar .profile a:hover {
+    background-color: #c6e9d6;
+    transform: translateY(-1px);
+}
+
+.sidebar nav a.active {
+    background-color: #2d8d60;
+    color: #ffffff;
+}
+
+.sidebar nav a img,
+.sidebar .profile a img {
+    height: 24px;
+    margin-bottom: 6px;
+}
 
         .profile {
             margin-top: auto;
         }
+
+.sidebar-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1300;
+    width: 54px;
+    height: 54px;
+    border: none;
+    border-radius: 16px;
+    background: rgba(33, 66, 53, 0.95);
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    box-shadow: 0 18px 32px rgba(33, 66, 53, 0.26);
+}
+
+.sidebar-toggle:focus-visible {
+    outline: 3px solid rgba(45, 141, 96, 0.75);
+    outline-offset: 3px;
+}
+
+.sidebar-toggle:hover {
+    transform: translateY(-2px);
+    background: rgba(45, 141, 96, 0.95);
+}
+
+.sidebar-toggle__icon,
+.sidebar-toggle__icon::before,
+.sidebar-toggle__icon::after {
+    content: "";
+    display: block;
+    width: 22px;
+    height: 2px;
+    border-radius: 999px;
+    background: currentColor;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.sidebar-toggle__icon {
+    position: relative;
+}
+
+.sidebar-toggle__icon::before,
+.sidebar-toggle__icon::after {
+    position: absolute;
+    left: 0;
+}
+
+.sidebar-toggle__icon::before {
+    transform: translateY(-6px);
+}
+
+.sidebar-toggle__icon::after {
+    transform: translateY(6px);
+}
+
+body.sidebar-open .sidebar-toggle__icon {
+    background: transparent;
+}
+
+body.sidebar-open .sidebar-toggle__icon::before {
+    transform: rotate(45deg);
+}
+
+body.sidebar-open .sidebar-toggle__icon::after {
+    transform: rotate(-45deg);
+}
+
+.sidebar-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    z-index: 900;
+}
+
+@media (max-width: 1024px) {
+    .sidebar {
+        transform: translateX(-110%);
+        box-shadow: none;
+    }
+
+    body.sidebar-open .sidebar {
+        transform: translateX(0);
+        box-shadow: 0 22px 45px rgba(0, 0, 0, 0.22);
+    }
+}
+
+@media (min-width: 1025px) {
+    .sidebar-toggle {
+        display: none;
+    }
+}

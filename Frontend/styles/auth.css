@@ -203,8 +203,16 @@ body {
 }
 
 .auth-error {
-    color: #b42323;
+    min-height: 1.2rem;
     font-size: 0.85rem;
+}
+
+.auth-error.is-error {
+    color: #b42323;
+}
+
+.auth-error.is-success {
+    color: #1f6b48;
 }
 
 .profile-summary {
@@ -262,3 +270,4 @@ body {
         padding: 36px 28px;
     }
 }
+

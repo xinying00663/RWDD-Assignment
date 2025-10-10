@@ -71,11 +71,18 @@ body {
       align-items:center; 
       margin-top:8px; 
     }
-    #msg { 
-      margin-top:10px; 
-      font-size:0.9rem; 
-      color:#b02; 
-      min-height:18px; 
+    #msg {
+      margin-top:10px;
+      font-size:0.9rem;
+      min-height:18px;
+    }
+
+    #msg.is-error {
+      color:#b02;
+    }
+
+    #msg.is-success {
+      color:#135d26;
     }
 
 .secondary { 
@@ -86,3 +93,4 @@ body {
 .secondary:hover { 
       background:#e2ebe5; 
     }
+
