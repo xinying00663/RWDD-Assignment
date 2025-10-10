@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="styles/searchbar.css">
     <link rel="stylesheet" href="styles/userProfile.css">
 </head>
-<body>
+<body data-page="user-profile">
     <button class="sidebar-toggle" type="button" data-sidebar-toggle aria-controls="sidebar" aria-expanded="false">
         <span class="sidebar-toggle__icon" aria-hidden="true"></span>
         <span class="sr-only">Toggle navigation</span>
@@ -54,18 +54,18 @@
     <main>
         <section class="profile-hero">
             <div class="identity">
-                <div class="profile-avatar">JL</div>
+                <div class="profile-avatar" data-profile-avatar>JL</div>
                 <div>
-                    <h1 class="username">Jamie</h1>
-                    <p class="fullName">Jamie Lim</p>
-                    <p class="gender">Female</p>
-                    <p class="value">abc@gmail.com</p>
-                    <p class="value">+60 12-345 6789</p>
-                    <p class="location">Kuala Lumpur, Malaysia</p>
-                    <p class="bio">Jamie coordinates neighbourhood clean-ups, rooftop garden builds, and resource swaps for EcoGo. Passionate about inclusive spaces, she mentors new volunteers and tracks project impact across the Klang Valley.</p>
+                    <h1 class="username" data-profile-field="username">Jamie</h1>
+                    <p class="fullName" data-profile-field="fullName">Jamie Lim</p>
+                    <p class="gender" data-profile-field="gender">Female</p>
+                    <p class="value" data-profile-field="email">abc@gmail.com</p>
+                    <p class="value" data-profile-field="phone">+60 12-345 6789</p>
+                    <p class="location" data-profile-field="location">Kuala Lumpur, Malaysia</p>
+                    <p class="bio" data-profile-field="bio">Jamie coordinates neighbourhood clean-ups, rooftop garden builds, and resource swaps for EcoGo. Passionate about inclusive spaces, she mentors new volunteers and tracks project impact across the Klang Valley.</p>
                     <div class="hero-actions">
-                        <button class="primary">Edit profile</button>
-                        <button class="secondary" onclick="window.href='landingPage.html'">Logout</button>
+                        <button class="primary" type="button" data-action="edit-profile">Edit profile</button>
+                        <button class="secondary" type="button" data-action="logout">Logout</button>
                     </div>
                 </div>
             </div>
@@ -86,8 +86,8 @@
             </div>
         </section>
             <section class="tabs">
-                <button class="tab-btn active" onclick="showTab(this, 'programs')">Programs</button>
-                <button class="tab-btn" onclick="showTab(this, 'posts')">Posts</button>
+                <button class="tab-btn active" type="button" data-target="programs">Programs</button>
+                <button class="tab-btn" type="button" data-target="posts">My Posts</button>
             </section>
             <section id="programs" class="profile-content active">
                 <div class="profile-card">
@@ -134,26 +134,66 @@
             </section>
             <section id="posts" class="profile-content">
                 <div class="profile-card">
-                    <h2>My Posts</h2>
-                    <div class="activity-feed">
-                        <article class="activity-item">
-                            <span class="time">2 days ago</span>
-                            <strong>5 Tips for Starting a Community Garden</strong>
-                            <p>Sharing my top tips for launching a successful community garden project in your neighborhood. From planning to planting, let's grow together!</p>
-                        </article>
-                        <article class="activity-item">
-                            <span class="time">Last week</span>
-                            <strong>How to Reduce Household Waste</strong>
-                            <p>Practical strategies for minimizing waste at home, including composting, recycling, and mindful consumption. Every little bit helps our planet!</p>
-                        </article>
-                        <article class="activity-item">
-                            <span class="time">2 weeks ago</span>
-                            <strong>Energy-Saving Tips for Your Home</strong>
-                            <p>Simple changes you can make to reduce energy consumption and lower your utility bills. Let's make our homes more eco-friendly!</p>
-                        </article>
+                    <div class="profile-card__header">
+                        <h2>My Posts</h2>
+                        <p>Check the projects, tips, and swaps you have shared with neighbours.</p>
                     </div>
+                    <div class="activity-feed" data-profile-posts></div>
+                    <p class="empty-state" data-profile-posts-empty hidden>You have not posted anything yet. Share your first story from the upload pages to see it here.</p>
                 </div>
+            </section>
     </main>
+    <div class="profile-modal" data-profile-modal hidden>
+        <div class="profile-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="profileEditTitle">
+            <header class="profile-modal__header">
+                <h2 id="profileEditTitle">Edit profile</h2>
+                <button class="profile-modal__close" type="button" data-action="close-modal" aria-label="Close edit profile">&times;</button>
+            </header>
+            <form class="profile-modal__form">
+                <div class="profile-modal__grid">
+                    <label class="profile-modal__field">
+                        <span>Username</span>
+                        <input type="text" name="username" autocomplete="nickname" required>
+                    </label>
+                    <label class="profile-modal__field">
+                        <span>Full name</span>
+                        <input type="text" name="fullName" autocomplete="name" required>
+                    </label>
+                    <label class="profile-modal__field">
+                        <span>Gender</span>
+                        <select name="gender" required>
+                            <option value="">Select</option>
+                            <option value="female">Female</option>
+                            <option value="male">Male</option>
+                            <option value="other">Prefer Not to Say</option>
+                        </select>
+                    </label>
+                    <label class="profile-modal__field">
+                        <span>Email</span>
+                        <input type="email" name="email" autocomplete="email" required>
+                    </label>
+                    <label class="profile-modal__field">
+                        <span>Phone number</span>
+                        <input type="tel" name="phone" autocomplete="tel">
+                    </label>
+                    <label class="profile-modal__field">
+                        <span>Location</span>
+                        <input type="text" name="location" autocomplete="address-level2">
+                    </label>
+                    <label class="profile-modal__field profile-modal__field--wide">
+                        <span>Bio</span>
+                        <textarea name="bio" rows="4" placeholder="Share a bit about your sustainability journey..."></textarea>
+                    </label>
+                </div>
+                <p class="profile-modal__error" data-modal-error aria-live="polite"></p>
+                <div class="profile-modal__actions">
+                    <button class="secondary" type="button" data-action="close-modal">Cancel</button>
+                    <button class="primary" type="submit">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
     <script src="script/sidebar.js" defer></script>
+    <script src="script/userProfile.js" defer></script>
 </body>
 </html>
