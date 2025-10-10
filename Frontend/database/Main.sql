@@ -8,9 +8,11 @@ CREATE TABLE Users (
     Email VARCHAR(200) UNIQUE NOT NULL,
     Username VARCHAR(200) UNIQUE NOT NULL,
     Password VARCHAR(200) NOT NULL,
-    Phone_Number VARCHAR(200)
-    City_or_Neighbourhood VARCHAR(200)
-    Additional_Info VARCHAR(200)
+    Phone_Number VARCHAR(200),
+    City_or_Neighbourhood VARCHAR(200),
+    Additional_Info VARCHAR(200),
+    Join_Date DATETIME,
+    Last_Login DATETIME
 ); 
 
 -- Admin Table

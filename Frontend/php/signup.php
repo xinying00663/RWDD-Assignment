@@ -1,20 +1,8 @@
 <?php
-$host="localhost";
-$name="EcoGo";
-$user="your_username";
-$password="your_password";
 
-//Connect to database
-try{
-    $pdo=new PDO("mysql:host=$host;dbname=$name",$user,$password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
-}catch(PDOException $e){
-    error_log("Database connection failed:".$e->getMessage());
-    http_response_code(500);
-    echo json_encode(["success"=>false,"message"=>"Database connection failed"]);
-    exit;
-}
+include "connect.php";
 
+session_start();
 if($_SERVER["REQUEST_METHOD"]=="POST"){
     $email=filter_var($_POST["email"] ??"",FILTER_VALIDATE_EMAIL);
     $password=$_POST["password"] ??"";
@@ -43,7 +31,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
             }else{
                 $hashedPassword=password_hash($password,PASSWORD_DEFAULT);
                 $joinDate=date("Y-m-d H:i:s");
-                $stmt=$pdo->prepare("INSERT INTO users(email,password,join_date,last_login) VALUES(?,?,?,?)");
+                $stmt=$pdo->prepare("INSERT INTO Users(Email,Password,Join_date,Last_login) VALUES(?,?,?,?)");
                 $stmt->execute([$email,$hashedPassword,$joinDate,$joinDate]);
 
                 $_SESSION["user_id"]=$userID;
@@ -52,7 +40,8 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
 
                 $response["success"]=true;
                 $response["message"]="Your account has been created successfully.";
-                $response["userID"]=$userID;
+                $response["user_id"]=$userID;
+                $response["redirect"]="profileSetup.html";
             }
         }catch(PDOException $e){
             error_log("Database error:".$e->getMessage());
