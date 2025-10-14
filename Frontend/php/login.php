@@ -83,7 +83,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST["action"])){
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="styles/loginPage.css">
+    <link rel="stylesheet" href="../styles/loginPage.css">
 </head>
 <body>
     <div class="card">
@@ -100,15 +100,15 @@ if($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST["action"])){
     </form>
 
     <button id="googleSignIn" class="google-btn" style="margin-top:10px;">
-      <img src="Pictures/loginPage/google.png" alt="" width="18" />
+      <img src="../Pictures/loginPage/google.png" alt="" width="18" />
       Sign in with Google
     </button>
 
-    <button class="secondary" type="button" onclick="window.location.href='landingPage.html'">Cancel</button>
+    <button class="secondary" type="button" onclick="window.location.href='../landingPage.html'">Cancel</button>
 
     <div class="row">
       <a href="#" id="forgotLink">Forgot password?</a>
-      <a href="signup.html" id="signupLink">Create account</a>
+      <a href="../signup.php" id="signupLink">Create account</a>
     </div>
 
     <div id="msg" aria-live="polite"></div>

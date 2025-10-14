@@ -63,14 +63,14 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Join EcoGo</title>
-    <link rel="stylesheet" href="styles/auth.css">
+    <link rel="stylesheet" href="../styles/auth.css">
 </head>
 <body class="auth-body">
     <main class="auth-shell">
         <section class="auth-card">
             <header>
-                <a class="brand" href="landingPage.html">
-                    <img src="Pictures/logo.jpeg" alt="EcoGo logo">
+                <a class="brand" href="../landingPage.html">
+                    <img src="../Pictures/logo.jpeg" alt="EcoGo logo">
                     EcoGo Collective
                 </a>
                 <h1>Create your EcoGo account</h1>
@@ -100,7 +100,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
                 <p id="signUpError" class="auth-error" aria-live="polite"></p>
                 <div class="actions">
                     <button type="submit">Create account</button>
-                    <footer>Already have an account? <a href="login.php">Log in</a></footer>
+                    <footer>Already have an account? <a href="../login.php">Log in</a></footer>
                 </div>
             </form>
         </section>
