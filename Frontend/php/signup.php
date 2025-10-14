@@ -6,10 +6,10 @@ include "connect.php";
 
 session_start();
 if($_SERVER["REQUEST_METHOD"]=="POST"){
-    $email=filter_var($_POST["email"] ??"",FILTER_VALIDATE_EMAIL);
-    $password=$_POST["password"] ??"";
-    $confirmPassword=$_POST["confirmPassword"] ??"";
-    $terms=isset($_POST["terms"]) ? true : false;
+    $email=filter_var($_POST["Email"] ??"",FILTER_VALIDATE_EMAIL);
+    $password=$_POST["Password"] ??"";
+    $confirmPassword=$_POST["Confirm_Password"] ??"";
+    $terms=isset($_POST["Terms"]) ? true : false;
     
     $response=["success"=>false,"message"=>""];
     
@@ -39,7 +39,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
                 $userID=$pdo->lastInsertID();
 
                 $_SESSION["user_id"]=$userID;
-                $_SESSION["email"]=$email;
+                $_SESSION["Email"]=$email;
                 $_SESSION["logged_in"]=true;
 
                 $response["success"]=true;
