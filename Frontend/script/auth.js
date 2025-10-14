@@ -75,7 +75,7 @@
             var payload = new FormData(form);
             payload.set('email', email);
 
-            fetch('../signup.php', {
+            fetch('./php/signup.php', {
                 method: 'POST',
                 body: payload,
             })
@@ -133,7 +133,7 @@
             payload.append('email', email);
             payload.append('password', password);
 
-            fetch('../login.php', {
+            fetch('./php/login.php', {
                 method: 'POST',
                 body: payload,
             })
