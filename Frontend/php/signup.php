@@ -115,6 +115,6 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
             </ul>
         </aside>
     </main>
-    <script src="../script/auth.js" defer></script>
+<!-- <script src="../script/auth.js" defer></script> -->
 </body>
 </html>
