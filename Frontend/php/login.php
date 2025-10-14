@@ -116,7 +116,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST["action"])){
     <div id="msg" aria-live="polite"></div>
     <div class="small">By signing in you agree to our terms.</div>
   </div>
-  <!-- <script src="../script/auth.js" defer></script> -->
+  <script src="../script/auth.js" defer></script>
 </body>
 
 </html>
