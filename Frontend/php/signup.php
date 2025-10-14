@@ -34,18 +34,21 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
                 $hashedPassword=password_hash($password,PASSWORD_DEFAULT);
                 $joinDate=date("Y-m-d H:i:s");
                 $stmt=$pdo->prepare("INSERT INTO users(Email,Password,Join_date,Last_login) VALUES(?,?,?,?)");
-                $stmt->execute([$email,$hashedPassword,$joinDate,$joinDate]);
+                if($stmt->execute([$email,$hashedPassword,$joinDate,$joinDate])){
+                    $userID=$pdo->lastInsertID();
 
-                $userID=$pdo->lastInsertID();
+                    $_SESSION["user_id"]=$userID;
+                    $_SESSION["Email"]=$email;
+                    $_SESSION["logged_in"]=true;
 
-                $_SESSION["user_id"]=$userID;
-                $_SESSION["Email"]=$email;
-                $_SESSION["logged_in"]=true;
+                    $response["success"]=true;
+                    $response["message"]="Your account has been created successfully.";
+                    $response["user_id"]=$userID;
+                    $response["redirectTo"]="profileSetup.html";
+                } else{
+                    $response["message"]="Database error, please try again.";
+                }
 
-                $response["success"]=true;
-                $response["message"]="Your account has been created successfully.";
-                $response["user_id"]=$userID;
-                $response["redirect"]="profileSetup.html";
             }
         }catch(PDOException $e){
             error_log("Database error:".$e->getMessage());
