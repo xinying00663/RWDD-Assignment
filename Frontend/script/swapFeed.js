@@ -5,6 +5,29 @@
     const STORAGE_KEY = "ecogoSwapListings";
     const FLASH_KEY = "ecogoSwapFlash";
     const FALLBACK_IMAGE = "Pictures/landingPage/swap-item-pic.jpg";
+    const SEED_SWAP_LISTINGS = [
+        {
+            category: "home-grown",
+            title: "Lemongrass bundles",
+            description: "Freshly harvested stalks from this week’s balcony trim. Perfect for teas or curries.",
+            imageSrc: "Pictures/landingPage/swap-item-pic.jpg",
+            imageAlt: "Fresh lemongrass bundled with twine"
+        },
+        {
+            category: "eco-friendly",
+            title: "Reusable produce bags",
+            description: "Set of six mesh bags sewn from leftover muslin. Trade for compost or herbs.",
+            imageSrc: "Pictures/landingPage/swap-item-pic.jpg",
+            imageAlt: "Stack of reusable produce bags on a table"
+        },
+        {
+            category: "home-grown",
+            title: "Curry leaf cuttings",
+            description: "Rooted cuttings ready for potting. Looking for homemade snacks or glass jars.",
+            imageSrc: "Pictures/landingPage/swap-item-pic.jpg",
+            imageAlt: "Curry leaf plant cuttings in small pots"
+        }
+    ];
 
     function categoryLabel(value) {
         switch (value) {
@@ -180,10 +203,7 @@
      * Renders the seeded swap listings and returns true when entries were added.
      */
     function renderSeedEntries(grid) {
-        if (!window.ecogoContentCatalog || typeof window.ecogoContentCatalog.listSwapListings !== "function") {
-            return false;
-        }
-        const seeds = window.ecogoContentCatalog.listSwapListings();
+        const seeds = SEED_SWAP_LISTINGS;
         if (!Array.isArray(seeds) || !seeds.length) {
             return false;
         }
