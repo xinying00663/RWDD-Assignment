@@ -6,7 +6,7 @@ include "connect.php";
 
 session_start();
 if($_SERVER["REQUEST_METHOD"]=="POST"){
-    $email=filter_var($_POST["email"] ??"",FILTER_VALIDATE_EMAIL);
+    $email=$_POST["email"] ??"";
     $password=$_POST["password"] ??"";
     $confirmPassword=$_POST["confirmPassword"] ??"";
     $terms=isset($_POST["terms"]) ? true : false;
@@ -81,7 +81,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
                 <h1>Create your EcoGo account</h1>
                 <p>Start tracking your sustainability journey, join neighbourhood initiatives, and swap resources with people nearby.</p>
             </header>
-            <form id="signUpForm" class="auth-form" method="POST" action="php/signup.php" novalidate>
+            <form id="signUpForm" class="auth-form" method="POST" novalidate>
                 <div class="form-row">
                     <label for="email">Email</label>
                     <input id="email" name="email" type="email" placeholder="you@example.com" required>
