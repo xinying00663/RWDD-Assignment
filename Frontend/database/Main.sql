@@ -2,7 +2,6 @@
 CREATE TABLE Users (
     UserID INT AUTO_INCREMENT PRIMARY KEY,
     Full_Name VARCHAR(200) NOT NULL,
-    Birth_Date DATE,
     Gender ENUM('Male','Female','Other'),
     Email VARCHAR(200) UNIQUE NOT NULL,
     Username VARCHAR(200) UNIQUE NOT NULL,
@@ -11,9 +10,7 @@ CREATE TABLE Users (
     City_or_Neighbourhood VARCHAR(200),
     Additional_info VARCHAR(200),
     Join_date DATETIME,
-    Last_login DATETIME,
-    Reset_token VARCHAR(200),
-    Reset_expiry DATETIME
+    Last_login DATETIME
 ); 
 
 -- Admin Table

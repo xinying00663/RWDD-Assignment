@@ -41,34 +41,6 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
       error_log("Database error:".$e->getMessage());
       $response["message"]="Error in processing your login. Please try again.";
     }
-   }elseif($_POST["forgot password"]){
-    $email=filter_var($_POST["email"] ??"",FILTER_VALIDATE_EMAIL);
-
-    if(empty($email)||!filter_var($email,FILTER_VALIDATE_EMAIL)){
-      $response["message"]="Please enter a valid email address.";
-    }else{
-      try{
-        $stmt=$pdo->prepare("SELECT UserID FROM users WHERE Email=?");
-        $stmt->execute([$email]);
-        $user=$stmt->fetch();
-
-        if($user){
-          $reset_token=bin2hex(random_bytes(32));
-          $expiry=date("Y-m-d H:i:s",time()+3600); // 1hour expiry
-
-          $stmt=$pdo->prepare("UPDATE users SET reset_token=?,reset_expiry=? WHERE Email=?");
-          $stmt->execute([$resetToken,$expiry,$email]);
-
-          $response["success"]=true;
-          $response["message"]="Password reset instructions have been sent to your email";
-        }else{
-          $response["message"]="No account found from the email address.";
-        }
-      }catch(PDOException $e){
-        error_log("Database error:".$e->getMessage());
-        $response["message"]="Error in processing your request. Please try again.";
-      }
-    }
   }
   header("Content-Type:application/json");
   echo json_encode($response);
@@ -113,7 +85,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
     <div id="msg" aria-live="polite"></div>
     <div class="small">By signing in you agree to our terms.</div>
   </div>
-  <!-- <script src="../script/auth.js" defer></script> -->
+  <script src="../script/auth.js" defer></script>
 </body>
 
 </html>
