@@ -13,7 +13,7 @@
             <tr>
                 <th>UserID</th>
                 <th>Full_Name</th>
-                <th>BirthDate</th>
+                <th>Birth_Date</th>
                 <th>Gender</th>
                 <th>Email</th>
                 <th>Username</th>
@@ -28,27 +28,35 @@
             </tr>
             <?php
                 include("connect.php");
-                $sql="SELECT *FROM users";
-                $result=mysqli_query($dbConn,$sql);
-                if(mysqli_num_rows($result)<=0){
-                    die("<script>alert('No data from database');<script>");
-                }
-                while($rows=$mysqliquery_fetch_array($result)){
-                    echo "<tr>";
-                    echo "<td>".$rows['users_UserID']."</td>";
-                    echo "<td>".$rows['users_Full_Name']."</td>";
-                    echo "<td>".$rows['users_BirthDate']."</td>";
-                    echo "<td>".$rows['users_Gender']."</td>";
-                    echo "<td>".$rows['users_Email']."</td>";
-                    echo "<td>".$rows['users_Username']."</td>";
-                    echo "<td>".$rows['users_Password']."</td>";
-                    echo "<td>".$rows['users_Phone_Number']."</td>";
-                    echo "<td>".$rows['users_City_or_Neighbourhood']."</td>";
-                    echo "<td>".$rows['users_Additional_info']."</td>";
-                    echo "<td>".$rows['users_Join_date']."</td>";
-                    echo "<td>".$rows['users_Last_login']."</td>";
-                    echo "<td>".$rows['users_Reset_token']."</td>";
-                    echo "<td>".$rows['users_Reset_expiry']."</td>";
+                try{
+                    $sql="SELECT * FROM users";
+                    $stmt=$pdo->query($sql);
+                    $users=$stmt->fetchAll(PDO::FETCH_ASSOC);
+                    if(empty($users)){
+                        die("<script>alert('No data from database');<script>");
+                    }else{
+                        foreach($users as $row){
+                            echo "<tr>";
+                            echo "<td>".$row['UserID']."</td>";
+                            echo "<td>".$row['users_Full_Name']."</td>";
+                            echo "<td>".$row['Birth_Date']."</td>";
+                            echo "<td>".$row['Gender']."</td>";
+                            echo "<td>".$row['Email']."</td>";
+                            echo "<td>".$row['Username']."</td>";
+                            echo "<td>".substr($row['Password'],0,20)."</td>";
+                            echo "<td>".$row['Phone_Number']."</td>";
+                            echo "<td>".$row['City_or_Neighbourhood']."</td>";
+                            echo "<td>".$row['Additional_info']."</td>";
+                            echo "<td>".$row['Join_date']."</td>";
+                            echo "<td>".$row['Last_login']."</td>";
+                            echo "<td>".$row['Reset_token']."</td>";
+                            echo "<td>".$row['Reset_expiry']."</td>";
+                            echo "<tr>";
+                        }
+                    }
+                }catch (PDOException $e){
+                    error_log("Database connection failed:".$e->getMessage());
+    die('<script>alert("Connection failed:Please check your database connection again!");</script>');
                 }
             ?>
         </table>

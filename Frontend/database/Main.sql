@@ -2,7 +2,7 @@
 CREATE TABLE Users (
     UserID INT AUTO_INCREMENT PRIMARY KEY,
     Full_Name VARCHAR(200) NOT NULL,
-    BirthDate DATE,
+    Birth_Date DATE,
     Gender ENUM('Male','Female','Other'),
     Email VARCHAR(200) UNIQUE NOT NULL,
     Username VARCHAR(200) UNIQUE NOT NULL,
