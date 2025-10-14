@@ -9,9 +9,11 @@ CREATE TABLE Users (
     Password VARCHAR(200) NOT NULL,
     Phone_Number VARCHAR(200) NOT NULL,
     City_or_Neighbourhood VARCHAR(200),
-    Additional_Info VARCHAR(200),
-    Join_Date DATETIME,
-    Last_Login DATETIME
+    Additional_info VARCHAR(200),
+    Join_date DATETIME,
+    Last_login DATETIME,
+    Reset_token VARCHAR(200),
+    Reset_expiry DATETIME
 ); 
 
 -- Admin Table
