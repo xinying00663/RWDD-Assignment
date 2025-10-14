@@ -100,7 +100,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
                 <p id="signUpError" class="auth-error" aria-live="polite"></p>
                 <div class="actions">
                     <button type="submit">Create account</button>
-                    <footer>Already have an account? <a href="../login.php">Log in</a></footer>
+                    <footer>Already have an account? <a href="login.php">Log in</a></footer>
                 </div>
             </form>
         </section>

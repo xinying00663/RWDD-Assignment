@@ -108,7 +108,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST["action"])){
 
     <div class="row">
       <a href="#" id="forgotLink">Forgot password?</a>
-      <a href="../signup.php" id="signupLink">Create account</a>
+      <a href="signup.php" id="signupLink">Create account</a>
     </div>
 
     <div id="msg" aria-live="polite"></div>
