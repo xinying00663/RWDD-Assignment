@@ -82,7 +82,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST["action"])){
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Document</title>
     <link rel="stylesheet" href="../styles/loginPage.css">
 </head>
 <body>
@@ -91,12 +91,12 @@ if($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST["action"])){
 
     <form id="loginForm">
       <label for="email">Email</label>
-      <input id="email" type="email" required />
+      <input id="email" name="email" type="email" required />
 
       <label for="password">Password</label>
-      <input id="password" type="password" required />
+      <input id="password" name="password" type="password" required />
 
-      <button class="primary" type="submit">Sign in</button>
+      <button class="primary">Sign in</button>
     </form>
 
     <button id="googleSignIn" class="google-btn" style="margin-top:10px;">
@@ -114,6 +114,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST["action"])){
     <div id="msg" aria-live="polite"></div>
     <div class="small">By signing in you agree to our terms.</div>
   </div>
+  <script src="../script/auth.js" defer></script>
 </body>
 
 </html>

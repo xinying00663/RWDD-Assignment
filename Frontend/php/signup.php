@@ -76,7 +76,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
                 <h1>Create your EcoGo account</h1>
                 <p>Start tracking your sustainability journey, join neighbourhood initiatives, and swap resources with people nearby.</p>
             </header>
-            <form id="signUpForm" class="auth-form" novalidate>
+            <form id="signUpForm" class="auth-form" method="POST" action="php/signup.php" novalidate>
                 <div class="form-row">
                     <label for="email">Email</label>
                     <input id="email" name="email" type="email" placeholder="you@example.com" required>
@@ -100,7 +100,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
                 <p id="signUpError" class="auth-error" aria-live="polite"></p>
                 <div class="actions">
                     <button type="submit">Create account</button>
-                    <footer>Already have an account? <a href="login.php">Log in</a></footer>
+                    <footer>Already have an account? <a href="loginPage.php">Log in</a></footer>
                 </div>
             </form>
         </section>
@@ -113,5 +113,6 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
             </ul>
         </aside>
     </main>
+    <script src="../script/auth.js" defer></script>
 </body>
 </html>
