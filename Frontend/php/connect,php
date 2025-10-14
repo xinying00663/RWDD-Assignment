@@ -1,8 +1,8 @@
 <?php
 $host="localhost";
-$user="username";
-$password="password";
-$dbname="EcoGo";
+$user="root";
+$password="";
+$dbname="ecogo";
 
 //Connect to database
 try{

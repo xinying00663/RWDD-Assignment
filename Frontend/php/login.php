@@ -6,7 +6,7 @@ session_start();
 if($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST["action"])){
   $response=["success"=>false,"message"=>""];
 
-  if($_POST["action"]!=="login"){
+  if($_POST["action"]==="login"){
     $email=filter_var($_POST["email"] ??"",FILTER_VALIDATE_EMAIL);
     $password=$_POST["password"] ??"";
   
@@ -17,22 +17,22 @@ if($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST["action"])){
       $response["message"]="Please enter a valid email address.";
     }else{
       try{
-        $stmt=$pdo->prepare("SELECT id,password FROM users WHERE email=?");
+        $stmt=$pdo->prepare("SELECT UserID,Password,Email FROM users WHERE email=?");
         $stmt->execute([$email]);
         $user=$stmt->fetch(PDO::FETCH_ASSOC);
 
-        if($user&&password_verify($password,$user["password"])){
-          $lastLogin=date("Y-m-d H-i-s");
-          $stmt=$pdo->prepare("UPDATE users SET last_login=? WHERE id=?");
-          $stmt->execute([$lastLogin,$user["id"]]);
+        if($user&&password_verify($password,$user["Password"])){
+          $lastLogin=date("Y-m-d H:i:s");
+          $stmt=$pdo->prepare("UPDATE users SET Last_login=? WHERE UserID=?");
+          $stmt->execute([$lastLogin,$user["UserID"]]);
 
-          $_SESSION["user_id"]=$userID;
-          $_SESSION["email"]=$email;
+          $_SESSION["user_id"]=$user["UserID"];
+          $_SESSION["email"]=$user["Email"];
           $_SESSION["logged_in"]=true;
 
           $response["success"]=true;
           $response["message"]="Your account has been created successfully.";
-          $response["user_id"]=$user["id"];
+          $response["user_id"]=$user["UserID"];
           $response["redirect"]="homePage.html";
         }else{
           $response["message"]="Invalid email or password.";
@@ -50,15 +50,15 @@ if($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST["action"])){
       $response["message"]="Please enter a valid email address.";
     }else{
       try{
-        $stmt=$pdo->prepare("SELECT id FROM users WHERE email=?");
+        $stmt=$pdo->prepare("SELECT UserID FROM users WHERE Email=?");
         $stmt->execute([$email]);
         $user=$stmt->fetch();
 
         if($user){
           $reset_token=bin2hex(random_bytes(32));
-          $expiry=date("Y-m-d H-i-s",time()+3600); // 1hour expiry
+          $expiry=date("Y-m-d H:i:s",time()+3600); // 1hour expiry
 
-          $stmt=$pdo->prepare("UPDATE users SET reset_token=?,reset_expiry=? WHERE email=?");
+          $stmt=$pdo->prepare("UPDATE users SET reset_token=?,reset_expiry=? WHERE Email=?");
           $stmt->execute([$resetToken,$expiry,$email]);
 
           $response["success"]=true;
@@ -72,7 +72,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST["action"])){
       }
     }
   }
-  header("Content-Type:applicant/json");
+  header("Content-Type:application/json");
   echo json_encode($response);
   exit;
 }

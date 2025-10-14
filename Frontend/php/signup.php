@@ -24,15 +24,17 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
         $response["message"]="You must agree to the terms and conditions.";
     }else{
         try{
-            $stmt=$pdo->prepare("SELECT id FROM users WHERE email=?");
+            $stmt=$pdo->prepare("SELECT UserID FROM users WHERE Email=?");
             $stmt->execute([$email]);
             if($stmt->fetch()){
                 $response["message"]="An account with this email already exists.";
             }else{
                 $hashedPassword=password_hash($password,PASSWORD_DEFAULT);
                 $joinDate=date("Y-m-d H:i:s");
-                $stmt=$pdo->prepare("INSERT INTO Users(Email,Password,Join_date,Last_login) VALUES(?,?,?,?)");
+                $stmt=$pdo->prepare("INSERT INTO users(Email,Password,Join_date,Last_login) VALUES(?,?,?,?)");
                 $stmt->execute([$email,$hashedPassword,$joinDate,$joinDate]);
+
+                $userID=$pdo->lastInsertID();
 
                 $_SESSION["user_id"]=$userID;
                 $_SESSION["email"]=$email;
@@ -48,7 +50,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
             $response["message"]="Error in processing your registration. Please try again.";
         }
     }
-    header("Content-Type:applicant/json");
+    header("Content-Type:application/json");
     echo json_encode($response);
     exit;
 }

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 10, 2025 at 09:33 AM
+-- Generation Time: Oct 14, 2025 at 02:43 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -39,7 +39,9 @@ CREATE TABLE `users` (
   `City_Or_Neighbourhood` varchar(200) DEFAULT NULL,
   `Additional_info` varchar(200) DEFAULT NULL,
   `Join_date` datetime(6) DEFAULT NULL,
-  `Last_login` datetime(6) DEFAULT NULL
+  `Last_login` datetime(6) DEFAULT NULL,
+  `Reset token` varchar(200) DEFAULT NULL,
+  `Reset expiry` datetime(6) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 COMMIT;
 
