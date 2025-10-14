@@ -6,10 +6,10 @@ include "connect.php";
 
 session_start();
 if($_SERVER["REQUEST_METHOD"]=="POST"){
-    $email=filter_var($_POST["Email"] ??"",FILTER_VALIDATE_EMAIL);
-    $password=$_POST["Password"] ??"";
-    $confirmPassword=$_POST["Confirm_Password"] ??"";
-    $terms=isset($_POST["Terms"]) ? true : false;
+    $email=filter_var($_POST["email"] ??"",FILTER_VALIDATE_EMAIL);
+    $password=$_POST["password"] ??"";
+    $confirmPassword=$_POST["confirmPassword"] ??"";
+    $terms=isset($_POST["terms"]) ? true : false;
     
     $response=["success"=>false,"message"=>""];
     
@@ -33,7 +33,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
             }else{
                 $hashedPassword=password_hash($password,PASSWORD_DEFAULT);
                 $joinDate=date("Y-m-d H:i:s");
-                $stmt=$pdo->prepare("INSERT INTO users(Email,Password,Join_date,Last_login) VALUES(?,?,?,?)");
+                $stmt=$pdo->prepare("INSERT INTO users(Email, Password, Join_date, Last_login) VALUES(?,?,?,?)");
                 if($stmt->execute([$email,$hashedPassword,$joinDate,$joinDate])){
                     $userID=$pdo->lastInsertID();
 
@@ -118,6 +118,6 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
             </ul>
         </aside>
     </main>
-<!-- <script src="../script/auth.js" defer></script> -->
+    <script src="script/auth.js" defer></script>
 </body>
 </html>
