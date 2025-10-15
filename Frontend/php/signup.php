@@ -5,6 +5,13 @@ ini_set('display_errors', 1);
 include "connect.php";
 
 session_start();
+
+// check if user has alr signup and redirect them to home page
+if(isset($_SESSION["userID"])&&($_SESSION["logged_in"])){
+    header("Location:../homePage.html");
+    exit;
+}
+
 if($_SERVER["REQUEST_METHOD"]=="POST"){
     $email=$_POST["email"] ??"";
     $password=$_POST["password"] ??"";
