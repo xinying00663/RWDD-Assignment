@@ -44,7 +44,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
                     $response["success"]=true;
                     $response["message"]="Your account has been created successfully.";
                     $response["user_id"]=$userID;
-                    $response["redirectTo"]="profileSetup.html";
+                    $response["redirectTo"]="profileSetup.php";
                 } else{
                     $response["message"]="Database error, please try again.";
                 }

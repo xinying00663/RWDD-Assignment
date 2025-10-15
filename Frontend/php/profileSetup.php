@@ -5,11 +5,11 @@ ini_set('display_errors', 1);
 include "connect.php";
 
 session_start();
-// check if the user has logged in
-if(!isset($_SESSION["user_id"])||!$_SESSION["logged_in"]){
-    header("Location:login.php");
-    exit;
-}
+// // check if the user has logged in
+// if(!isset($_SESSION["user_id"])||!$_SESSION["logged_in"]){
+//     header("Location:login.php");
+//     exit;
+// }
 
 if($_SERVER["REQUEST_METHOD"]=="POST"){
     $userID=$_SESSION["user_id"];
@@ -46,13 +46,13 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
                     Additional_info= ?
                     WHERE UserID=?");
 
-                if($stmt->execute([$username,$fullName,$gender,$phoneNumber,$city,$additionalInfo,$userID])){
+                if($stmt->execute([$username,$fullName,$dbgender,$phoneNumber,$city,$additionalInfo,$userID])){
                     $_SESSION["Username"]=$username;
                     $_SESSION["Full_Name"]=$fullName;
 
                     $response["success"]=true;
                     $response["message"]="Your profile has been setup successfully.";
-                    $response["redirectTo"]="homePage.html";
+                    $response["redirectTo"]="../homePage.html";
                 }else{
                     $response["message"]="Database error, please try again.";
                 }
@@ -76,14 +76,14 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Complete Your EcoGo Profile</title>
-    <link rel="stylesheet" href="styles/auth.css">
+    <link rel="stylesheet" href="../styles/auth.css">
 </head>
 <body class="auth-body">
     <main class="auth-shell">
         <section class="auth-card">
             <header>
                 <a class="brand" href="homePage.html">
-                    <img src="Pictures/logo.jpeg" alt="EcoGo logo">
+                    <img src="../Pictures/logo.jpeg" alt="EcoGo logo">
                     EcoGo Collective
                 </a>
                 <h1>Tell us about yourself</h1>
@@ -133,6 +133,6 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
             </ul>
         </aside>
     </main>
-    <script src="script/userProfile.js" defer></script>
+    <script src="../script/userProfile.js" defer></script>
 </body>
 </html>
