@@ -47,13 +47,26 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
                     WHERE UserID=?");
 
                 if($stmt->execute([$username,$fullName,$gender,$phoneNumber,$city,$additionalInfo,$userID])){
-                    
+                    $_SESSION["Username"]=$username;
+                    $_SESSION["Full_Name"]=$fullName;
+
+                    $response["success"]=true;
+                    $response["message"]="Your profile has been setup successfully.";
+                    $response["redirectTo"]="homePage.html";
+                }else{
+                    $response["message"]="Database error, please try again.";
                 }
 
             }
 
+        }catch(PDOException $e){
+            error_log("Database error:".$e->getMessage());
+            $response["message"]="Error in processing your registration. Please try again.";
         }
     }
+    header("Content-Type:application/json");
+    echo json_encode($response);
+    exit;
 }
 ?>
 
