@@ -2,14 +2,15 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
+session_start();
+
 include "connect.php";
 
-session_start();
-// // check if the user has logged in
-// if(!isset($_SESSION["user_id"])||!$_SESSION["logged_in"]){
-//     header("Location:login.php");
-//     exit;
-// }
+// check if the user has logged in
+if(!isset($_SESSION["user_id"])||!$_SESSION["logged_in"]){
+    header("Location:login.php");
+    exit;
+}
 
 if($_SERVER["REQUEST_METHOD"]=="POST"){
     $userID=$_SESSION["user_id"];
@@ -46,7 +47,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
                     Additional_info= ?
                     WHERE UserID=?");
 
-                if($stmt->execute([$username,$fullName,$dbgender,$phoneNumber,$city,$additionalInfo,$userID])){
+                if($stmt->execute([$username,$fullName,$dbGender,$phoneNumber,$city,$additionalInfo,$userID])){
                     $_SESSION["Username"]=$username;
                     $_SESSION["Full_Name"]=$fullName;
 

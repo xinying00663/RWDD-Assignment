@@ -2,9 +2,10 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
+session_start();
+
 include "connect.php";
 
-session_start();
 if($_SERVER["REQUEST_METHOD"]=="POST"){
   $response=["success"=>false,"message"=>""];
 
@@ -21,7 +22,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
       $stmt->execute([$email]);
       $user=$stmt->fetch(PDO::FETCH_ASSOC);
 
-      if($user&&password_verify($password,$user["Password"])){
+      if($user&&password===$user["Password"]){
         $lastLogin=date("Y-m-d H:i:s");
         $stmt=$pdo->prepare("UPDATE users SET Last_login=? WHERE UserID=?");
         $stmt->execute([$lastLogin,$user["UserID"]]);
@@ -31,9 +32,9 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
         $_SESSION["logged_in"]=true;
 
         $response["success"]=true;
-        $response["message"]="Your account has been created successfully.";
+        $response["message"]="Login successful.";
         $response["user_id"]=$user["UserID"];
-        $response["redirectTo"]="homePage.html";
+        $response["redirectTo"]="../homePage.html";
       }else{
         $response["message"]="Invalid email or password.";
       }
@@ -53,7 +54,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Login</title>
     <link rel="stylesheet" href="../styles/loginPage.css">
 </head>
 <body>

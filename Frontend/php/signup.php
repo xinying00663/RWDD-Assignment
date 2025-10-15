@@ -2,9 +2,9 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-include "connect.php";
-
 session_start();
+
+include "connect.php";
 
 // check if user has alr signup and redirect them to home page
 if(isset($_SESSION["userID"])&&($_SESSION["logged_in"])){
@@ -38,10 +38,9 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
             if($stmt->fetch()){
                 $response["message"]="An account with this email already exists.";
             }else{
-                $hashedPassword=password_hash($password,PASSWORD_DEFAULT);
                 $joinDate=date("Y-m-d H:i:s");
                 $stmt=$pdo->prepare("INSERT INTO users(Email, Password, Join_date, Last_login) VALUES(?,?,?,?)");
-                if($stmt->execute([$email,$hashedPassword,$joinDate,$joinDate])){
+                if($stmt->execute([$email,$password,$joinDate,$joinDate])){
                     $userID=$pdo->lastInsertID();
 
                     $_SESSION["user_id"]=$userID;
