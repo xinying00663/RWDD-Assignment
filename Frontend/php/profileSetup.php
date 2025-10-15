@@ -7,7 +7,7 @@ session_start();
 include "connect.php";
 
 // check if the user has logged in
-if(!isset($_SESSION["user_id"])||!$_SESSION["logged_in"]){
+if(!isset($_SESSION["user_id"]) || !$_SESSION["logged_in"]){
     header("Location:login.php");
     exit;
 }
@@ -37,27 +37,44 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
 
                 $dbGender=$genderMap[$gender] ??"";
 
-                // Update user profile
-                $stmt=$pdo->prepare("UPDATE users SET
-                    Username= ?,
-                    Full_Name= ?,
-                    Gender= ?,
-                    Phone_Number= ?,
-                    City_Or_Neighbourhood= ?,
-                    Additional_info= ?
-                    WHERE UserID=?");
+                $stmt=$pdo->prepare("SELECT Email FROM users WHERE UserID=?");
+                $stmt->execute([$userID]);
+                $user=$stmt->fetch();
 
-                if($stmt->execute([$username,$fullName,$dbGender,$phoneNumber,$city,$additionalInfo,$userID])){
-                    $_SESSION["Username"]=$username;
-                    $_SESSION["Full_Name"]=$fullName;
-
-                    $response["success"]=true;
-                    $response["message"]="Your profile has been setup successfully.";
-                    $response["redirectTo"]="../homePage.html";
+                if(!$user){
+                    $response["message"]="User not found.";
                 }else{
-                    $response["message"]="Database error, please try again.";
-                }
+                    // Update user profile
+                    $stmt=$pdo->prepare("UPDATE users SET
+                        Username= ?,
+                        Full_Name= ?,
+                        Gender= ?,
+                        Phone_Number= ?,
+                        City_Or_Neighbourhood= ?,
+                        Additional_info= ?
+                        WHERE UserID=?");
 
+                    $success=$stmt->execute([
+                        $username ?: NULL,
+                        $fullName ?: NULL,
+                        $dbGender ?: NULL,
+                        $phoneNumber ?: NULL,
+                        $city ?: NULL,
+                        $additionalInfo ?: NULL,
+                        $userID 
+                    ]);
+
+                    if($success && $stmt->rowCount>0){
+                        $_SESSION["Username"]=$username;
+                        $_SESSION["Full_Name"]=$fullName;
+
+                        $response["success"]=true;
+                        $response["message"]="Your profile has been setup successfully.";
+                        $response["redirectTo"]="../userProfile.html";
+                    }else{
+                        $response["message"]="Database error, please try again.";
+                    }
+                }
             }
 
         }catch(PDOException $e){
