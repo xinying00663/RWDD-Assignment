@@ -64,15 +64,15 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
                         $userID 
                     ]);
 
-                    if($success && $stmt->rowCount>0){
+                    if($success && $stmt->rowCount()>0){
                         $_SESSION["Username"]=$username;
                         $_SESSION["Full_Name"]=$fullName;
 
                         $response["success"]=true;
                         $response["message"]="Your profile has been setup successfully.";
-                        $response["redirectTo"]="../userProfile.html";
+                        $response["redirectTo"]="userProfile.html";
                     }else{
-                        $response["message"]="Database error, please try again.";
+                        $response["message"]="No changes were made due to database error, please try again.";
                     }
                 }
             }
@@ -107,7 +107,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
                 <h1>Tell us about yourself</h1>
                 <p>We use these details to recommend the right programs, swaps, and neighbours for you. You can update them anytime from your profile.</p>
             </header>
-            <form id="profileForm" class="auth-form" novalidate>
+            <form id="profileForm" class="auth-form" method="POST" novalidate>
                 <div class="form-row">
                     <label for="username">Username</label>
                     <input id="username" name="username" type="text" placeholder="Jamie Lim" required>
