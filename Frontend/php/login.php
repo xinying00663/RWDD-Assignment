@@ -7,22 +7,32 @@ session_start();
 include "connect.php";
 
 if($_SERVER["REQUEST_METHOD"]=="POST"){
-  $response=["success"=>false,"message"=>""];
+  echo '<script>alert("Login request received");</script>';
+  // $response=["success"=>false,"message"=>""];
 
   $email=$_POST["email"] ??"";
   $password=$_POST["password"] ??"";
   
   if(empty($email)|| empty($password)){
-    $response["message"]="Please fill in all required fields.";
+    echo "<script>
+            alert('Please fill in all required fields.');
+            window.history.back();
+        </script>";
+        exit;
+    //$response["message"]="Please fill in all required fields.";
   }elseif(!filter_var($email,FILTER_VALIDATE_EMAIL)){
-    $response["message"]="Please enter a valid email address.";
+    echo "<script>
+            alert('Please enter a valid email address.');
+            window.history.back();
+        </script>";
+        exit;
   }else{
     try{
       $stmt=$pdo->prepare("SELECT UserID,Password,Email FROM users WHERE Email=?");
       $stmt->execute([$email]);
       $user=$stmt->fetch(PDO::FETCH_ASSOC);
 
-      if($user&&password===$user["Password"]){
+      if($user&& $password===$user["Password"]){
         $lastLogin=date("Y-m-d H:i:s");
         $stmt=$pdo->prepare("UPDATE users SET Last_login=? WHERE UserID=?");
         $stmt->execute([$lastLogin,$user["UserID"]]);
@@ -31,19 +41,30 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
         $_SESSION["email"]=$user["Email"];
         $_SESSION["logged_in"]=true;
 
-        $response["success"]=true;
-        $response["message"]="Login successful.";
-        $response["user_id"]=$user["UserID"];
-        $response["redirectTo"]="../homePage.html";
+        echo "<script>
+                        alert('Login successful!');
+                        window.location.href = '../homePage.html';
+                    </script>";
+                    exit;
       }else{
-        $response["message"]="Invalid email or password.";
+        echo "<script>
+                alert('Invalid email or password.');
+                window.history.back();
+            </script>";
+            exit;
+        // $response["message"]="Invalid email or password.";
       }
     }catch(PDOException $e){
       error_log("Database error:".$e->getMessage());
-      $response["message"]="Error in processing your login. Please try again.";
+      echo "<script>
+              alert('Error in processing your login. Please try again.');
+              window.history.back();
+          </script>";
+          exit;
+      //$response["message"]="Error in processing your login. Please try again.";
     }
   }
-  header("Content-Type:application/json");
+  // header("Content-Type:application/json");
   echo json_encode($response);
   exit;
 }
@@ -61,7 +82,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
     <div class="card">
     <h2>Sign in</h2>
 
-    <form id="loginForm">
+    <form id="loginForm" class="auth-form" method="POST" novalidate>
       <label for="email">Email</label>
       <input id="email" name="email" type="email" required />
 
@@ -86,7 +107,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
     <div id="msg" aria-live="polite"></div>
     <div class="small">By signing in you agree to our terms.</div>
   </div>
-  <script src="../script/auth.js" defer></script>
+  <!-- <script src="../script/auth.js" defer></script> -->
 </body>
 
 </html>
