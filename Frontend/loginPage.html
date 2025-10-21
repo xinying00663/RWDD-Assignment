@@ -10,7 +10,7 @@
     <div class="card">
     <h2>Sign in</h2>
 
-    <form id="loginForm" class="auth-form" method="POST" action="php/login.php" novalidate>
+    <form id="loginForm" class="auth-form" method="POST" action="php/login.php" onclick="saveUser(event)" novalidate>
       <label for="email">Email</label>
       <input id="email" name="email" type="email" required />
 
@@ -36,6 +36,7 @@
     <div class="small">By signing in you agree to our terms.</div>
   </div>
   <!-- <script src="script/auth.js" defer></script> -->
+   <script src="script/cookies.js"></script>
 </body>
 
 </html>
