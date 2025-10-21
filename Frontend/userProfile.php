@@ -26,46 +26,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="styles/userProfile.css">
 </head>
 <body data-page="user-profile">
-    <button class="sidebar-toggle" type="button" data-sidebar-toggle aria-controls="sidebar" aria-expanded="false">
-        <span class="sidebar-toggle__icon" aria-hidden="true"></span>
-        <span class="sr-only">Toggle navigation</span>
-    </button>
-    <div class="sidebar-backdrop" id="sidebarBackdrop" hidden></div>
-    <header id="sidebar" class="sidebar" aria-label="Primary navigation">
-        <div class="logo">
-            <a href="homePage.html">
-                <img src="Pictures/logo.jpeg" alt="EcoGo Logo">
-            </a>
-        </div>
-        <nav>
-            <a href="homePage.html">
-                <img src="Pictures/sidebar/recycle-sign.png" alt="Home Icon">
-                <p>Recycling Program</p>
-            </a>
-            <a href="energyPage.html">
-                <img src="Pictures/sidebar/lamp.png" alt="Energy Icon">
-                <p>Energy Conservation Tips</p>
-            </a>
-            <a href="communityPage.html">
-                <img src="Pictures/sidebar/garden.png" alt="Community Icon">
-                <p>Gardening Community</p>
-            </a>
-            <a href="swapPage.html">
-                <img src="Pictures/sidebar/swap.png" alt="Swap Icon">
-                <p>Swap Items</p>
-            </a>
-            <a href="inboxPage.html">
-                <img src="Pictures/sidebar/inbox.png" alt="Inbox Icon">
-                <p>Inbox</p>
-            </a>
-        </nav>
-        <div class="profile">
-            <a href="userProfile.php" class="active">
-                <img src="Pictures/sidebar/user.png" alt="Profile Icon">
-                <p>User Profile</p>
-            </a>
-        </div>
-    </header>
+    <!-- Sidebar will be loaded here by sidebar.js -->
     <main>
         <section class="profile-hero">
             <div class="identity">
@@ -208,7 +169,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
             </form>
         </div>
     </div>
-    <script src="script/sidebar.js" defer></script>
+    <script src="script/sidebar.js?v=2"></script>
     <!-- <script src="script/userProfile.js" defer></script> -->
 </body>
 </html>

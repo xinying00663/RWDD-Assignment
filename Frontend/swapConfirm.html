@@ -11,46 +11,7 @@
     <link rel="stylesheet" href="styles/swapConfirm.css">
 </head>
 <body data-page="swap-confirm">
-    <button class="sidebar-toggle" type="button" data-sidebar-toggle aria-controls="sidebar" aria-expanded="false">
-        <span class="sidebar-toggle__icon" aria-hidden="true"></span>
-        <span class="sr-only">Toggle navigation</span>
-    </button>
-    <div class="sidebar-backdrop" id="sidebarBackdrop" hidden></div>
-    <header id="sidebar" class="sidebar" aria-label="Primary navigation">
-        <div class="logo">
-            <a href="homePage.html">
-                <img src="Pictures/logo.jpeg" alt="EcoGo Logo">
-            </a>
-        </div>
-        <nav>
-            <a href="homePage.html">
-                <img src="Pictures/sidebar/recycle-sign.png" alt="Recycling icon">
-                <p>Recycling Program</p>
-            </a>
-            <a href="energyPage.html">
-                <img src="Pictures/sidebar/lamp.png" alt="Energy icon">
-                <p>Energy Conservation Tips</p>
-            </a>
-            <a href="communityPage.html">
-                <img src="Pictures/sidebar/garden.png" alt="Community icon">
-                <p>Gardening Community</p>
-            </a>
-            <a href="swapPage.html" class="active">
-                <img src="Pictures/sidebar/swap.png" alt="Swap icon">
-                <p>Swap Items</p>
-            </a>
-            <a href="inboxPage.html">
-                <img src="Pictures/sidebar/inbox.png" alt="Inbox icon">
-                <p>Inbox</p>
-            </a>
-        </nav>
-        <div class="profile">
-            <a href="userProfile.php">
-                <img src="Pictures/sidebar/user.png" alt="Home Icon">
-                <p>User Profile</p>
-            </a>
-        </div>
-    </header>
+    <!-- Sidebar will be loaded here by sidebar.js -->
     <main>
         <section class="tabs-card swap-confirm-card" aria-labelledby="swapConfirmHeading">
             <div class="section-header">
@@ -103,7 +64,7 @@
             </div>
         </section>
     </main>
-    <script src="script/sidebar.js" defer></script>
+    <script src="script/sidebar.js?v=2"></script>
     <script src="script/swapConfirm.js" defer></script>
 </body>
 </html>

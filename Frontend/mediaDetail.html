@@ -9,51 +9,12 @@
     <link rel="stylesheet" href="styles/sidebar.css">
     <link rel="stylesheet" href="styles/mediaDetail.css">
 </head>
-<body>
-    <button class="sidebar-toggle" type="button" data-sidebar-toggle aria-controls="sidebar" aria-expanded="false">
-        <span class="sidebar-toggle__icon" aria-hidden="true"></span>
-        <span class="sr-only">Toggle navigation</span>
-    </button>
-    <div class="sidebar-backdrop" id="sidebarBackdrop" hidden></div>
-    <header id="sidebar" class="sidebar" aria-label="Primary navigation">
-        <div class="logo">
-            <a href="homePage.html">
-                <img src="Pictures/logo.jpeg" alt="EcoGo Logo">
-            </a>
-        </div>
-        <nav>
-            <a href="homePage.html" data-nav="home">
-                <img src="Pictures/sidebar/recycle-sign.png" alt="Home Icon">
-                <p>Recycling Program</p>
-            </a>
-            <a href="energyPage.html" data-nav="energy">
-                <img src="Pictures/sidebar/lamp.png" alt="Energy Icon">
-                <p>Energy Conservation Tips</p>
-            </a>
-            <a href="communityPage.html" data-nav="community">
-                <img src="Pictures/sidebar/garden.png" alt="Community Icon">
-                <p>Gardening Community</p>
-            </a>
-            <a href="swapPage.html" data-nav="swap">
-                <img src="Pictures/sidebar/swap.png" alt="Swap Icon">
-                <p>Swap Items</p>
-            </a>
-            <a href="inboxPage.html" data-nav="inbox">
-                <img src="Pictures/sidebar/inbox.png" alt="Inbox Icon">
-                <p>Inbox</p>
-            </a>
-        </nav>
-        <div class="profile">
-            <a href="userProfile.php">
-                <img src="Pictures/sidebar/user.png" alt="Home Icon">
-                <p>User Profile</p>
-            </a>
-        </div>
-    </header>
+<body data-page="media-detail">
+    <!-- Sidebar will be loaded here by sidebar.js -->
     <main class="detail-main">
         <div id="detailShell"></div>
     </main>
-    <script src="script/sidebar.js" defer></script>
+    <script src="script/sidebar.js?v=2"></script>
     <script src="script/mediaDetail.js" defer></script>
 </body>
 </html>
