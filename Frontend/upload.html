@@ -56,7 +56,7 @@
                 <h2>Share a recycling program</h2>
                 <p>List your next drop-off drive, clean-up sprint, or repair workshop so neighbours can pitch in.</p>
             </div>
-            <form class="upload-form" action="#" method="post">
+            <form class="upload-form" action="php/uploadPost.php" method="post">
                 <div class="upload-form__grid">
                     <div class="input-group">
                         <label for="eventName">Program name</label>
@@ -110,11 +110,11 @@
                         <div class="dynamic-section" data-section>
                             <div class="input-group input-group--full">
                                 <label>Section title</label>
-                                <input type="text" name="sectionTitle" placeholder="e.g. Weekly plan">
+                                <input type="text" name="sectionTitle[]" placeholder="e.g. Weekly plan">
                             </div>
                             <div class="input-group input-group--full">
                                 <label>Section details</label>
-                                <textarea name="sectionDescription" rows="4" placeholder="Describe the timing, key activities, or important notes."></textarea>
+                                <textarea name="sectionDescription[]" rows="4" placeholder="Describe the timing, key activities, or important notes."></textarea>
                             </div>
                             <button type="button" class="button-remove" data-section-remove>Remove section</button>
                         </div>
