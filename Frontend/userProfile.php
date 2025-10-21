@@ -1,4 +1,18 @@
+<?php
+session_start();
+include "php/connect.php";
 
+if (!isset($_SESSION['userId'])) {
+    header("Location: loginPage.html");
+    exit();
+}
+
+$userId = $_SESSION['userId'];
+$query = "SELECT Username, Full_Name, Gender, Email, Phone_Number, City_Or_Neighbourhood, Additional_info FROM users WHERE id = ?";
+$stmt = $pdo->prepare($query);
+$stmt->execute([$userId]);
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -46,7 +60,7 @@
             </a>
         </nav>
         <div class="profile">
-            <a href="userProfile.html" class="active">
+            <a href="userProfile.php" class="active">
                 <img src="Pictures/sidebar/user.png" alt="Profile Icon">
                 <p>User Profile</p>
             </a>
@@ -55,15 +69,15 @@
     <main>
         <section class="profile-hero">
             <div class="identity">
-                <div class="profile-avatar" data-profile-avatar></div>
+                <div class="profile-avatar"></div>
                 <div>
-                    <h1 class="username" data-profile-field="username"></h1>
-                    <p class="fullName" data-profile-field="fullName"></p>
-                    <p class="gender" data-profile-field="gender"></p>
-                    <p class="value" data-profile-field="email"></p>
-                    <p class="value" data-profile-field="phone"></p>
-                    <p class="location" data-profile-field="location"></p>
-                    <p class="bio" data-profile-field="bio"></p>
+                    <h1 class="username"><?php echo $user['username']; ?></h1>
+                    <p class="fullName"><?php echo $user['fullName']; ?></p>
+                    <p class="gender"><?php echo $user['gender']; ?></p>
+                    <p class="value"><?php echo $user['email']; ?></p>
+                    <p class="value"><?php echo $user['phone']; ?></p>
+                    <p class="location"><?php echo $user['location']; ?></p>
+                    <p class="bio"><?php echo $user['bio']; ?></p>
                     <div class="hero-actions">
                         <button class="primary" type="button" data-action="edit-profile">Edit profile</button>
                         <button class="secondary" type="button" data-action="logout">Logout</button>
