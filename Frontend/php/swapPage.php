@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoGo Swap Items</title>
+    <link rel="stylesheet" href="styles/general.css">
+    <link rel="stylesheet" href="styles/common.css">
+    <link rel="stylesheet" href="styles/sidebar.css">
+    <link rel="stylesheet" href="styles/searchbar.css">
+    <link rel="stylesheet" href="styles/mediaFeed.css">
+    <link rel="stylesheet" href="styles/swapPage.css">
+    <link rel="stylesheet" href="styles/addButton.css">
+</head>
+<body data-page="swap">
+    <button class="sidebar-toggle" type="button" data-sidebar-toggle aria-controls="sidebar" aria-expanded="false">
+        <span class="sidebar-toggle__icon" aria-hidden="true"></span>
+        <span class="sr-only">Toggle navigation</span>
+    </button>
+    <div class="sidebar-backdrop" id="sidebarBackdrop" hidden></div>
+    <header id="sidebar" class="sidebar" aria-label="Primary navigation">
+        <div class="logo">
+            <a href="homePage.html">
+                <img src="Pictures/logo.jpeg" alt="EcoGo Logo">
+            </a>
+        </div>
+        <nav>
+            <a href="homePage.html">
+                <img src="Pictures/sidebar/recycle-sign.png" alt="Home Icon">
+                <p>Recycling Program</p>
+            </a>
+            <a href="energyPage.html">
+                <img src="Pictures/sidebar/lamp.png" alt="Home Icon">
+                <p>Energy Conservation Tips</p>
+            </a>
+            <a href="communityPage.html">
+                <img src="Pictures/sidebar/garden.png" alt="Home Icon">
+                <p>Gardening Community</p>
+            </a>
+            <a href="swapPage.html" class="active">
+                <img src="Pictures/sidebar/swap.png" alt="Home Icon">
+                <p>Swap Items</p>
+            </a>
+            <a href="inboxPage.html">
+                <img src="Pictures/sidebar/inbox.png" alt="Home Icon">
+                <p>Inbox</p>
+            </a>
+        </nav>
+        <div class="profile">
+            <a href="userProfile.html">
+                <img src="Pictures/sidebar/user.png" alt="Home Icon">
+                <p>User Profile</p>
+            </a>
+        </div>
+    </header>
+    <main>
+        <section class="tabs-card">
+            <div class="section-header">
+                <h2>Swap items from your neighbours</h2>
+                <p>Browse the latest sustainable finds and trade for what you need without creating extra waste.</p>
+            </div>
+            <div class="filter-controls swap-controls" role="region" aria-label="Sort swap items">
+                <label for="categoryFilter">Sort by category</label>
+                <select id="categoryFilter" class="media-filter" data-target="swapItems">
+                    <option value="all">Original order</option>
+                    <option value="home-grown">Home-grown first</option>
+                    <option value="eco-friendly">Eco-friendly first</option>
+                </select>
+            </div>
+            <div class="media-grid" id="swapItems">
+                <!-- Swap listings are injected by script/swapFeed.js -->
+            </div>
+        </section>
+        <button type="button" class="add-button" aria-label="List a swap item" onclick="window.location.href='uploadSwap.html'">+</button>
+    </main>
+    <!-- <script src="script/sidebar.js" defer></script>
+    <script src="script/mediaFeed.js" defer></script>
+    <script src="script/uploadShared.js" defer></script>
+    <script src="script/swapPage.js" defer></script>
+    <script src="script/swapFeed.js" defer></script> -->
+</body>
+</html>
+
+

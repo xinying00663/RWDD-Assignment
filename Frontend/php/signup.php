@@ -2,17 +2,13 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
+include "connect.php";
+// echo "Database connected successfully!";
+
 session_start();
 
-include "connect.php";
-
-// check if user has alr signup and redirect them to home page
-if(isset($_SESSION["userID"])&&($_SESSION["logged_in"])){
-    header("Location:../homePage.html");
-    exit;
-}
-
 if($_SERVER["REQUEST_METHOD"]=="POST"){
+
     $email=$_POST["email"] ??"";
     $password=$_POST["password"] ??"";
     $confirmPassword=$_POST["confirmPassword"] ??"";
@@ -35,33 +31,59 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
         try{
             $stmt=$pdo->prepare("SELECT UserID FROM users WHERE Email=?");
             $stmt->execute([$email]);
+
             if($stmt->fetch()){
                 $response["message"]="An account with this email already exists.";
             }else{
                 $joinDate=date("Y-m-d H:i:s");
+
                 $stmt=$pdo->prepare("INSERT INTO users(Email, Password, Join_date, Last_login) VALUES(?,?,?,?)");
-                if($stmt->execute([$email,$password,$joinDate,$joinDate])){
-                    $userID=$pdo->lastInsertID();
+                if($stmt->execute([$email,$hashedPassword,$joinDate,$joinDate])){
+                    $userID=$pdo->lastInsertId();
 
                     $_SESSION["user_id"]=$userID;
                     $_SESSION["Email"]=$email;
                     $_SESSION["logged_in"]=true;
 
-                    $response["success"]=true;
-                    $response["message"]="Your account has been created successfully.";
-                    $response["user_id"]=$userID;
-                    $response["redirectTo"]="profileSetup.php";
-                } else{
-                    $response["message"]="Database error, please try again.";
-                }
+                    // method 1
+                    // header("Location: ../loginPage.html");
+                    // exit;
 
+                    // method 2
+                    echo "<script>
+                        alert('Your account has been created successfully!');
+                        window.location.href = '../profileSetup.html';
+                    </script>";
+                    exit;
+                     
+                    // $response["success"]=true;
+                    // $response["message"]="Your account has been created successfully.";
+                    // $response["user_id"]=$userID;
+                    // $response["redirectTo"]="profileSetup.php";
+
+                    // $response = [
+                    //     "success" => true,
+                    //     "message" => "Your account has been created successfully.",
+                    //     "user_id" => $userID,
+                    //     "redirectTo" => "login.php"
+                    // ];
+
+                } else{
+                    // method 2
+                      echo "<script>
+                            alert('Database error, please try again.');
+                            window.history.back();
+                        </script>";
+                        exit;
+                    // $response["message"]="Database error, please try again.";
+                }
             }
         }catch(PDOException $e){
             error_log("Database error:".$e->getMessage());
             $response["message"]="Error in processing your registration. Please try again.";
         }
     }
-    header("Content-Type:application/json");
+    // header("Content-Type:application/json");
     echo json_encode($response);
     exit;
 }
@@ -124,6 +146,6 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
             </ul>
         </aside>
     </main>
-    <script src="script/auth.js" defer></script>
+    <!-- <script src="script/auth.js" defer></script> -->
 </body>
 </html>

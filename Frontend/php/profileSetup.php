@@ -82,7 +82,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
             $response["message"]="Error in processing your registration. Please try again.";
         }
     }
-    header("Content-Type:application/json");
+    // header("Content-Type:application/json");
     echo json_encode($response);
     exit;
 }
