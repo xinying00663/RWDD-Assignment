@@ -2,13 +2,24 @@
 session_start();
 include "php/connect.php";
 
-if (!isset($_SESSION['userId'])) {
+// Accept either session key name (some pages set user_id, others userId)
+if (!isset($_SESSION['user_id'])) {
     header("Location: loginPage.html");
     exit();
 }
 
-$userId = $_SESSION['userId'];
-$query = "SELECT Username, Full_Name, Gender, Email, Phone_Number, City_Or_Neighbourhood, Additional_info FROM users WHERE id = ?";
+$userId = $_SESSION['user_id'];
+
+// Use correct column name (UserID) and alias columns to the keys used in the template
+$query = "SELECT
+    Username AS username,
+    Full_Name AS fullName,
+    Gender AS gender,
+    Email AS email,
+    Phone_Number AS phone,
+    City_Or_Neighbourhood AS location,
+    Additional_info AS bio
+FROM users WHERE UserID = ?";
 $stmt = $pdo->prepare($query);
 $stmt->execute([$userId]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -156,7 +167,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
                         <span>Location</span>
                         <input type="text" name="location" autocomplete="address-level2">
                     </label>
-                    <label class="profile-modal__field profile-modal__field--wide">
+                    <label class="profile-modal_field profile-modal_field--wide">
                         <span>Bio</span>
                         <textarea name="bio" rows="4" placeholder="Share a bit about your sustainability journey..."></textarea>
                     </label>
