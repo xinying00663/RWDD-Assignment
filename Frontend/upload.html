@@ -18,7 +18,6 @@
                 <p>List your next drop-off drive, clean-up sprint, or repair workshop so neighbours can pitch in.</p>
             </div>
             <form class="upload-form" action="php/uploadPost.php" method="POST">
-            <form class="upload-form" action="php/uploadPost.php" method="POST">
                 <div class="upload-form__grid">
                     <div class="input-group">
                         <label for="eventName">Program name</label>
@@ -26,7 +25,10 @@
                     </div>
                     <div class="input-group">
                         <label for="eventLocation">Location</label>
-                        <input type="text" id="eventLocation" name="eventLocation" placeholder="e.g. Eco Park Community Hall" required>
+                        <!-- Search box for places + map picker. Users can search or click the map to pick a location. -->
+                        <input type="text" id="eventLocationSearch" name="eventLocationSearch" placeholder="Type an address" autocomplete="off">
+                        <div id="map" style="width:100%;height:320px;border:1px solid #ddd;margin-top:8px;border-radius:6px"></div>
+                        <p class="helper-text">Click the map to set the program location or search above. Drag the marker to adjust.</p>
                     </div>
                     <div class="input-group">
                         <label for="eventDate">Event date From</label>
@@ -89,12 +91,177 @@
                         <button type="submit">Submit program</button>
                     </div>
                 </div>
+                
             </form>
         </section>
     </main>
     <script src="script/sidebar.js?v=2"></script>
-    <!-- <script src="script/uploadShared.js" defer></script> -->
-    <!-- <script src="script/uploadPrograms.js" defer></script> -->
+    <script>
+        // Map picker logic
+        let map, marker, autocompleteService, placesService, geocoder;
+        function initMapPicker() {
+            const searchInput = document.getElementById('eventLocationSearch');
+            const latInput = document.getElementById('eventLat');
+            const lngInput = document.getElementById('eventLng');
+
+            // default center (fallback to a sensible lat/lng)
+            const defaultPos = { lat: 3.1390, lng: 101.6869 }; // Kuala Lumpur as example
+
+            // create map container if not already
+            try {
+                map = new google.maps.Map(document.getElementById('map'), {
+                    center: defaultPos,
+                    zoom: 13,
+                });
+
+                marker = new google.maps.Marker({
+                    position: defaultPos,
+                    map: map,
+                    draggable: true,
+                });
+
+                geocoder = new google.maps.Geocoder();
+
+                // when marker dragged, update hidden inputs
+                marker.addListener('dragend', function() {
+                    const pos = marker.getPosition();
+                    latInput.value = pos.lat();
+                    lngInput.value = pos.lng();
+                });
+
+                // click map to move marker
+                map.addListener('click', function(ev) {
+                    marker.setPosition(ev.latLng);
+                    latInput.value = ev.latLng.lat();
+                    lngInput.value = ev.latLng.lng();
+                });
+
+                // try to wire up Places search if available
+                try {
+                    const input = searchInput;
+                    const options = { fields: ['geometry', 'name', 'formatted_address'] };
+                    // Use Place AutocompleteElement if available (newer) or fallback to Autocomplete
+                    if (google.maps.places && google.maps.places.PlaceAutocompleteElement) {
+                        // Newer PlaceAutocompleteElement path (if present) - graceful fallback below will handle classic Autocomplete
+                        const pae = new google.maps.places.PlaceAutocompleteElement({ element: input, options: { types: ['address', 'establishment'] } });
+                        pae.addListener('change', async (e) => {
+                            // PlaceAutocompleteElement provides place on change; try geocode by text as fallback
+                            const text = input.value;
+                            geocodeText(text);
+                        });
+                    } else if (google.maps.places && google.maps.places.Autocomplete) {
+                        const ac = new google.maps.places.Autocomplete(input, { types: ['geocode', 'establishment'] });
+                        ac.bindTo('bounds', map);
+                        ac.addListener('place_changed', function() {
+                            const place = ac.getPlace();
+                            if (place && place.geometry && place.geometry.location) {
+                                map.panTo(place.geometry.location);
+                                map.setZoom(15);
+                                marker.setPosition(place.geometry.location);
+                                latInput.value = place.geometry.location.lat();
+                                lngInput.value = place.geometry.location.lng();
+                            } else {
+                                // fallback: geocode the typed text
+                                geocodeText(input.value);
+                            }
+                        });
+                    } else {
+                        // Places not available; we'll use text search on blur
+                        searchInput.addEventListener('blur', () => geocodeText(searchInput.value));
+                    }
+                } catch (e) {
+                    // if anything fails, fallback later
+                    console.warn('Places setup failed', e);
+                    searchInput.addEventListener('blur', () => geocodeText(searchInput.value));
+                }
+
+                // helper: geocode typed text using Google if available, otherwise Nominatim
+                function geocodeText(text) {
+                    if (!text || text.trim() === '') return;
+                    if (geocoder) {
+                        geocoder.geocode({ address: text }, function(results, status) {
+                            if (status === 'OK' && results[0]) {
+                                const loc = results[0].geometry.location;
+                                map.panTo(loc);
+                                map.setZoom(15);
+                                marker.setPosition(loc);
+                                latInput.value = loc.lat();
+                                lngInput.value = loc.lng();
+                                return;
+                            } else {
+                                // fallback to Nominatim
+                                geocodeNominatim(text).then(r => {
+                                    if (r) {
+                                        const pos = { lat: parseFloat(r.lat), lng: parseFloat(r.lon) };
+                                        map.panTo(pos);
+                                        map.setZoom(15);
+                                        marker.setPosition(pos);
+                                        latInput.value = pos.lat;
+                                        lngInput.value = pos.lng;
+                                    }
+                                });
+                            }
+                        });
+                    } else {
+                        geocodeNominatim(text).then(r => {
+                            if (r) {
+                                const pos = { lat: parseFloat(r.lat), lng: parseFloat(r.lon) };
+                                map.panTo(pos);
+                                map.setZoom(15);
+                                marker.setPosition(pos);
+                                latInput.value = pos.lat;
+                                lngInput.value = pos.lng;
+                            }
+                        });
+                    }
+                }
+
+            } catch (err) {
+                console.error('Google Maps failed; map picker not available', err);
+                // fallback: show a basic static map area with a message and still allow geocoding on blur
+                const mapEl = document.getElementById('map');
+                mapEl.innerHTML = '<div style="padding:18px;color:#666">Map unavailable. Type an address into the search box and move focus away to resolve the location.</div>';
+                document.getElementById('eventLocationSearch').addEventListener('blur', () => geocodeNominatim(document.getElementById('eventLocationSearch').value));
+            }
+        }
+
+        // Nominatim fallback geocode
+        async function geocodeNominatim(address) {
+            if (!address || address.trim() === '') return null;
+            const url = 'https://nominatim.openstreetmap.org/search?format=jsonv2&q=' + encodeURIComponent(address);
+            try {
+                const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+                if (!res.ok) return null;
+                const data = await res.json();
+                if (Array.isArray(data) && data.length > 0) return data[0];
+            } catch (e) { console.warn('Nominatim error', e); }
+            return null;
+        }
+
+        // If the Google Maps script is loaded with a callback, call initMapPicker then. Otherwise try to wait for window.google
+        function ensureInit() {
+            if (window.google && google.maps) {
+                initMapPicker();
+            } else {
+                // wait a bit and try again (in case Maps script is still loading)
+                let tries = 0;
+                const id = setInterval(() => {
+                    if (window.google && google.maps) {
+                        clearInterval(id);
+                        initMapPicker();
+                    }
+                    tries++;
+                    if (tries > 40) { clearInterval(id); /* give up after ~4s */ }
+                }, 100);
+            }
+        }
+
+        // Start when DOM ready
+        document.addEventListener('DOMContentLoaded', ensureInit);
+        </script>
+
+        <!-- Load Google Maps JavaScript API (replace YOUR_API_KEY) -->
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAX23VSgysvFGdvQRAadSkUkhIvF9-B6Mo&libraries=places&callback=initMap" async defer></script>
 </body>
 </html>
 
