@@ -85,7 +85,7 @@ try {
     $stmt->execute();
 
     if ($stmt->affected_rows > 0) {
-        echo "Success";
+        header('Location: ../homePage.php');
         // optionally redirect: header('Location: ../homePage.html');
     } else {
         http_response_code(500);
