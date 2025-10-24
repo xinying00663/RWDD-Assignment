@@ -78,11 +78,11 @@ if ($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST["swap_action"])){
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EcoGo Inbox</title>
-    <link rel="stylesheet" href="styles/general.css">
-    <link rel="stylesheet" href="styles/common.css">  
-    <link rel="stylesheet" href="styles/sidebar.css">
-    <link rel="stylesheet" href="styles/searchbar.css">
-    <link rel="stylesheet" href="styles/inboxPage.css">
+    <link rel="stylesheet" href="../styles/general.css">
+    <link rel="stylesheet" href="../styles/common.css">  
+    <link rel="stylesheet" href="../styles/sidebar.css">
+    <link rel="stylesheet" href="../styles/searchbar.css">
+    <link rel="stylesheet" href="../styles/inboxPage.css">
 </head>
 <body>
     <button class="sidebar-toggle" type="button" data-sidebar-toggle aria-controls="sidebar" aria-expanded="false">
@@ -93,34 +93,34 @@ if ($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST["swap_action"])){
     <header id="sidebar" class="sidebar" aria-label="Primary navigation">
         <div class="logo">
             <a href="homePage.html">
-                <img src="Pictures/logo.jpeg" alt="EcoGo Logo">
+                <img src="../Pictures/logo.jpeg" alt="EcoGo Logo">
             </a>
         </div>
         <nav>
-            <a href="homePage.html">
-                <img src="Pictures/sidebar/recycle-sign.png" alt="Home Icon">
+            <a href="../homePage.html">
+                <img src="../Pictures/sidebar/recycle-sign.png" alt="Home Icon">
                 <p>Recycling Program</p>
             </a>
-            <a href="energyPage.html">
-                <img src="Pictures/sidebar/lamp.png" alt="Energy Icon">
+            <a href="../energyPage.html">
+                <img src="../Pictures/sidebar/lamp.png" alt="Energy Icon">
                 <p>Energy Conservation Tips</p>
             </a>
-            <a href="communityPage.html">
+            <a href="../communityPage.html">
                 <img src="Pictures/sidebar/garden.png" alt="Community Icon">
                 <p>Gardening Community</p>
             </a>
             <a href="swapPage.html">
-                <img src="Pictures/sidebar/swap.png" alt="Swap Icon">
+                <img src="../Pictures/sidebar/swap.png" alt="Swap Icon">
                 <p>Swap Items</p>
             </a>
-            <a href="inboxPage.html" class="active">
-                <img src="Pictures/sidebar/inbox.png" alt="Inbox Icon">
+            <a href="../inboxPage.html" class="active">
+                <img src="../Pictures/sidebar/inbox.png" alt="Inbox Icon">
                 <p>Inbox</p>
             </a>
         </nav>
         <div class="profile">
-            <a href="userProfile.html">
-                <img src="Pictures/sidebar/user.png" alt="Profile Icon">
+            <a href="../userProfile.html">
+                <img src="../Pictures/sidebar/user.png" alt="Profile Icon">
                 <p>User Profile</p>
             </a>
         </div>

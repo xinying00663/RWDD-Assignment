@@ -63,11 +63,11 @@ if($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST["swap_request"])){
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Confirm Swap</title>
-    <link rel="stylesheet" href="styles/general.css">
-    <link rel="stylesheet" href="styles/common.css">
-    <link rel="stylesheet" href="styles/sidebar.css">
-    <link rel="stylesheet" href="styles/uploadPage.css">
-    <link rel="stylesheet" href="styles/swapConfirm.css">
+    <link rel="stylesheet" href="../styles/general.css">
+    <link rel="stylesheet" href="../styles/common.css">
+    <link rel="stylesheet" href="../styles/sidebar.css">
+    <link rel="stylesheet" href="../styles/uploadPage.css">
+    <link rel="stylesheet" href="../styles/swapConfirm.css">
 </head>
 <body data-page="swap-confirm">
     <!-- Sidebar will be loaded here by sidebar.js -->
@@ -80,7 +80,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST["swap_request"])){
             <div class="swap-confirm__content">
                 <article class="swap-confirm__item" aria-live="polite">
                     <div class="swap-confirm__media">
-                        <img id="selectedItemImage" src="Pictures/landingPage/swap-item-pic.jpg" alt="Selected swap item">
+                        <img id="selectedItemImage" src="../Pictures/landingPage/swap-item-pic.jpg" alt="Selected swap item">
                     </div>
                     <div class="swap-confirm__details">
                         <span class="swap-confirm__tag" id="selectedItemTag">Swap item</span>
