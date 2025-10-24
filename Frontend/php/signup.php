@@ -12,6 +12,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
     $email=$_POST["email"] ??"";
     $password=$_POST["password"] ??"";
     $confirmPassword=$_POST["confirmPassword"] ??"";
+    $userRole=$_POST["userRole"] ??"user"; // Default to 'user' if not set
     $terms=isset($_POST["terms"]) ? true : false;
     
     $response=["success"=>false,"message"=>""];
@@ -52,6 +53,12 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
             </script>";
             exit;
         // $response["message"]="You must agree to the terms and conditions.";
+    }elseif(!in_array($userRole, ['user', 'admin'])){
+        echo "<script>
+                alert('Please select a valid account type.');
+                window.history.back();
+            </script>";
+            exit;
     }else{
         try{
             $stmt=$pdo->prepare("SELECT UserID FROM users WHERE Email=?");
@@ -68,8 +75,8 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
                 $hashedPassword=password_hash($password,PASSWORD_DEFAULT);
                 $joinDate=date("Y-m-d H:i:s");
 
-                $stmt=$pdo->prepare("INSERT INTO users(Email, Password, Join_date, Last_login) VALUES(?,?,?,?)");
-                if($stmt->execute([$email,$hashedPassword,$joinDate,$joinDate])){
+                $stmt=$pdo->prepare("INSERT INTO users(Email, Password, Role, Join_date, Last_login) VALUES(?,?,?,?,?)");
+                if($stmt->execute([$email,$hashedPassword,$userRole,$joinDate,$joinDate])){
                     $userID=$pdo->lastInsertId();
 
                     $_SESSION["user_id"]=$userID;
