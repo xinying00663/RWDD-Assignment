@@ -60,33 +60,36 @@
             flex-wrap: wrap;
         }
 
-        .hero-actions button {
+        .hero-actions a.primary,
+        .hero-actions a.secondary {
             border: none;
             border-radius: 999px;
             padding: 12px 26px;
             font-weight: 700;
             cursor: pointer;
             transition: transform 0.2s ease, box-shadow 0.3s ease, background 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
         }
 
-        .hero-actions button.primary {
+        .hero-actions a.primary {
             background: #214235;
             color: #fff;
             box-shadow: 0 18px 28px rgba(33, 66, 53, 0.25);
         }
 
-        .hero-actions button.primary:hover {
+        .hero-actions a.primary:hover {
             transform: translateY(-1px);
             background: var(--accent-dark);
         }
 
-        .hero-actions button.secondary {
+        .hero-actions a.secondary {
             background: rgba(255, 255, 255, 0.85);
             color: var(--accent-dark);
             border: 1px solid rgba(45, 141, 96, 0.24);
         }
 
-        .hero-actions button.secondary:hover {
+        .hero-actions a.secondary:hover {
             background: rgba(255, 255, 255, 1);
             transform: translateY(-1px);
         }
@@ -386,7 +389,9 @@
             gap: 12px;
         }
 
-        .profile-modal__actions .primary {
+        .profile-modal__actions .primary,
+        .profile-modal__actions a.primary,
+        .profile-modal__actions button.primary {
             background: #214235;
             color: #fff;
             border: none;
@@ -394,9 +399,13 @@
             padding: 10px 24px;
             font-weight: 600;
             cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
         }
 
-        .profile-modal__actions .secondary {
+        .profile-modal__actions .secondary,
+        .profile-modal__actions a.secondary,
+        .profile-modal__actions button.secondary {
             background: rgba(33, 66, 53, 0.08);
             color: #214235;
             border: none;
@@ -404,13 +413,19 @@
             padding: 10px 24px;
             font-weight: 600;
             cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
         }
 
-        .profile-modal__actions .primary:hover {
+        .profile-modal__actions .primary:hover,
+        .profile-modal__actions a.primary:hover,
+        .profile-modal__actions button.primary:hover {
             background: var(--accent-dark);
         }
 
-        .profile-modal__actions .secondary:hover {
+        .profile-modal__actions .secondary:hover,
+        .profile-modal__actions a.secondary:hover,
+        .profile-modal__actions button.secondary:hover {
             background: rgba(33, 66, 53, 0.16);
         }
 

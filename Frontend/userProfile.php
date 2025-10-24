@@ -10,6 +10,46 @@ if (!isset($_SESSION['user_id'])) {
 
 $userId = $_SESSION['user_id'];
 
+// Check if edit mode is requested
+$showModal = isset($_GET['edit']) && $_GET['edit'] === 'true';
+
+// Handle form submission
+$updateSuccess = false;
+$updateError = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
+    try {
+        $updateQuery = "UPDATE users SET 
+            Username = ?,
+            Full_Name = ?,
+            Gender = ?,
+            Email = ?,
+            Phone_Number = ?,
+            City_Or_Neighbourhood = ?,
+            Additional_info = ?
+        WHERE UserID = ?";
+        
+        $updateStmt = $pdo->prepare($updateQuery);
+        $updateStmt->execute([
+            $_POST['username'],
+            $_POST['fullName'],
+            $_POST['gender'],
+            $_POST['email'],
+            $_POST['phone'],
+            $_POST['location'],
+            $_POST['bio'],
+            $userId
+        ]);
+        
+        $updateSuccess = true;
+        // Redirect to remove POST data
+        header("Location: userProfile.php?updated=true");
+        exit();
+    } catch (PDOException $e) {
+        $updateError = "Error updating profile: " . $e->getMessage();
+    }
+}
+
 // Use correct column name (UserID) and alias columns to the keys used in the template
 $query = "SELECT
     Username AS username,
@@ -30,11 +70,11 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EcoGo Profile</title>
-    <link rel="stylesheet" href="styles/general.css">
-    <link rel="stylesheet" href="styles/common.css">  
-    <link rel="stylesheet" href="styles/sidebar.css">
-    <link rel="stylesheet" href="styles/searchbar.css">
-    <link rel="stylesheet" href="styles/userProfile.css">
+    <link rel="stylesheet" href="styles/general.css?v=5">
+    <link rel="stylesheet" href="styles/common.css?v=5">
+    <link rel="stylesheet" href="styles/sidebar.css?v=5">
+    <link rel="stylesheet" href="styles/searchbar.css?v=5">
+    <link rel="stylesheet" href="styles/userProfile.css?v=5">
 </head>
 <body data-page="user-profile">
     <!-- Sidebar will be loaded here by sidebar.js -->
@@ -51,8 +91,8 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
                     <p class="location"><?php echo $user['location']; ?></p>
                     <p class="bio"><?php echo $user['bio']; ?></p>
                     <div class="hero-actions">
-                        <button class="primary" type="button" data-action="edit-profile">Edit profile</button>
-                        <button class="secondary" type="button" data-action="logout">Logout</button>
+                        <a href="userProfile.php?edit=true" class="primary">Edit profile</a>
+                        <a href="php/logout.php" class="secondary">Logout</a>
                     </div>
                 </div>
             </div>
@@ -130,51 +170,57 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
                 </div>
             </section>
     </main>
-    <div class="profile-modal" data-profile-modal hidden>
+    <div class="profile-modal" data-profile-modal <?php echo $showModal ? '' : 'hidden'; ?>>
         <div class="profile-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="profileEditTitle">
             <header class="profile-modal__header">
                 <h2 id="profileEditTitle">Edit profile</h2>
-                <button class="profile-modal__close" type="button" data-action="close-modal" aria-label="Close edit profile">&times;</button>
+                <a href="userProfile.php" class="profile-modal__close" aria-label="Close edit profile">&times;</a>
             </header>
-            <form class="profile-modal__form">
+            <form class="profile-modal__form" method="POST" action="userProfile.php">
                 <div class="profile-modal__grid">
                     <label class="profile-modal__field">
                         <span>Username</span>
-                        <input type="text" name="username" autocomplete="nickname" required>
+                        <input type="text" name="username" value="<?php echo htmlspecialchars($user['username']); ?>" autocomplete="nickname" required>
                     </label>
                     <label class="profile-modal__field">
                         <span>Full name</span>
-                        <input type="text" name="fullName" autocomplete="name" required>
+                        <input type="text" name="fullName" value="<?php echo htmlspecialchars($user['fullName']); ?>" autocomplete="name" required>
                     </label>
                     <label class="profile-modal__field">
                         <span>Gender</span>
                         <select name="gender" required>
                             <option value="">Select</option>
-                            <option value="female">Female</option>
-                            <option value="male">Male</option>
-                            <option value="other">Prefer Not to Say</option>
+                            <option value="female" <?php echo $user['gender'] === 'female' ? 'selected' : ''; ?>>Female</option>
+                            <option value="male" <?php echo $user['gender'] === 'male' ? 'selected' : ''; ?>>Male</option>
+                            <option value="other" <?php echo $user['gender'] === 'other' ? 'selected' : ''; ?>>Prefer Not to Say</option>
                         </select>
                     </label>
                     <label class="profile-modal__field">
                         <span>Email</span>
-                        <input type="email" name="email" autocomplete="email" required>
+                        <input type="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" autocomplete="email" required>
                     </label>
                     <label class="profile-modal__field">
                         <span>Phone number</span>
-                        <input type="tel" name="phone" autocomplete="tel">
+                        <input type="tel" name="phone" value="<?php echo htmlspecialchars($user['phone']); ?>" autocomplete="tel">
                     </label>
                     <label class="profile-modal__field">
                         <span>Location</span>
-                        <input type="text" name="location" autocomplete="address-level2">
+                        <input type="text" name="location" value="<?php echo htmlspecialchars($user['location']); ?>" autocomplete="address-level2">
                     </label>
                     <label class="profile-modal_field profile-modal_field--wide">
                         <span>Bio</span>
-                        <textarea name="bio" rows="4" placeholder="Share a bit about your sustainability journey..."></textarea>
+                        <textarea name="bio" rows="4" placeholder="Share a bit about your sustainability journey..."><?php echo htmlspecialchars($user['bio']); ?></textarea>
                     </label>
                 </div>
-                <p class="profile-modal__error" data-modal-error aria-live="polite"></p>
+                <?php if ($updateError): ?>
+                    <p class="profile-modal__error" style="color: red;"><?php echo htmlspecialchars($updateError); ?></p>
+                <?php endif; ?>
+                <?php if (isset($_GET['updated']) && $_GET['updated'] === 'true'): ?>
+                    <p class="profile-modal__success" style="color: green;">Profile updated successfully!</p>
+                <?php endif; ?>
+                <input type="hidden" name="update_profile" value="1">
                 <div class="profile-modal__actions">
-                    <button class="secondary" type="button" data-action="close-modal">Cancel</button>
+                    <a href="userProfile.php" class="secondary">Cancel</a>
                     <button class="primary" type="submit">Save changes</button>
                 </div>
             </form>
