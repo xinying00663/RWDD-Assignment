@@ -6,6 +6,8 @@ require 'connect.php'; // Your database connection script
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
+
+
 if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['email'])) {
     $email = $_POST['email'];
 
@@ -49,9 +51,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['email'])) {
             $mail->Body = "Hi,<br>Click this link to reset your password: <a href='$reset_link'>$reset_link</a>";
 
             $mail->send();
-            echo "A password reset link has been sent to your email.";
+            echo '<script>
+                    alert("A password reset link has been sent to your email.");
+                    window.location.href = "../landingPage.html";
+                  </script>';
         } catch (Exception $e) {
-            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+            echo '<script>
+                    alert("Failed to send email. Please try again later.");
+                    window.history.back();
+                  </script>';
         }
     } else {
         // Send a generic message to prevent revealing if an email exists
