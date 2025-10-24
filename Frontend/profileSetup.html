@@ -17,7 +17,7 @@
                 <h1>Tell us about yourself</h1>
                 <p>We use these details to recommend the right programs, swaps, and neighbours for you. You can update them anytime from your profile.</p>
             </header>
-            <form id="profileForm" class="auth-form" novalidate>
+            <form id="profileForm" class="auth-form" method="POST" action="php/profileSetup.php" novalidate>
                 <div class="form-row">
                     <label for="username">Username</label>
                     <input id="username" name="username" type="text" placeholder="Jamie Lim" required>
@@ -61,6 +61,6 @@
             </ul>
         </aside>
     </main>
-    <script src="script/userProfile.js" defer></script>
+    <!-- <script src="script/userProfile.js" defer></script> -->
 </body>
 </html>

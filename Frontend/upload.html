@@ -10,53 +10,15 @@
     <link rel="stylesheet" href="styles/uploadPage.css">
 </head>
 <body data-page="upload">
-    <button class="sidebar-toggle" type="button" data-sidebar-toggle aria-controls="sidebar" aria-expanded="false">
-        <span class="sidebar-toggle__icon" aria-hidden="true"></span>
-        <span class="sr-only">Toggle navigation</span>
-    </button>
-    <div class="sidebar-backdrop" id="sidebarBackdrop" hidden></div>
-    <header id="sidebar" class="sidebar" aria-label="Primary navigation">
-        <div class="logo">
-            <a href="homePage.html">
-                <img src="Pictures/logo.jpeg" alt="EcoGo Logo">
-            </a>
-        </div>
-        <nav>
-            <a href="homePage.html" class="active">
-                <img src="Pictures/sidebar/recycle-sign.png" alt="Recycling icon">
-                <p>Recycling Program</p>
-            </a>
-            <a href="energyPage.html">
-                <img src="Pictures/sidebar/lamp.png" alt="Energy icon">
-                <p>Energy Conservation Tips</p>
-            </a>
-            <a href="communityPage.html">
-                <img src="Pictures/sidebar/garden.png" alt="Community icon">
-                <p>Gardening Community</p>
-            </a>
-            <a href="swapPage.html">
-                <img src="Pictures/sidebar/swap.png" alt="Swap icon">
-                <p>Swap Items</p>
-            </a>
-            <a href="inboxPage.html">
-                <img src="Pictures/sidebar/inbox.png" alt="Inbox icon">
-                <p>Inbox</p>
-            </a>
-        </nav>
-        <div class="profile">
-            <a href="userProfile.html">
-                <img src="Pictures/sidebar/user.png" alt="Profile icon">
-                <p>User Profile</p>
-            </a>
-        </div>
-    </header>
+    <!-- Sidebar will be loaded here by sidebar.js -->
     <main>
         <section class="tabs-card upload-card">
             <div class="section-header">
                 <h2>Share a recycling program</h2>
                 <p>List your next drop-off drive, clean-up sprint, or repair workshop so neighbours can pitch in.</p>
             </div>
-            <form class="upload-form" action="#" method="post">
+            <form class="upload-form" action="php/uploadPost.php" method="POST">
+            <form class="upload-form" action="php/uploadPost.php" method="POST">
                 <div class="upload-form__grid">
                     <div class="input-group">
                         <label for="eventName">Program name</label>
@@ -110,11 +72,11 @@
                         <div class="dynamic-section" data-section>
                             <div class="input-group input-group--full">
                                 <label>Section title</label>
-                                <input type="text" name="sectionTitle" placeholder="e.g. Weekly plan">
+                                <input type="text" name="sectionTitle[]" placeholder="e.g. Weekly plan">
                             </div>
                             <div class="input-group input-group--full">
                                 <label>Section details</label>
-                                <textarea name="sectionDescription" rows="4" placeholder="Describe the timing, key activities, or important notes."></textarea>
+                                <textarea name="sectionDescription[]" rows="4" placeholder="Describe the timing, key activities, or important notes."></textarea>
                             </div>
                             <button type="button" class="button-remove" data-section-remove>Remove section</button>
                         </div>
@@ -130,9 +92,9 @@
             </form>
         </section>
     </main>
-    <script src="script/sidebar.js" defer></script>
-    <script src="script/uploadShared.js" defer></script>
-    <script src="script/uploadPrograms.js" defer></script>
+    <script src="script/sidebar.js?v=2"></script>
+    <!-- <script src="script/uploadShared.js" defer></script> -->
+    <!-- <script src="script/uploadPrograms.js" defer></script> -->
 </body>
 </html>
 

@@ -1,3 +1,85 @@
+<?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+include "connect.php";
+// echo "Database connected successfully!";
+
+session_start();
+
+if($_SERVER["REQUEST_METHOD"]=="POST"){
+    echo '<script>alert("Swap page request received");</script>';
+
+    $title=$_POST["swapTitle"]??"";
+    $category=$_POST["swapCategory"]??"";
+    $itemCondition=$_POST["swapCondition"]??"";
+    $preferredExchange=$_POST["swapPreferred"]??"";
+    $description=$_POST["swapDetails"]??"";
+    $category=$_POST["swapCategory"]??"";
+    $userID=$_SESSION["user_id"];
+
+    $image_path=NULL;
+    if(isset($_FILES["swapMedia"])&& $_FILES["swapMedia"]["error"]===0){
+        if($_FILES["swapMedia"]["size"]>262144000){
+            echo '<script>
+                    alert("File size exceeds the 250MB limit.");
+                    window.history.back();
+                </script>';
+                exit;
+        }else{
+            $upload_dir="upload/swapItems/";
+            if(!is_dir($upload_dir)){
+                mkdir($upload_dir,0777,true);
+            }
+
+            $file_extension=strtolower(pathinfo($_FILES["swapMedia"]["name"],PATHINFO_EXTENSION));
+            $allowed_extension=["jpg","jpeg","png","gif","mp4","mov","avi"];
+
+            if(in_array($file_extension,$allowed_extension)){
+                $filename=uniqid().".".$file_extension;
+                $target_path=$upload_dir.$filename;
+
+                if(move_uploaded_file($_FILES["swapMedia"]["tmp_name"],$target_path)){
+                    $image_path=$target_path;
+                }else{
+                    echo '<script>
+                            alert("Failed to upload file.Please try again.");
+                            window.history.back();
+                        </script>';
+                        exit;
+                }
+            }else{
+                echo '<script>
+                        alert("Invalid file type. Please upload again.");
+                        window.history.back();
+                    </script>';
+                    exit;
+            }
+        }
+    }else{
+        echo '<script>
+                alert("No file uploaded. Please select a file to upload.");
+                window.history.back();
+            </script>';
+            exit;
+    }
+    
+    if(!isset($error)){
+        $stmt=$pdo->prepare("INSERT INTO items(ItemID,Title,Category,Description,Item_condition,Preferred_exchange,Image_path,Status,UserID) VALUES(?,?,?,?,?,?,?,?,?)");
+        if($stmt->execute([$user_id,$title,$category,$description,$itemCondition,$preferredExchange,$image_path])){
+            header("Location:swapPage.php?success=item_added");
+            exit;
+        }else{
+            echo'<script>
+                   alert("Database error,please try again.");
+                   window.history.back();
+                </script>';
+                exit;
+        }
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

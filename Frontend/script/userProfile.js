@@ -450,7 +450,7 @@
             };
 
             saveProfile(updatedProfile);
-            window.location.href = "userProfile.html";
+            window.location.href = "userProfile.php";
         });
     }
 

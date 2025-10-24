@@ -25,13 +25,23 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
 
     // validate inputs
     if(empty($username)||empty($fullName)||empty($gender)||empty($phoneNumber)||empty($city)){
-        $response["message"]="All fields are required except additional info.";
+        echo "<script>
+                alert('All fields are required except additional info.');
+                window.history.back();
+            </script>";
+            exit;
+        // $response["message"]="All fields are required except additional info.";
     }else{
         try{
             $stmt=$pdo->prepare("SELECT UserID FROM users WHERE Username=? and UserID!=?");
             $stmt->execute([$username,$userID]);
             if($stmt->fetch()){
-                $response["message"]="The username already been used, please try again.";
+                echo "<script>
+                        alert('The username already been used, please try again.');
+                        window.history.back();
+                    </script>";
+                    exit;
+                // $response["message"]="The username already been used, please try again.";
             }else{
                 $genderMap=["male"=>"Male", "female"=>"Female","other"=>"Others"];
 
@@ -67,19 +77,33 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
                     if($success && $stmt->rowCount()>0){
                         $_SESSION["Username"]=$username;
                         $_SESSION["Full_Name"]=$fullName;
-
-                        $response["success"]=true;
-                        $response["message"]="Your profile has been setup successfully.";
-                        $response["redirectTo"]="userProfile.html";
+                        echo "<script>
+                                alert('Your profile has been setup successfully!');
+                                window.location.href = '../homePage.html';
+                            </script>";
+                            exit;
+                        // $response["success"]=true;
+                        // $response["message"]="Your profile has been setup successfully.";
+                        // $response["redirectTo"]="userProfile.html";
                     }else{
-                        $response["message"]="No changes were made due to database error, please try again.";
+                            echo "<script>
+                                    alert('No changes were made due to database error, please try again.');
+                                    window.history.back();
+                                </script>";
+                                exit;
+                        // $response["message"]="No changes were made due to database error, please try again.";
                     }
                 }
             }
 
         }catch(PDOException $e){
             error_log("Database error:".$e->getMessage());
-            $response["message"]="Error in processing your registration. Please try again.";
+            echo "<script>
+                    alert('Error in processing your registration. Please try again.');
+                    window.history.back();
+                </script>";
+                exit;
+            // $response["message"]="Error in processing your registration. Please try again.";
         }
     }
     // header("Content-Type:application/json");
@@ -151,6 +175,6 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
             </ul>
         </aside>
     </main>
-    <script src="../script/userProfile.js" defer></script>
+    <!-- <script src="../script/userProfile.js" defer></script> -->
 </body>
 </html>

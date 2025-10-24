@@ -1,3 +1,77 @@
+<?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+include "connect.php";
+// echo "Database connected successfully!";
+
+session_start();
+
+$userID=$_SESSION["user_id"];
+
+// Handle message sending
+if ($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST["send_message"])){
+    $conversationID=$_POST["conversation_id"];
+    $messageContent=$_POST["message_content"];
+
+    try{
+        $sql="INSERT INTO message(ConversationID,SenderID,Message_Content,Chat_Timestamp)VALUES(:ConversationID,:SenderID,:Message_Content,NOW())";
+        $stmt=$pdo->prepare($sql);
+        $stmt->execute([":ConversationID"=>$conversationID,":SenderID"=>$senderID,":Message_Content"=>$messageContent]);
+
+        $sql="UPDATE conversation SET Last_Updated=NOW() WHERE id=:ConversationID";
+        $stmt=$pdo->prepare($sql);
+        $stmt->execute([":ConversationID"=>$conversationID]);
+
+        echo json_encode(["status" => "success"]);
+        exit();
+    } catch (PDOException $e) {
+        echo json_encode(["status" => "error", "message" => $e->getMessage()]);
+        exit();
+    }
+}
+
+// Handle swap request response
+if ($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST["swap_action"])){
+    $exchangeID=$_POST["exchange_id"];
+    $action=$_POST["action"];
+
+    try{
+        $sql="UPDATE exchange SET Status=:Status WHERE id=:ExchangeID";
+        $stmt=$pdo->prepare($sql);
+        $status=($action=="accept")?"Accepted":"Rejected";
+        $stmt->execute([":Status"=>$status,":ExchangeID"=>$ExchangeID]);
+
+        $sql = "INSERT INTO notification (UserID, Message, Is_read, Notification_Timestamp) 
+                SELECT RequesterID, :message, 0, NOW() 
+                FROM exchange WHERE id = :ExchangeID";
+        $stmt = $pdo->prepare($sql);
+        $message = ($action == "accept") 
+            ? "Your swap request has been accepted!" 
+            : "Your swap request has been declined.";
+        $stmt->execute([":Message" => $Message, ":ExchangeID" => $exchange_id]);
+        
+        // Add system message to conversation
+        $system_message = "Swap request has been " . $status . " by the item owner.";
+        $sql = "INSERT INTO message (ConversationID, SenderID, Message_Content, Chat_Timestamp, is_system) 
+                VALUES (:ConversationID, 0, :Message_Content, NOW(), 1)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            ":Conversation" => $conversation_id,
+            ":Message_Content" => $system_message
+        ]);
+        
+        // Redirect back to the same conversation
+        header("Location: inboxPage.php?ConversationID=" . $conversation_id);
+        exit();
+    } catch (PDOException $e) {
+        echo json_encode(["status" => "error", "message" => $e->getMessage()]);
+        exit();
+    }
+}
+   
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

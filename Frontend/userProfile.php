@@ -1,3 +1,29 @@
+<?php
+session_start();
+include "php/connect.php";
+
+// Accept either session key name (some pages set user_id, others userId)
+if (!isset($_SESSION['user_id'])) {
+    header("Location: loginPage.html");
+    exit();
+}
+
+$userId = $_SESSION['user_id'];
+
+// Use correct column name (UserID) and alias columns to the keys used in the template
+$query = "SELECT
+    Username AS username,
+    Full_Name AS fullName,
+    Gender AS gender,
+    Email AS email,
+    Phone_Number AS phone,
+    City_Or_Neighbourhood AS location,
+    Additional_info AS bio
+FROM users WHERE UserID = ?";
+$stmt = $pdo->prepare($query);
+$stmt->execute([$userId]);
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,58 +37,19 @@
     <link rel="stylesheet" href="styles/userProfile.css">
 </head>
 <body data-page="user-profile">
-    <button class="sidebar-toggle" type="button" data-sidebar-toggle aria-controls="sidebar" aria-expanded="false">
-        <span class="sidebar-toggle__icon" aria-hidden="true"></span>
-        <span class="sr-only">Toggle navigation</span>
-    </button>
-    <div class="sidebar-backdrop" id="sidebarBackdrop" hidden></div>
-    <header id="sidebar" class="sidebar" aria-label="Primary navigation">
-        <div class="logo">
-            <a href="homePage.html">
-                <img src="Pictures/logo.jpeg" alt="EcoGo Logo">
-            </a>
-        </div>
-        <nav>
-            <a href="homePage.html">
-                <img src="Pictures/sidebar/recycle-sign.png" alt="Home Icon">
-                <p>Recycling Program</p>
-            </a>
-            <a href="energyPage.html">
-                <img src="Pictures/sidebar/lamp.png" alt="Energy Icon">
-                <p>Energy Conservation Tips</p>
-            </a>
-            <a href="communityPage.html">
-                <img src="Pictures/sidebar/garden.png" alt="Community Icon">
-                <p>Gardening Community</p>
-            </a>
-            <a href="swapPage.html">
-                <img src="Pictures/sidebar/swap.png" alt="Swap Icon">
-                <p>Swap Items</p>
-            </a>
-            <a href="inboxPage.html">
-                <img src="Pictures/sidebar/inbox.png" alt="Inbox Icon">
-                <p>Inbox</p>
-            </a>
-        </nav>
-        <div class="profile">
-            <a href="userProfile.html" class="active">
-                <img src="Pictures/sidebar/user.png" alt="Profile Icon">
-                <p>User Profile</p>
-            </a>
-        </div>
-    </header>
+    <!-- Sidebar will be loaded here by sidebar.js -->
     <main>
         <section class="profile-hero">
             <div class="identity">
-                <div class="profile-avatar" data-profile-avatar>JL</div>
+                <div class="profile-avatar"></div>
                 <div>
-                    <h1 class="username" data-profile-field="username">Jamie</h1>
-                    <p class="fullName" data-profile-field="fullName">Jamie Lim</p>
-                    <p class="gender" data-profile-field="gender">Female</p>
-                    <p class="value" data-profile-field="email">abc@gmail.com</p>
-                    <p class="value" data-profile-field="phone">+60 12-345 6789</p>
-                    <p class="location" data-profile-field="location">Kuala Lumpur, Malaysia</p>
-                    <p class="bio" data-profile-field="bio">Jamie coordinates neighbourhood clean-ups, rooftop garden builds, and resource swaps for EcoGo. Passionate about inclusive spaces, she mentors new volunteers and tracks project impact across the Klang Valley.</p>
+                    <h1 class="username"><?php echo $user['username']; ?></h1>
+                    <p class="fullName"><?php echo $user['fullName']; ?></p>
+                    <p class="gender"><?php echo $user['gender']; ?></p>
+                    <p class="value"><?php echo $user['email']; ?></p>
+                    <p class="value"><?php echo $user['phone']; ?></p>
+                    <p class="location"><?php echo $user['location']; ?></p>
+                    <p class="bio"><?php echo $user['bio']; ?></p>
                     <div class="hero-actions">
                         <button class="primary" type="button" data-action="edit-profile">Edit profile</button>
                         <button class="secondary" type="button" data-action="logout">Logout</button>
@@ -180,7 +167,7 @@
                         <span>Location</span>
                         <input type="text" name="location" autocomplete="address-level2">
                     </label>
-                    <label class="profile-modal__field profile-modal__field--wide">
+                    <label class="profile-modal_field profile-modal_field--wide">
                         <span>Bio</span>
                         <textarea name="bio" rows="4" placeholder="Share a bit about your sustainability journey..."></textarea>
                     </label>
@@ -193,7 +180,7 @@
             </form>
         </div>
     </div>
-    <script src="script/sidebar.js" defer></script>
-    <script src="script/userProfile.js" defer></script>
+    <script src="script/sidebar.js?v=2"></script>
+    <!-- <script src="script/userProfile.js" defer></script> -->
 </body>
 </html>
