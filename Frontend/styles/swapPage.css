@@ -56,7 +56,7 @@
 }
 
 .swap-card__cta:hover::after,
-.swap-card__cta:focus::after {
+.swap-card__cta:hover::after {
     transform: translateX(3px);
 }
 
