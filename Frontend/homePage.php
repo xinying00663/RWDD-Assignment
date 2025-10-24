@@ -1,4 +1,5 @@
 ﻿<?php
+session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
@@ -19,11 +20,22 @@ include "php/connect.php";
 //     exit;
 // }
 
+// Accept either session key name (some pages set user_id, others userId)
+if (!isset($_SESSION['user_id'])) {
+    header("Location: loginPage.html");
+    exit();
+}
+
+$userId = $_SESSION['user_id'];
+
+// Use correct column name (UserID) and alias columns to the keys used in the template
+$query = "SELECT Full_Name AS fullName FROM users WHERE UserID = ?";
+$stmt = $pdo->prepare($query);
+$stmt->execute([$userId]);  
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
+
 // Fetch programs from database
 try {
-    $query = "SELECT
-    Full_Name AS fullName,
-    FROM users WHERE UserID = ?";
     $sql = "SELECT * FROM program ORDER BY created_at DESC";
     $result = $pdo->query($sql);
     $programs = [];
@@ -71,7 +83,7 @@ function esc($str) {
     <!-- Sidebar will be loaded here by sidebar.js -->
     <main>
         <section class="welcome-card">
-            <h1>Welcome back, <span id="profileSummaryName"><?php echo esc($user["fullName"]); ?></span></h1>
+            <h1>Welcome back, <span id="profileSummaryName"><?php echo $user["fullName"]; ?></span></h1>
         </section>
         <section class="tabs-card">
             <div class="section-header">
