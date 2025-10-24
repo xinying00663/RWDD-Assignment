@@ -43,7 +43,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
 
         echo "<script>
                         alert('Login successful!');
-                        window.location.href = '../homePage.html';
+                        window.location.href = '../homePage.php';
                     </script>";
                     exit;
       }else{
