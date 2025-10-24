@@ -10,21 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-$host="localhost";
-$user="root";
-$password="";
-$dbname="uploadpost";
-
-try {
-    $db = new mysqli($host, $user, $password, $dbname);
-    $db->set_charset('utf8mb4');
-} catch (mysqli_sql_exception $e) {
-    error_log("DB connect error: " . $e->getMessage());
-    http_response_code(500);
-    echo "DB connect error: " . $e->getMessage(); // temporary for debugging
-    exit;
-}
-
+include "connect.php";
 
 
 $programName = $_POST['eventName'] ?? '';
@@ -62,7 +48,7 @@ if ($programName === '' || $programStartDate === '' || $programEndDate === '') {
 }
 
 try {
-    $stmt = $db->prepare(
+    $stmt = $pdo->prepare(
         "INSERT INTO program 
         (Program_name, Program_location, Event_date_start, Event_date_end, Program_description, Coordinator_name, Coordinator_email, 
         Coordinator_phone, Section_title, Section_description)
