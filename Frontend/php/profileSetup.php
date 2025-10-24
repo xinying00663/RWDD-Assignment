@@ -79,7 +79,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
                         $_SESSION["Full_Name"]=$fullName;
                         echo "<script>
                                 alert('Your profile has been setup successfully!');
-                                window.location.href = '../homePage.html';
+                                window.location.href = '../homePage.php';
                             </script>";
                             exit;
                         // $response["success"]=true;

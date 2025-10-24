@@ -28,7 +28,7 @@ try {
 
 
 $programName = $_POST['eventName'] ?? '';
-$programLocation = $_POST['eventLocation'] ?? '';
+$programLocation = $_POST['eventLocationSearch'] ?? '';
 $programStartDate = $_POST['eventDate'] ?? '';
 $programEndDate = $_POST['eventDateTo'] ?? '';
 $programDescription = $_POST['eventDescription'] ?? '';
@@ -55,22 +55,20 @@ if (is_array($sectionTitles) || is_array($sectionDescriptions)) {
 }
 
 // Basic validation (you can expand)
-if ($programName === '' || $programLocation === '') {
+if ($programName === '' || $programStartDate === '' || $programEndDate === '') {
     http_response_code(400);
     echo "Required fields are missing.";
     exit;
 }
 
-$section_titles_json = $sections ? json_encode(array_column($sections, 'title'), JSON_UNESCAPED_UNICODE) : '';
-$sections_json = $sections ? json_encode($sections, JSON_UNESCAPED_UNICODE) : '';
-
-
 try {
-    $stmt = $dbconnect->prepare(
+    $stmt = $db->prepare(
         "INSERT INTO program 
-        (Program_name, Program_location, Event_date_start, Event_date_end, Program_description, Coordinator_name, Coordinator_email, Coordinator_phone, Section_title, Section_description)
+        (Program_name, Program_location, Event_date_start, Event_date_end, Program_description, Coordinator_name, Coordinator_email, 
+        Coordinator_phone, Section_title, Section_description)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
     );
+
     $stmt->bind_param(
         'ssssssssss',
         $programName,
@@ -81,13 +79,13 @@ try {
         $coordinatorName,
         $coordinatorEmail,
         $coordinatorPhone,
-        $sectionTitle,
-        $sectionDescription
+        $section_titles_json,
+        $sections_json
     );
     $stmt->execute();
 
     if ($stmt->affected_rows > 0) {
-        echo "Success";
+        header('Location: ../homePage.php');
         // optionally redirect: header('Location: ../homePage.html');
     } else {
         http_response_code(500);
@@ -95,15 +93,11 @@ try {
     }
 
     $stmt->close();
-    $dbconnect->close();
+    $db->close();
 } catch (mysqli_sql_exception $e) {
     error_log('DB query error: ' . $e->getMessage());
     http_response_code(500);
     echo "Database error.";
     exit;
 }
-
-
-
-
 ?>
