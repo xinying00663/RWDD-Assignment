@@ -155,7 +155,7 @@
                     renderStatus(messageTarget, result.data.message || 'Signed in successfully.', 'success');
 
                     setTimeout(function () {
-                        window.location.href = result.data.redirectTo || 'homePage.html';
+                        window.location.href = result.data.redirectTo || 'homePage.php';
                     }, 600);
                 })
                 .catch(function (error) {
