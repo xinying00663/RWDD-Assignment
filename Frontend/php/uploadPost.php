@@ -10,12 +10,12 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-session_start(); // ensure session is started and user id is available
-// require connect.php to create $pdo (PDO instance)
-include_once __DIR__ . '/connect.php';
+session_start(); 
 
-// ensure user is logged in (program.userID FK requires a valid value)
-$userId = $_SESSION['userID'] ?? null;
+include "connect.php";
+
+
+$userId = $_SESSION['user_id'] ?? null;  
 if (!$userId) {
     http_response_code(401);
     echo "Authentication required.";
