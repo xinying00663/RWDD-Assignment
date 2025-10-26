@@ -124,7 +124,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
     <main class="auth-shell">
         <section class="auth-card">
             <header>
-                <a class="brand" href="homePage.html">
+                <a class="brand" href="homePage.php">
                     <img src="../Pictures/logo.jpeg" alt="EcoGo logo">
                     EcoGo Collective
                 </a>
