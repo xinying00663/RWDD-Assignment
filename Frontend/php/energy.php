@@ -106,7 +106,7 @@ try {
 
     $pdo->commit();
 
-    header('Location: ../uploadEnergy.html');
+    header('Location: ../energyPage.html');
     exit;
 
 } catch (PDOException $e) {

@@ -17,7 +17,7 @@
                 <h2>Share an energy-saving win</h2>
                 <p>Upload your tutorial, daily habit, or planning guide so neighbours can put it into action this week.</p>
             </div>
-            <form class="upload-form" action="php/energy.php" method="post">
+            <form class="upload-form" action="php/energy.php" method="post" enctype="multipart/form-data">
                 <div class="upload-form__grid">
                     <div class="input-group">
                         <label for="energyTitle">Resource title</label>
@@ -41,7 +41,7 @@
                     </div>
                     <div class="input-group input-group--full">
                         <label for="energyMedia">Upload media</label>
-                        <input type="file" id="energyMedia" name="energyMedia" accept="image/*,video/* enctype="multipart/form-data" required>
+                        <input type="file" id="energyMedia" name="energyMedia" accept="image/*,video/*" required>
                         <p class="input-help">Share MP4/MOV videos or JPG/PNG images up to 250&nbsp;MB.</p>
                     </div>
                     <div class="input-group input-group--full">
