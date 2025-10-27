@@ -1,3 +1,78 @@
+<?php
+session_start();
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+// Helper function to escape HTML output
+function esc($str) {
+    return htmlspecialchars($str ?? '', ENT_QUOTES, 'UTF-8');
+}
+
+// Helper to format date ranges, similar to the JS version
+function formatDateRange($start, $end) {
+    if (!$start && !$end) return "Schedule to be confirmed";
+    $startFmt = $start ? date('M j, Y', strtotime($start)) : '';
+    $endFmt = $end ? date('M j, Y', strtotime($end)) : '';
+    if ($start && $end) return "{$startFmt} - {$endFmt}";
+    if ($start) return "Starts {$startFmt}";
+    return "Until {$endFmt}";
+}
+
+include "php/connect.php";
+
+$programId = $_GET['id'] ?? null;
+$programData = null;
+
+echo "<!-- Debug: programId from URL: " . var_export($programId, true) . " -->\n";
+
+if ($programId) {
+    echo "<!-- Debug: programId is set, attempting to fetch from DB -->\n";
+    try {
+        // Fetch main program details
+        $query = "SELECT 
+                    ProgramID as id,
+                    Program_name as name,
+                    Program_description as description,
+                    Program_location as location,
+                    Event_date_start as startDate,
+                    Event_date_end as endDate,
+                    Coordinator_name as coordinatorName,
+                    Coordinator_email as coordinatorEmail,
+                    Coordinator_phone as coordinatorPhone
+                  FROM program 
+                  WHERE ProgramID = ?";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute([$programId]);
+        $program = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        echo "<!-- Debug: Program fetched: " . var_export($program, true) . " -->\n";
+
+        if ($program) {
+            echo "<!-- Debug: Program found, fetching sections -->\n";
+            // Fetch custom sections
+            $sectionQuery = "SELECT 
+                                section_title as heading, 
+                                section_description as details 
+                             FROM program_sections 
+                             WHERE program_id = ?";
+            $sectionStmt = $pdo->prepare($sectionQuery);
+            $sectionStmt->execute([$programId]);
+            $sections = $sectionStmt->fetchAll(PDO::FETCH_ASSOC);
+            $program['sections'] = $sections;
+            $programData = $program; // Assign the fetched program data
+            echo "<!-- Debug: programData after sections: " . var_export($programData, true) . " -->\n";
+        } else {
+            echo "<!-- Debug: No program found with ID: " . var_export($programId, true) . " -->\n";
+        }
+    } catch (PDOException $e) {
+        error_log("Program detail fetch error: " . $e->getMessage());
+        echo "<!-- Debug: PDOException caught: " . $e->getMessage() . " -->\n";
+    }
+} else {
+    echo "<!-- Debug: programId is NOT set in URL. -->\n";
+}
+echo "<!-- Debug: Final programData before rendering: " . var_export($programData, true) . " -->\n";
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,28 +87,39 @@
 <body data-page="recycling">
     <!-- Sidebar will be loaded here by sidebar.js -->
     <main>
-        <div id="programView">
+        <?php if ($programData): ?>
+        <?php
+            // Prepare variables for the view, providing fallbacks
+            $title = esc($programData['name'] ?: 'Community Recycling Program');
+            $summary = esc($programData['description'] ?: 'This organiser has not shared additional details yet.');
+            $location = esc($programData['location'] ?: 'Location to be confirmed');
+            $dateLabel = formatDateRange($programData['startDate'], $programData['endDate']);
+            $coordinatorName = esc($programData['coordinatorName'] ?: 'Community Organiser');
+            $coordinatorEmail = esc($programData['coordinatorEmail']);
+            $coordinatorPhone = esc($programData['coordinatorPhone']);
+        ?>
+        <div id="programView" data-program-id="<?php echo esc($programData['id']); ?>">
             <section class="program-hero">
                 <nav class="breadcrumbs" aria-label="Program breadcrumbs">
                     <a href="homePage.php">Recycling Programs</a>
                     <span aria-hidden="true">&gt;</span>
-                    <span id="programBreadcrumb">Program details</span>
+                    <span id="programBreadcrumb"><?php echo $title; ?></span>
                 </nav>
-                <div class="hero-badge" id="programBadge"></div>
-                <h1 id="programTitle">Program title</h1>
-                <p class="hero-summary" id="programSummary"></p>
+                <div class="hero-badge" id="programBadge">Community submission</div>
+                <h1 id="programTitle"><?php echo $title; ?></h1>
+                <p class="hero-summary" id="programSummary"><?php echo $summary; ?></p>
                 <div class="hero-meta">
                     <div class="hero-meta__item">
                         <span class="hero-meta__label">Duration</span>
-                        <span class="hero-meta__value" id="programDuration"></span>
+                        <span class="hero-meta__value" id="programDuration"><?php echo $dateLabel; ?></span>
                     </div>
                     <div class="hero-meta__item">
                         <span class="hero-meta__label">Meet-ups</span>
-                        <span class="hero-meta__value" id="programCommitment"></span>
+                        <span class="hero-meta__value" id="programCommitment"><?php echo $dateLabel; ?></span>
                     </div>
                     <div class="hero-meta__item">
                         <span class="hero-meta__label">Location</span>
-                        <span class="hero-meta__value" id="programLocation"></span>
+                        <span class="hero-meta__value" id="programLocation"><?php echo $location; ?></span>
                     </div>
                 </div>
                 <div class="hero-actions">
@@ -44,29 +130,56 @@
             <section class="program-body">
                 <article class="program-panel">
                     <h2>What you will do</h2>
-                    <ul class="program-outcomes" id="programOutcomes"></ul>
+                    <ul class="program-outcomes" id="programOutcomes">
+                        <li><?php echo $summary; ?></li>
+                    </ul>
                 </article>
                 <article class="program-panel">
                     <h2>What to know before you join</h2>
-                    <div class="info-grid" id="programResources"></div>
+                    <div class="info-grid" id="programResources">
+                        <div class="info-card"><h3>When</h3><p><?php echo $dateLabel; ?></p></div>
+                        <div class="info-card"><h3>Where</h3><p><?php echo $location; ?></p></div>
+                    </div>
                 </article>
+                <?php if (!empty($programData['sections'])): ?>
+                    <?php foreach ($programData['sections'] as $section): ?>
+                        <?php if (!empty($section['heading']) || !empty($section['details'])): ?>
+                        <article class="program-panel program-panel--community">
+                            <h2><?php echo esc($section['heading'] ?: 'Additional Details'); ?></h2>
+                            <p><?php echo esc($section['details'] ?: 'More information coming soon.'); ?></p>
+                        </article>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </section>
             <section class="coordinator">
                 <h2>Program coordinator</h2>
                 <div class="coordinator-card">
                     <div class="coordinator-details">
-                        <h3 id="coordinatorName">Coordinator name</h3>
-                        <p id="coordinatorRole">Coordinator role</p>
+                        <h3 id="coordinatorName"><?php echo $coordinatorName; ?></h3>
+                        <p id="coordinatorRole">Community submission</p>
                     </div>
                     <ul class="coordinator-contact">
-                        <li><span>Phone</span><a id="coordinatorPhone" href="tel:">Phone number</a></li>
-                        <li><span>Email</span><a id="coordinatorEmail" href="mailto:">Email address</a></li>
+                        <li><span>Phone</span>
+                            <?php if ($coordinatorPhone): ?>
+                                <a id="coordinatorPhone" href="tel:<?php echo preg_replace('/\s+/', '', $coordinatorPhone); ?>"><?php echo $coordinatorPhone; ?></a>
+                            <?php else: ?>
+                                <a id="coordinatorPhone">To be shared after confirmation</a>
+                            <?php endif; ?>
+                        </li>
+                        <li><span>Email</span>
+                            <?php if ($coordinatorEmail): ?>
+                                <a id="coordinatorEmail" href="mailto:<?php echo $coordinatorEmail; ?>"><?php echo $coordinatorEmail; ?></a>
+                            <?php else: ?>
+                                <a id="coordinatorEmail">Email not provided</a>
+                            <?php endif; ?>
+                        </li>
                     </ul>
                 </div>
             </section>
             <section class="program-register" id="register">
                 <h2>Reserve your spot</h2>
-                <p class="register-intro">Complete the form and the coordinator will reach out with onboarding details for the <span id="registerProgramName"></span>.</p>
+                <p class="register-intro">Complete the form and the coordinator will reach out with onboarding details for the <span id="registerProgramName"><?php echo $title; ?></span>.</p>
                 <form class="register-form" id="programRegisterForm">
                     <div class="form-field">
                         <label for="participantName">Full name</label>
@@ -80,21 +193,22 @@
                         <label for="participantPhone">Phone number</label>
                         <input type="tel" id="participantPhone" name="participantPhone" placeholder="e.g. +60 12-345 6789">
                     </div>
-                    <div class="form-field form-field--checkbox">
+                    <div class="form-field form-field--checkbox form-field--full">
                         <input type="checkbox" id="consent" name="consent" required>
                         <label for="consent">I agree to follow the EcoGo volunteer guidelines and will be contacted by the coordinator.</label>
                     </div>
-                    <button type="submit" class="primary-cta">Submit registration</button>
+                    <button type="submit" class="primary-cta form-field--full">Submit registration</button>
                     <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
                 </form>
             </section>
         </div>
-        <section class="program-fallback" id="programFallback" hidden>
+        <?php else: ?>
+        <section class="program-fallback" id="programFallback">
             <h1>We could not find that program</h1>
             <p>The link might be outdated. Browse the <a href="homePage.php">Recycling Programs</a> to pick an active initiative.</p>
         </section>
+        <?php endif; ?>
     </main>
     <script src="script/sidebar.js?v=2"></script>
-    <script src="script/programDetail.js" defer></script>
 </body>
 </html>

@@ -144,13 +144,20 @@ function renderCustomSections(sections) {
 // Populate the program detail page once the DOM skeleton is ready.
 document.addEventListener("DOMContentLoaded", () => {
     const params = new URLSearchParams(window.location.search);
-    const requestedId = params.get("program") || "rooftop-herb-lab";
+    // Use 'id' from PHP-generated links, but keep 'program' as a fallback for old links.
+    const requestedId = params.get("id") || params.get("program") || "rooftop-herb-lab";
     let program = loadSeedProgram(requestedId);
 
     if (!program) {
-        const communityProgram = loadCommunityProgram(requestedId);
-        if (communityProgram) {
+        // Prioritize program data passed directly from PHP
+        if (window.ecogoCommunityProgram && window.ecogoCommunityProgram.id.toString() === requestedId) {
+            program = transformCommunityProgram(window.ecogoCommunityProgram);
+        } else {
+            // Fallback to localStorage for programs not from the DB
+            const communityProgram = loadCommunityProgram(requestedId);
+            if (communityProgram) {
             program = transformCommunityProgram(communityProgram);
+            }
         }
     }
 
