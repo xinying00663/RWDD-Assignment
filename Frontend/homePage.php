@@ -98,21 +98,6 @@ function esc($str) {
                         echo esc(mb_strlen($desc) > 240 ? mb_substr($desc, 0, 240) . '…' : $desc);
                         ?>
                     </p>
-                    <div class="coordinator-info">
-                        <p class="coordinator">
-                            Coordinator: <?php echo esc($program['Coordinator_name'] ?: '—'); ?>
-                        </p>
-                        <?php if ($program['Coordinator_email'] || $program['Coordinator_phone']): ?>
-                        <div class="contact-details">
-                            <?php if ($program['Coordinator_email']): ?>
-                            <p>Email: <?php echo esc($program['Coordinator_email']); ?></p>
-                            <?php endif; ?>
-                            <?php if ($program['Coordinator_phone']): ?>
-                            <p>Phone: <?php echo esc($program['Coordinator_phone']); ?></p>
-                            <?php endif; ?>
-                        </div>
-                        <?php endif; ?>
-                    </div>
                 </a>
                 <?php endforeach; ?>
                 <?php if (empty($programs)): ?>

@@ -67,7 +67,7 @@
             window.ecogoUploads.saveEntries(STORAGE_KEY, uploads);
 
             window.ecogoUploads.setFlash(FLASH_KEY, { title: entry.title });
-            window.location.href = "energyPage.html";
+            window.location.href = "energyPage.php";
         });
     });
 })();

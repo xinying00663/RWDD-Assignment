@@ -32,7 +32,7 @@
             <h1>Select a story to view</h1>
             <p>Choose a video or gallery from the energy or community pages to see the full details here.</p>
             <div>
-                <a href="energyPage.html">Browse energy ideas</a>
+                <a href="energyPage.php">Browse energy ideas</a>
                 &nbsp;|&nbsp;
                 <a href="communityPage.html">Explore community projects</a>
             </div>
@@ -233,7 +233,7 @@
             if (window.history.length > 1) {
                 window.history.back();
             } else {
-                window.location.href = data.page === "community" ? "communityPage.html" : "energyPage.html";
+                window.location.href = data.page === "community" ? "communityPage.html" : "energyPage.php";
             }
         });
         return button;

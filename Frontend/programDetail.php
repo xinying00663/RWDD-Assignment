@@ -15,7 +15,7 @@
         <div id="programView">
             <section class="program-hero">
                 <nav class="breadcrumbs" aria-label="Program breadcrumbs">
-                    <a href="homePage.html">Recycling Programs</a>
+                    <a href="homePage.php">Recycling Programs</a>
                     <span aria-hidden="true">&gt;</span>
                     <span id="programBreadcrumb">Program details</span>
                 </nav>
@@ -38,7 +38,7 @@
                 </div>
                 <div class="hero-actions">
                     <a class="primary-cta" href="#register">Register now</a>
-                    <a class="secondary-cta" href="homePage.html">Back to programs</a>
+                    <a class="secondary-cta" href="homePage.php">Back to programs</a>
                 </div>
             </section>
             <section class="program-body">
@@ -91,7 +91,7 @@
         </div>
         <section class="program-fallback" id="programFallback" hidden>
             <h1>We could not find that program</h1>
-            <p>The link might be outdated. Browse the <a href="homePage.html">Recycling Programs</a> to pick an active initiative.</p>
+            <p>The link might be outdated. Browse the <a href="homePage.php">Recycling Programs</a> to pick an active initiative.</p>
         </section>
     </main>
     <script src="script/sidebar.js?v=2"></script>
