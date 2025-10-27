@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -131,6 +131,33 @@
             }
         }
         </script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sectionList = document.querySelector('[data-section-list]');
+            const addButton = document.querySelector('[data-section-add]');
+            const template = document.getElementById('program-section-template');
+
+            // Add new section
+            addButton.addEventListener('click', function() {
+                const newSection = template.content.cloneNode(true);
+                sectionList.appendChild(newSection);
+            });
+
+            // Remove section (using event delegation)
+            sectionList.addEventListener('click', function(e) {
+                if (e.target.matches('[data-section-remove]')) {
+                    const section = e.target.closest('.dynamic-section');
+                    if (section) {
+                        section.remove();
+                    }
+                }
+            });
+
+            // Add initial section on page load
+            addButton.click();
+        });
+    </script>
 </body>
 </html>
 

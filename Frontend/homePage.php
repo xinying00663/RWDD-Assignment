@@ -1,33 +1,49 @@
 ﻿<?php
+session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
-$host="localhost";
-$user="root";
-$password="";
-$dbname="uploadpost";
+include "php/connect.php";
+// $host="localhost";
+// $user="root";
+// $password="";
+// $dbname="uploadpost";
 
-try {
-    $db = new mysqli($host, $user, $password, $dbname);
-    $db->set_charset('utf8mb4');
-} catch (mysqli_sql_exception $e) {
-    error_log("DB connect error: " . $e->getMessage());
-    http_response_code(500);
-    echo "DB connect error: " . $e->getMessage();
-    exit;
+// try {
+//     $db = new mysqli($host, $user, $password, $dbname);
+//     $db->set_charset('utf8mb4');
+// } catch (mysqli_sql_exception $e) {
+//     error_log("DB connect error: " . $e->getMessage());
+//     http_response_code(500);
+//     echo "DB connect error: " . $e->getMessage();
+//     exit;
+// }
+
+// Accept either session key name (some pages set user_id, others userId)
+if (!isset($_SESSION['user_id'])) {
+    header("Location: loginPage.html");
+    exit();
 }
+
+$userId = $_SESSION['user_id'];
+
+// Use correct column name (UserID) and alias columns to the keys used in the template
+$query = "SELECT Full_Name AS fullName FROM users WHERE UserID = ?";
+$stmt = $pdo->prepare($query);
+$stmt->execute([$userId]);  
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Fetch programs from database
 try {
     $sql = "SELECT * FROM program ORDER BY created_at DESC";
-    $result = $db->query($sql);
+    $result = $pdo->query($sql);
     $programs = [];
-    while ($row = $result->fetch_assoc()) {
+    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
         $programs[] = $row;
     }
     $result->free();
-} catch (mysqli_sql_exception $e) {
+} catch (PDOException $e) {
     error_log("DB query error: " . $e->getMessage());
     $programs = [];
 }
@@ -67,7 +83,7 @@ function esc($str) {
     <!-- Sidebar will be loaded here by sidebar.js -->
     <main>
         <section class="welcome-card">
-            <h1>Welcome back, <span id="profileSummaryName">Jamie</span></h1>
+            <h1>Welcome back, <span id="profileSummaryName"><?php echo $user["fullName"]; ?></span></h1>
         </section>
         <section class="tabs-card">
             <div class="section-header">

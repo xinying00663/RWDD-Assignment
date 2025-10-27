@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -128,4 +126,3 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
     exit;
 }
 ?>
->>>>>>> 4111635eb8c4c4bc9156d13316fa0abb25eec9dc

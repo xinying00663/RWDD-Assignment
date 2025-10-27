@@ -10,22 +10,17 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-$host="localhost";
-$user="root";
-$password="";
-$dbname="uploadpost";
+session_start(); 
 
-try {
-    $db = new mysqli($host, $user, $password, $dbname);
-    $db->set_charset('utf8mb4');
-} catch (mysqli_sql_exception $e) {
-    error_log("DB connect error: " . $e->getMessage());
-    http_response_code(500);
-    echo "DB connect error: " . $e->getMessage(); // temporary for debugging
+include "connect.php";
+
+
+$userId = $_SESSION['user_id'] ?? null;  
+if (!$userId) {
+    http_response_code(401);
+    echo "Authentication required.";
     exit;
 }
-
-
 
 $programName = $_POST['eventName'] ?? '';
 $programLocation = $_POST['eventLocationSearch'] ?? '';
@@ -48,13 +43,12 @@ if (is_array($sectionTitles) || is_array($sectionDescriptions)) {
         if ($t !== '' || $d !== '') $sections[] = ['title' => $t, 'description' => $d];
     }
 } else {
-    // single values (old form) — keep as string
     if ($sectionTitles !== '' || $sectionDescriptions !== '') {
         $sections[] = ['title' => $sectionTitles, 'description' => $sectionDescriptions];
     }
 }
 
-// Basic validation (you can expand)
+// Basic validation
 if ($programName === '' || $programStartDate === '' || $programEndDate === '') {
     http_response_code(400);
     echo "Required fields are missing.";
@@ -62,15 +56,20 @@ if ($programName === '' || $programStartDate === '' || $programEndDate === '') {
 }
 
 try {
-    $stmt = $db->prepare(
-        "INSERT INTO program 
-        (Program_name, Program_location, Event_date_start, Event_date_end, Program_description, Coordinator_name, Coordinator_email, 
-        Coordinator_phone, Section_title, Section_description)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-    );
+    if (!isset($pdo) || !($pdo instanceof PDO)) {
+        throw new Exception("Database connection not available.");
+    }
 
-    $stmt->bind_param(
-        'ssssssssss',
+    $pdo->beginTransaction();
+
+
+    $query = "INSERT INTO program 
+              (userID, Program_name, Program_location, Event_date_start, Event_date_end, 
+               Program_description, Coordinator_name, Coordinator_email, Coordinator_phone)
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute([
+        $userId,
         $programName,
         $programLocation,
         $programStartDate,
@@ -78,26 +77,44 @@ try {
         $programDescription,
         $coordinatorName,
         $coordinatorEmail,
-        $coordinatorPhone,
-        $section_titles_json,
-        $sections_json
-    );
-    $stmt->execute();
+        $coordinatorPhone
+    ]);
 
-    if ($stmt->affected_rows > 0) {
-        header('Location: ../homePage.php');
-        // optionally redirect: header('Location: ../homePage.html');
-    } else {
-        http_response_code(500);
-        echo "Insert failed.";
+    $programId = (int)$pdo->lastInsertId();
+
+    if (!empty($sections)) {
+        $sectionQuery = "INSERT INTO program_sections (program_id, section_title, section_description) VALUES (?, ?, ?)";
+        $sectionStmt = $pdo->prepare($sectionQuery);
+        foreach ($sections as $s) {
+            $sectionStmt->execute([
+                $programId,
+                $s['title'],
+                $s['description']
+            ]);
+        }
     }
 
-    $stmt->close();
-    $db->close();
-} catch (mysqli_sql_exception $e) {
-    error_log('DB query error: ' . $e->getMessage());
+    $pdo->commit();
+
+    header('Location: ../homePage.php');
+    exit;
+
+} catch (PDOException $e) {
+    if (isset($pdo) && $pdo->inTransaction()) $pdo->rollBack();
+    error_log('DB error: ' . $e->getMessage());
     http_response_code(500);
     echo "Database error.";
     exit;
+} catch (Exception $e) {
+    if (isset($pdo) && $pdo->inTransaction()) $pdo->rollBack();
+    error_log('Error: ' . $e->getMessage());
+    http_response_code(500);
+    echo $e->getMessage();
+    exit;
+} finally {
+    // PDO statements/connection cleanup
+    if (isset($stmt)) $stmt = null;
+    if (isset($sectionStmt)) $sectionStmt = null;
+    $pdo = $pdo ?? null;
 }
 ?>

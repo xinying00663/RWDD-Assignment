@@ -92,12 +92,12 @@ if ($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST["swap_action"])){
     <div class="sidebar-backdrop" id="sidebarBackdrop" hidden></div>
     <header id="sidebar" class="sidebar" aria-label="Primary navigation">
         <div class="logo">
-            <a href="homePage.html">
+            <a href="homePage.php">
                 <img src="../Pictures/logo.jpeg" alt="EcoGo Logo">
             </a>
         </div>
         <nav>
-            <a href="../homePage.html">
+            <a href="../homePage.php">
                 <img src="../Pictures/sidebar/recycle-sign.png" alt="Home Icon">
                 <p>Recycling Program</p>
             </a>
