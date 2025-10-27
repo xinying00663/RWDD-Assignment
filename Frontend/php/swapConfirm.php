@@ -123,7 +123,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST["swap_request"])){
             </div>
         </section>
     </main>
-    <script src="script/sidebar.js?v=2"></script>
-    <script src="script/swapConfirm.js" defer></script>
+    <!-- <script src="script/sidebar.js?v=2"></script>
+    <script src="script/swapConfirm.js" defer></script> -->
 </body>
 </html>
