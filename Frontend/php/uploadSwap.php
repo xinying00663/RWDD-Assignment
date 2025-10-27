@@ -140,8 +140,8 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
             </form>
         </section>
     </main>
-    <script src="script/sidebar.js?v=2"></script>
+    <!-- <script src="script/sidebar.js?v=2"></script>
     <script src="script/uploadShared.js" defer></script>
-    <script src="script/uploadSwap.js" defer></script>
+    <script src="script/uploadSwap.js" defer></script> -->
 </body>
 </html>
