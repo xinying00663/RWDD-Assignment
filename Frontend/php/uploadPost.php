@@ -62,7 +62,7 @@ try {
 
     $pdo->beginTransaction();
 
-    // Include userID in insert to satisfy FK
+
     $query = "INSERT INTO program 
               (userID, Program_name, Program_location, Event_date_start, Event_date_end, 
                Program_description, Coordinator_name, Coordinator_email, Coordinator_phone)
