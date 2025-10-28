@@ -65,14 +65,27 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
             }
         }
     }else{
+        } else {
+        $uploadError = $_FILES["swapMedia"]["error"] ?? 'Unknown error';
+        $errorMessages = [
+            UPLOAD_ERR_INI_SIZE => 'File exceeds upload_max_filesize directive in php.ini',
+            UPLOAD_ERR_FORM_SIZE => 'File exceeds MAX_FILE_SIZE directive in HTML form',
+            UPLOAD_ERR_PARTIAL => 'File was only partially uploaded',
+            UPLOAD_ERR_NO_FILE => 'No file was uploaded',
+            UPLOAD_ERR_NO_TMP_DIR => 'Missing temporary folder',
+            UPLOAD_ERR_CANT_WRITE => 'Failed to write file to disk',
+            UPLOAD_ERR_EXTENSION => 'A PHP extension stopped the file upload'
+        ];
+
+        $errorMessage = $errorMessages[$uploadError] ?? 'Unknown upload error';
         echo '<script>
-                alert("No file uploaded. Please select a file to upload.");
+                alert("File upload error: ' . $errorMessage . '");
                 window.history.back();
-            </script>';
-            exit;
+              </script>';
+        exit;
     }
     
-    if(!$error){
+    if(!$error && $image_path){
         $itemID=uniqid('item_',true);
         $stmt=$pdo->prepare("INSERT INTO items(ItemID,Title,Category,Description,Item_condition,Preferred_exchange,Image_path,Status,UserID) VALUES(?,?,?,?,?,?,?,?,?)");
         $status="active";
