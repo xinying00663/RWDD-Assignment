@@ -7,12 +7,13 @@ session_start();
 include "connect.php";
 // echo "Database connected successfully!";
 
-$userID = $_SESSION['user_id'] ?? null;  
-if (!$userID) {
-    http_response_code(401);
-    echo "Authentication required.";
-    exit;
-}
+// $userID = $_SESSION['user_id'] ?? null;  
+// if (!$userID) {
+//     http_response_code(401);
+//     echo "Authentication required.";
+//     window.location.href="login.php";
+//     exit;
+// }
 
 if($_SERVER["REQUEST_METHOD"]=="POST"){
     echo '<script>alert("Swap page request received");</script>';
@@ -23,7 +24,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
     $preferredExchange=$_POST["swapPreferred"]??"";
     $description=$_POST["swapDetails"]??"";
     $category=$_POST["swapCategory"]??"";
-    $userID=$_SESSION["user_id"];
+    $userID=$_SESSION["user_id"]?? NULL;
 
     $image_path=NULL;
     if(isset($_FILES["swapMedia"])&& $_FILES["swapMedia"]["error"]===0){
@@ -71,9 +72,11 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
             exit;
     }
     
-    if(!isset($error)){
+    if(!$error){
+        $itemID=uniqid('item_',true);
         $stmt=$pdo->prepare("INSERT INTO items(ItemID,Title,Category,Description,Item_condition,Preferred_exchange,Image_path,Status,UserID) VALUES(?,?,?,?,?,?,?,?,?)");
-        if($stmt->execute([$user_id,$title,$category,$description,$itemCondition,$preferredExchange,$image_path])){
+        $status="active";
+        if($stmt->execute([$user_id,$title,$category,$description,$itemCondition,$preferredExchange,$image_path,$status,$userID])){
             header("Location:swapPage.php?success=item_added");
             exit;
         }else{
@@ -108,7 +111,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
                 <h2>List a swap item</h2>
                 <p>Share a photo or short clip of what you'd like to swap and let neighbours know what you're hoping for in return.</p>
             </div>
-            <form class="upload-form" action="#" method="post">
+            <form class="upload-form" action="#" method="post" enctype="multipart/form-data">
                 <div class="upload-form__grid">
                     <div class="input-group">
                         <label for="swapTitle">Item name</label>
