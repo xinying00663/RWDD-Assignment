@@ -65,7 +65,6 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
             }
         }
     }else{
-        } else {
         $uploadError = $_FILES["swapMedia"]["error"] ?? 'Unknown error';
         $errorMessages = [
             UPLOAD_ERR_INI_SIZE => 'File exceeds upload_max_filesize directive in php.ini',

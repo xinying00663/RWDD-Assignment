@@ -7,19 +7,30 @@ include "connect.php";
 
 session_start();
 
-$userID=$_SESSION["user_id"];
+// $userID = $_SESSION['user_id'] ?? null;  
+// if (!$userID) {
+//     http_response_code(401);
+//     echo "Authentication required.";
+//     window.location.href="login.php";
+//     exit;
+// }
 
 // Handle message sending
 if ($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST["send_message"])){
-    $conversationID=$_POST["conversation_id"];
-    $messageContent=$_POST["message_content"];
+    $conversationID=$_POST["conversation_id"] ?? NULL;
+    $messageContent=$_POST["message_content"] ??"";
+
+    if(!$conversationID || !$messageContent){
+        echo json_encode(["status" => "error", "message" => "Missing conversationID and message content."]);
+        exit();
+    }
 
     try{
         $sql="INSERT INTO message(ConversationID,SenderID,Message_Content,Chat_Timestamp)VALUES(:ConversationID,:SenderID,:Message_Content,NOW())";
         $stmt=$pdo->prepare($sql);
-        $stmt->execute([":ConversationID"=>$conversationID,":SenderID"=>$senderID,":Message_Content"=>$messageContent]);
+        $stmt->execute([":ConversationID"=>$conversationID,":SenderID"=>$userID,":Message_Content"=>$messageContent]);
 
-        $sql="UPDATE conversation SET Last_Updated=NOW() WHERE id=:ConversationID";
+        $sql="UPDATE conversation SET Last_Updated=NOW() WHERE ConversationID=:ConversationID";
         $stmt=$pdo->prepare($sql);
         $stmt->execute([":ConversationID"=>$conversationID]);
 
@@ -33,36 +44,119 @@ if ($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST["send_message"])){
 
 // Handle swap request response
 if ($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST["swap_action"])){
-    $exchangeID=$_POST["exchange_id"];
-    $action=$_POST["action"];
+    $exchangeID=$_POST["exchange_id"] ?? NULL;
+    $action=$_POST["action"] ??"";
+    $conversationID=$_POST["conversation_id"] ?? NULL;
+
+    if(!$exchangeID || !$conversationID){
+        echo json_encode(["status" => "error", "message" => "Missing conversationID and exchangeID."]);
+        exit();
+    }
 
     try{
-        $sql="UPDATE exchange SET Status=:Status WHERE id=:ExchangeID";
+        $sql="UPDATE exchange SET Status=:Status WHERE ExchangeID=:ExchangeID";
         $stmt=$pdo->prepare($sql);
         $status=($action=="accept")?"Accepted":"Rejected";
-        $stmt->execute([":Status"=>$status,":ExchangeID"=>$ExchangeID]);
+        $stmt->execute([":Status"=>$status,":ExchangeID"=>$exchangeID]);
 
-        $sql = "INSERT INTO notification (UserID, Message, Is_read, Notification_Timestamp) 
-                SELECT RequesterID, :message, 0, NOW() 
-                FROM exchange WHERE id = :ExchangeID";
+        $sql = "SELECT RequesterID FROM exchange WHERE ExchangeID = :ExchangeID";
         $stmt = $pdo->prepare($sql);
-        $message = ($action == "accept") 
-            ? "Your swap request has been accepted!" 
-            : "Your swap request has been declined.";
-        $stmt->execute([":Message" => $Message, ":ExchangeID" => $exchange_id]);
+        $stmt->execute([":ExchangeID" => $exchangeID]);
+        $exchange = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if ($exchange) {
+            $requesterID = $exchange['RequesterID'];
+
+            $sql = "INSERT INTO notification (UserID, Message, Is_read, Notification_Timestamp) 
+                    VALUES (:UserID, :Message, 0, NOW())";
+            $stmt = $pdo->prepare($sql);
+            $message = ($action == "accept") 
+                ? "Your swap request has been accepted!" 
+                : "Your swap request has been declined.";
+        $stmt->execute([":Message" => $message, ":UserID" => $requesterID]);
         
         // Add system message to conversation
-        $system_message = "Swap request has been " . $status . " by the item owner.";
+        $system_message = "Swap request has been " . strtolower($status) . " by the item owner.";
         $sql = "INSERT INTO message (ConversationID, SenderID, Message_Content, Chat_Timestamp, is_system) 
                 VALUES (:ConversationID, 0, :Message_Content, NOW(), 1)";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([
-            ":Conversation" => $conversation_id,
+            ":Conversation" => $conversationID,
             ":Message_Content" => $system_message
         ]);
         
         // Redirect back to the same conversation
-        header("Location: inboxPage.php?ConversationID=" . $conversation_id);
+        header("Location: inboxPage.php?ConversationID=" . $conversationID);
+        exit();
+    } catch (PDOException $e) {
+        echo json_encode(["status" => "error", "message" => $e->getMessage()]);
+        exit();
+    }
+}
+
+// Handle creating conversation from swap request (this should be in your swapConfirm.php)
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["create_swap_conversation"])) {
+    $itemID = $_POST["item_id"] ?? null;
+    $requesterID = $_SESSION["user_id"] ?? null;
+    
+    if (!$itemID || !$requesterID) {
+        echo json_encode(["status" => "error", "message" => "Missing item ID or user not logged in"]);
+        exit();
+    }
+
+    try {
+        // Get item owner
+        $sql = "SELECT UserID, Title FROM items WHERE ItemID = :ItemID";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([":ItemID" => $itemID]);
+        $item = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if (!$item) {
+            echo json_encode(["status" => "error", "message" => "Item not found"]);
+            exit();
+        }
+        
+        $ownerID = $item['UserID'];
+        $itemTitle = $item['Title'];
+        
+        // Check if conversation already exists
+        $sql = "SELECT ConversationID FROM conversation 
+                WHERE (User1ID = :User1ID AND User2ID = :User2ID) 
+                OR (User1ID = :User2ID AND User2ID = :User1ID)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            ":User1ID" => $requesterID,
+            ":User2ID" => $ownerID
+        ]);
+        
+        $existingConversation = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if ($existingConversation) {
+            $conversationID = $existingConversation['ConversationID'];
+        } else {
+            // Create new conversation
+            $sql = "INSERT INTO conversation (User1ID, User2ID, Last_Updated, ItemID) 
+                    VALUES (:User1ID, :User2ID, NOW(), :ItemID)";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([
+                ":User1ID" => $requesterID,
+                ":User2ID" => $ownerID,
+                ":ItemID" => $itemID
+            ]);
+            $conversationID = $pdo->lastInsertId();
+            
+            // Add initial system message
+            $initialMessage = "Conversation started about swapping: " . $itemTitle;
+            $sql = "INSERT INTO message (ConversationID, SenderID, Message_Content, Chat_Timestamp, is_system) 
+                    VALUES (:ConversationID, 0, :Message_Content, NOW(), 1)";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([
+                ":ConversationID" => $conversationID,
+                ":Message_Content" => $initialMessage
+            ]);
+        }
+        
+        echo json_encode(["status" => "success", "conversation_id" => $conversationID]);
         exit();
     } catch (PDOException $e) {
         echo json_encode(["status" => "error", "message" => $e->getMessage()]);

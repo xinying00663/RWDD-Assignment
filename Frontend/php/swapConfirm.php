@@ -17,10 +17,10 @@ include "connect.php";
 // Handle swap request submission
 if($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST["swap_request"])){
     $itemID=$_POST["item_id"] ?? $_GET["item_id"] ?? 0;
-    $offerTitle=$_POST["offer_title"];
-    $offerDescription=$_POST["offer_description"];
-    $offerNotes=$_POST["offer_notes"];
-    $requesterID=$_SESSION["user_id"];
+    $offerTitle=$_POST["offer_title"] ??"";
+    $offerDescription=$_POST["offer_description"] ??"";
+    $offerNotes=$_POST["offer_notes"] ??"";
+    $requesterID=$_SESSION["user_id"] ?? NULL;
 
     $offerImagePath="";
     if(isset($_FILES["offerMedia"])&& $_FILES["offerMedia"]["error"]===0){
@@ -29,39 +29,82 @@ if($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST["swap_request"])){
             mkdir($target_dir,0777,true);
         }
         $image_name=time().'_offer_'.basename($_FILES["offerMedia"]["name"]);
-        $offer_image_path=$target_dir.$image_name;
-        move_uploaded_file($_FILES["offerMedia"]["tmp_name"],$offer_image_path);
-
-        try{
-            $sql="SELECT UserID,Title from items WHERE id=:ItemID and status='Available'";
-            $stmt=$pdo->prepare($sql);
-            $stmt=$pdo->execute([":ItemID"=>$itemID]);
-            $item=$stmt->fetch(PDO::FETCH_ASSOC);
-
-            if($item){
-                $ownerID=$item["UserID"];
-                $itemTitle=$item["Title"];
-
-                $sql="SELECT id FROM exchange WHERE ItemID=:ItemID AND RequesterID=:RequesterID AND Status='Pending'";
-                $stmt=$pdo->prepare($sql);
-                $stmt->execute(["ItemID"=>$itemID,"RequesterID"=>$requesterID]);
-
-                if($stmt->rowCount()==0){
-                    $sql="INSERT INTO exchange(ItemID,RequesterID,OwnerID,OfferID,Offer_Description,Offer_Notes,Offer_Image,Status,Exchange_Timestamp)Values(:ItemID,:RequesterID,:OwnerID,:OfferID,:Offer_Description,:Offer_Notes,:Offer_Image,'Pending',NOW())";
-                    $stmt=$pdo->prepare($sql);
-                    $stmt->execute([":ItemID"=>$itemID,":RequesterID"=>$requesterID,":OwnerID"=>$ownerID,":OfferID"=>$offerID,":Offer_Description"=>$offerDescription,":Offer_Notes"=>$offerNotes,":Offer_Image"=>$offerImage]);
-                    echo '<script>alert("Swap request sent successfully!")</script>';
-                }else{
-                    echo '<script>alert("You have already sent a swap request for this item.")</script>';
-                }
-            }else{
-                echo '<script>alert("The selected item is no longer available or not found.")</script>';
-            }
-        }catch(PDOException $e){
-                echo '<script>alert("Error: '.$e->getMessage().'")</script>';
+        $offerImagePath=$target_dir.$image_name;
+        if(!move_uploaded_file($_FILES["offerMedia"]["tmp_name"], $offerImagePath)){
+            echo '<script>alert("Failed to upload image. Please try again.")</script>';
+            header('Location: ' . $_SERVER['HTTP_REFERER']);
+            exit;
         }
+    } else {
+        echo '<script>alert("Please upload an image of your offer item.")</script>';
+        header('Location: ' . $_SERVER['HTTP_REFERER']);
+        exit;
     }
-    header('Location: ../homePage.php');
+
+    try{
+        $sql="SELECT UserID,Title from items WHERE ItemID=:ItemID and status='Available'";
+        $stmt=$pdo->prepare($sql);
+        $stmt->execute([":ItemID"=>$itemID]);
+        $item=$stmt->fetch(PDO::FETCH_ASSOC);
+
+        if($item){
+            $ownerID=$item["UserID"];
+            $itemTitle=$item["Title"];
+
+            $sql="SELECT ExchangeID FROM exchange WHERE ItemID=:ItemID AND RequesterID=:RequesterID AND Status='Pending'";
+            $stmt=$pdo->prepare($sql);
+            $stmt->execute(["ItemID"=>$itemID,"RequesterID"=>$requesterID]);
+
+            if($stmt->rowCount()==0){
+                $offerID = uniqid('offer_', true);
+                $sql="INSERT INTO exchange(ItemID,RequesterID,OwnerID,OfferID,Offer_Description,Offer_Notes,Offer_Image,Status,Exchange_Timestamp)Values(:ItemID,:RequesterID,:OwnerID,:OfferID,:Offer_Description,:Offer_Notes,:Offer_Image,'Pending',NOW())";
+                $stmt=$pdo->prepare($sql);
+                $stmt->execute([":ItemID"=>$itemID,":RequesterID"=>$requesterID,":OwnerID"=>$ownerID,":OfferID"=>$offerID,":Offer_Description"=>$offerDescription,":Offer_Notes"=>$offerNotes,":Offer_Image"=>$offerImagePath]);
+              
+                $sql = "SELECT ConversationID FROM conversation 
+                        WHERE ((User1ID = :User1ID AND User2ID = :User2ID) 
+                        OR (User1ID = :User2ID AND User2ID = :User1ID))
+                        AND ItemID = :ItemID";
+                $stmt = $pdo->prepare($sql);
+                $stmt->execute([":User1ID" => $requesterID,":User2ID" => $ownerID,":ItemID" => $itemID]);
+                
+                $existingConversation = $stmt->fetch(PDO::FETCH_ASSOC);
+                
+                if ($existingConversation) {
+                    $conversationID = $existingConversation['ConversationID'];
+                    
+                    // Update conversation timestamp
+                    $sql = "UPDATE conversation SET Last_Updated = NOW() WHERE ConversationID = :ConversationID";
+                    $stmt = $pdo->prepare($sql);
+                    $stmt->execute([":ConversationID" => $conversationID]);
+                } else {
+                    // Create conversation between requester and owner
+                    $sql = "INSERT INTO conversation (User1ID, User2ID, Last_Updated, ItemID) VALUES (:User1ID, :User2ID, NOW(), :ItemID)";
+                    $stmt = $pdo->prepare($sql);
+                    $stmt->execute([":User1ID" => $requesterID,":User2ID" => $ownerID,":ItemID" => $itemID]);
+                    $conversationID = $pdo->lastInsertId();
+                }
+                    // Add initial message about the swap request
+                    $initialMessage = "Swap request submitted for: " . $itemTitle . ". Offer: " . $offerTitle;
+                    $sql = "INSERT INTO message (ConversationID, SenderID, Message_Content, Chat_Timestamp, is_system) VALUES (:ConversationID, 0, :Message_Content, NOW(), 1)";
+                    $stmt = $pdo->prepare($sql);
+                    $stmt->execute([":ConversationID" => $conversationID,":Message_Content" => $initialMessage]);
+
+                    $sql = "UPDATE conversation SET ExchangeID = :ExchangeID WHERE ConversationID = :ConversationID";
+                    $stmt = $pdo->prepare($sql);
+                    $stmt->execute([":ExchangeID" => $offerID,":ConversationID" => $conversationID]);
+                    echo '<script>alert("Swap request sent successfully!")</script>';
+            }else{
+                echo '<script>alert("You have already sent a swap request for this item.")</script>';
+            }
+        }else{
+            echo '<script>alert("The selected item is no longer available or not found.")</script>';
+        }
+    }catch(PDOException $e){
+            echo '<script>alert("Error: '.$e->getMessage().'")</script>';
+    }
+
+    header('Location: ../inboxPage.php?conversation_id=' . $conversationID);
     exit;
 }
 ?>
