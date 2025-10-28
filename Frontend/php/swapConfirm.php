@@ -7,6 +7,13 @@ session_start();
 include "connect.php";
 // echo "Database connected successfully!";
 
+$userID = $_SESSION['user_id'] ?? null;  
+if (!$userID) {
+    http_response_code(401);
+    echo "Authentication required.";
+    exit;
+}
+
 // Handle swap request submission
 if($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST["swap_request"])){
     $itemID=$_POST["item_id"] ?? $_GET["item_id"] ?? 0;

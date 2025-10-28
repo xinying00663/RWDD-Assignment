@@ -8,7 +8,7 @@ include "connect.php";
 // echo "Database connected successfully!";
 
 $userID = $_SESSION['user_id'] ?? null;  
-if (!$userId) {
+if (!$userID) {
     http_response_code(401);
     echo "Authentication required.";
     exit;
