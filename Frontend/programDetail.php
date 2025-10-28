@@ -180,7 +180,8 @@ echo "<!-- Debug: Final programData before rendering: " . var_export($programDat
             <section class="program-register" id="register">
                 <h2>Reserve your spot</h2>
                 <p class="register-intro">Complete the form and the coordinator will reach out with onboarding details for the <span id="registerProgramName"><?php echo $title; ?></span>.</p>
-                <form class="register-form" id="programRegisterForm">
+                <form class="register-form" id="programRegisterForm" action="php/programCustomer.php" method="post">
+                    <input type="hidden" name="programId" value="<?php echo esc($programData['id']); ?>">
                     <div class="form-field">
                         <label for="participantName">Full name</label>
                         <input type="text" id="participantName" name="participantName" placeholder="e.g. Nur Aisyah" required>

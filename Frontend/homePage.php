@@ -20,6 +20,18 @@ $stmt = $pdo->prepare($query);
 $stmt->execute([$userId]);  
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
+// Fetch program IDs the user has already registered for
+$registeredProgramIds = [];
+try {
+    $regQuery = "SELECT program_id FROM program_customer WHERE user_id = ?";
+    $regStmt = $pdo->prepare($regQuery);
+    $regStmt->execute([$userId]);
+    $registeredProgramIds = $regStmt->fetchAll(PDO::FETCH_COLUMN, 0);
+} catch (PDOException $e) {
+    error_log("DB query error for registered programs: " . $e->getMessage());
+    // Non-critical error, so we can continue without this data.
+}
+
 // Fetch programs from database
 try {
     $query = "SELECT ProgramID, Program_name, Program_location, Event_date_start, Event_date_end, Program_description, Coordinator_name, Coordinator_email, Coordinator_phone, latitude, longitude FROM program ORDER BY created_at DESC";
@@ -86,18 +98,31 @@ function esc($str) {
             </div>
             <div class="project-highlights program-grid" data-program-grid>
                 <?php foreach ($programs as $program): ?>
-                <a href="programDetail.php?id=<?php echo esc($program['ProgramID']); ?>" class="program-card">
+                <?php
+                    $isRegistered = in_array($program['ProgramID'], $registeredProgramIds);
+                    $cardClass = $isRegistered ? 'highlight-card program-card is-registered' : 'highlight-card program-card';
+                ?>
+                <a href="programDetail.php?id=<?php echo esc($program['ProgramID']); ?>" class="<?php echo $cardClass; ?>">
+                    <div class="program-card__meta">
+                        <span class="program-card__tag">Community</span>
+                        <?php if ($program['Event_date_start'] || $program['Event_date_end']): ?>
+                        <span class="program-card__duration">
+                            <?php 
+                                $dateRange = formatDateRange($program['Event_date_start'], $program['Event_date_end']);
+                                echo $dateRange ?: 'Date TBC';
+                            ?>
+                        </span>
+                        <?php endif; ?>
+                    </div>
                     <h3><?php echo esc($program['Program_name']); ?></h3>
-                    <p class="muted"><?php echo esc($program['Program_location']); ?></p>
-                    <p class="dates">
-                        <?php echo formatDateRange($program['Event_date_start'], $program['Event_date_end']); ?>
-                    </p>
-                    <p>
-                        <?php 
-                        $desc = $program['Program_description'] ?? '';
-                        echo esc(mb_strlen($desc) > 240 ? mb_substr($desc, 0, 240) . '…' : $desc);
-                        ?>
-                    </p>
+                    <p><?php echo esc($program['Program_location']); ?></p>
+                    <div class="program-card__actions">
+                        <?php if ($isRegistered): ?>
+                            <span class="program-card__link program-card__link--signed">Signed Up</span>
+                        <?php else: ?>
+                            <span class="program-card__link">View Program</span>
+                        <?php endif; ?>
+                    </div>
                 </a>
                 <?php endforeach; ?>
                 <?php if (empty($programs)): ?>

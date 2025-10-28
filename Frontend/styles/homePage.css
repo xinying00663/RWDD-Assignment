@@ -48,6 +48,8 @@
     background: #ffffff;
     border: 1px solid rgba(26, 49, 38, 0.12);
     box-shadow: 0 16px 30px rgba(26, 49, 38, 0.1);
+    color: inherit;
+    text-decoration: none;
 }
 
 .program-card:hover {
@@ -141,6 +143,14 @@
 
 .program-card__link:hover {
     background: #214235;
+}
+
+.program-card__link--signed {
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    cursor: default;
+    pointer-events: none; /* Prevents hover effects */
 }
 
 .program-card__spots {
