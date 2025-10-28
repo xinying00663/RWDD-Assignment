@@ -2,10 +2,10 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
+session_start();
+
 include "connect.php";
 // echo "Database connected successfully!";
-
-session_start();
 
 // Handle swap request submission
 if($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST["swap_request"])){
@@ -54,6 +54,8 @@ if($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST["swap_request"])){
                 echo '<script>alert("Error: '.$e->getMessage().'")</script>';
         }
     }
+    header('Location: ../homePage.php');
+    exit;
 }
 ?>
 

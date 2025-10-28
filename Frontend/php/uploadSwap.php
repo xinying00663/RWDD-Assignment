@@ -2,10 +2,17 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
+session_start();
+
 include "connect.php";
 // echo "Database connected successfully!";
 
-session_start();
+$userID = $_SESSION['user_id'] ?? null;  
+if (!$userId) {
+    http_response_code(401);
+    echo "Authentication required.";
+    exit;
+}
 
 if($_SERVER["REQUEST_METHOD"]=="POST"){
     echo '<script>alert("Swap page request received");</script>';
@@ -77,6 +84,8 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
                 exit;
         }
     }
+    header('Location: ../homePage.php');
+    exit;
 }
 ?>
 
