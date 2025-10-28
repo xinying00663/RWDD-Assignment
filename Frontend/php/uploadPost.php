@@ -25,6 +25,8 @@ if (!$userId) {
 $programName = $_POST['eventName'] ?? '';
 $programLocation = $_POST['eventLocationSearch'] ?? '';
 $programStartDate = $_POST['eventDate'] ?? '';
+$programLat = $_POST['eventLocationLat'] ?? null;
+$programLng = $_POST['eventLocationLng'] ?? null;
 $programEndDate = $_POST['eventDateTo'] ?? '';
 $programDescription = $_POST['eventDescription'] ?? '';
 $coordinatorName = $_POST['coordinatorName'] ?? '';
@@ -65,8 +67,9 @@ try {
 
     $query = "INSERT INTO program 
               (userID, Program_name, Program_location, Event_date_start, Event_date_end, 
-               Program_description, Coordinator_name, Coordinator_email, Coordinator_phone)
-              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+               Program_description, Coordinator_name, Coordinator_email, Coordinator_phone,
+               latitude, longitude, created_at)
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
     $stmt = $pdo->prepare($query);
     $stmt->execute([
         $userId,
@@ -77,7 +80,9 @@ try {
         $programDescription,
         $coordinatorName,
         $coordinatorEmail,
-        $coordinatorPhone
+        $coordinatorPhone,
+        $programLat,
+        $programLng
     ]);
 
     $programId = (int)$pdo->lastInsertId();

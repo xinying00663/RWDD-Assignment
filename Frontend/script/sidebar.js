@@ -19,7 +19,7 @@
             <img src="Pictures/sidebar/recycle-sign.png" alt="Home Icon">
             <p>Recycling Program</p>
         </a>
-        <a href="energyPage.html" data-page="energy">
+        <a href="energyPage.php" data-page="energy">
             <img src="Pictures/sidebar/lamp.png" alt="Home Icon">
             <p>Energy Conservation Tips</p>
         </a>

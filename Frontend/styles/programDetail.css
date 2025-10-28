@@ -176,28 +176,11 @@
     background: var(--accent);
 }
 
-.schedule-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 18px;
+.program-panel--community {
+    background: rgba(45, 141, 96, 0.05);
+    border: 1px dashed rgba(45, 141, 96, 0.35);
 }
-
-.schedule-card {
-    background: rgba(45, 141, 96, 0.08);
-    border-radius: 18px;
-    padding: 18px 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.schedule-card h3 {
-    margin: 0;
-    font-size: 1rem;
-    color: #214235;
-}
-
-.schedule-card p {
+.program-panel--community p {
     margin: 0;
     color: #476052;
     line-height: 1.5;
@@ -209,7 +192,7 @@
     gap: 18px;
 }
 
-.info-card {
+main .info-card {
     background: rgba(33, 66, 53, 0.05);
     border-radius: 18px;
     padding: 18px 20px;
@@ -217,14 +200,13 @@
     flex-direction: column;
     gap: 8px;
 }
-
 .info-card h3 {
     margin: 0;
     font-size: 1rem;
     color: #214235;
 }
 
-.info-card p {
+main .info-card p {
     margin: 0;
     color: #476052;
     line-height: 1.5;
@@ -240,7 +222,7 @@
     gap: 18px;
 }
 
-.coordinator h2 {
+main .coordinator h2 {
     margin: 0;
     font-size: 1.55rem;
     color: #214235;
@@ -254,13 +236,13 @@
     align-items: center;
 }
 
-.coordinator-details h3 {
+main .coordinator-details h3 {
     margin: 0;
     font-size: 1.3rem;
     color: #1a3126;
 }
 
-.coordinator-details p {
+main .coordinator-details p {
     margin: 4px 0 0;
     color: var(--muted);
 }
@@ -311,13 +293,13 @@
     gap: 18px;
 }
 
-.program-register h2 {
+main .program-register h2 {
     margin: 0;
     font-size: 1.55rem;
     color: #214235;
 }
 
-.register-intro {
+main .register-intro {
     margin: 0;
     color: #476052;
     line-height: 1.5;

@@ -101,7 +101,7 @@ if ($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST["swap_action"])){
                 <img src="../Pictures/sidebar/recycle-sign.png" alt="Home Icon">
                 <p>Recycling Program</p>
             </a>
-            <a href="../energyPage.html">
+            <a href="../energyPage.php">
                 <img src="../Pictures/sidebar/lamp.png" alt="Energy Icon">
                 <p>Energy Conservation Tips</p>
             </a>

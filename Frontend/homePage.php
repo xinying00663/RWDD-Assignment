@@ -5,20 +5,6 @@ ini_set('display_errors', 1);
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 include "php/connect.php";
-// $host="localhost";
-// $user="root";
-// $password="";
-// $dbname="uploadpost";
-
-// try {
-//     $db = new mysqli($host, $user, $password, $dbname);
-//     $db->set_charset('utf8mb4');
-// } catch (mysqli_sql_exception $e) {
-//     error_log("DB connect error: " . $e->getMessage());
-//     http_response_code(500);
-//     echo "DB connect error: " . $e->getMessage();
-//     exit;
-// }
 
 // Accept either session key name (some pages set user_id, others userId)
 if (!isset($_SESSION['user_id'])) {
@@ -36,13 +22,10 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Fetch programs from database
 try {
-    $sql = "SELECT * FROM program ORDER BY created_at DESC";
-    $result = $pdo->query($sql);
-    $programs = [];
-    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-        $programs[] = $row;
-    }
-    $result->free();
+    $query = "SELECT ProgramID, Program_name, Program_location, Event_date_start, Event_date_end, Program_description, Coordinator_name, Coordinator_email, Coordinator_phone, latitude, longitude FROM program ORDER BY created_at DESC";
+    $result = $pdo->query($query);
+    // Fetch all results into an array
+    $programs = $result->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     error_log("DB query error: " . $e->getMessage());
     $programs = [];
@@ -103,7 +86,7 @@ function esc($str) {
             </div>
             <div class="project-highlights program-grid" data-program-grid>
                 <?php foreach ($programs as $program): ?>
-                <article class="program-card">
+                <a href="programDetail.php?id=<?php echo esc($program['ProgramID']); ?>" class="program-card">
                     <h3><?php echo esc($program['Program_name']); ?></h3>
                     <p class="muted"><?php echo esc($program['Program_location']); ?></p>
                     <p class="dates">
@@ -115,23 +98,13 @@ function esc($str) {
                         echo esc(mb_strlen($desc) > 240 ? mb_substr($desc, 0, 240) . '…' : $desc);
                         ?>
                     </p>
-                    <div class="coordinator-info">
-                        <p class="coordinator">
-                            Coordinator: <?php echo esc($program['Coordinator_name'] ?: '—'); ?>
-                        </p>
-                        <?php if ($program['Coordinator_email'] || $program['Coordinator_phone']): ?>
-                        <div class="contact-details">
-                            <?php if ($program['Coordinator_email']): ?>
-                            <p>Email: <?php echo esc($program['Coordinator_email']); ?></p>
-                            <?php endif; ?>
-                            <?php if ($program['Coordinator_phone']): ?>
-                            <p>Phone: <?php echo esc($program['Coordinator_phone']); ?></p>
-                            <?php endif; ?>
-                        </div>
-                        <?php endif; ?>
-                    </div>
-                </article>
+                </a>
                 <?php endforeach; ?>
+                <?php if (empty($programs)): ?>
+                    <div class="empty-state">
+                        <p>No programs have been shared yet. Be the first to add one!</p>
+                    </div>
+                <?php endif; ?>
             </div>
         </section>
         <button type="button" class="add-button" aria-label="Add new program" 
@@ -148,20 +121,20 @@ function esc($str) {
 
     <script>
     // Programs with coords for client-side markers (safe JSON)
-    window.serverPrograms = <?php echo json_encode($programs_for_js, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES); ?>;
+    window.serverPrograms = <?php echo json_encode($programs, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES); ?>;
 
     // function to add markers once map is available
     (function () {
         function addServerMarkers() {
             if (typeof google === 'undefined' || !window.map || !Array.isArray(window.serverPrograms)) return;
             window.serverPrograms.forEach(function(p) {
-                var lat = parseFloat(p.eventLocationLat);
-                var lng = parseFloat(p.eventLocationLng);
+                var lat = parseFloat(p.latitude);
+                var lng = parseFloat(p.longitude);
                 if (!isNaN(lat) && !isNaN(lng)) {
                     new google.maps.Marker({
                         position: { lat: lat, lng: lng },
                         map: window.map,
-                        title: p.eventName || ''
+                        title: p.Program_name || ''
                     });
                 }
             });
