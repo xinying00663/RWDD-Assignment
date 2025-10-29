@@ -24,7 +24,7 @@ if (!$userId) {
 $EnergyTitle = $_POST['energyTitle'] ?? '';
 $EnergyCategory = $_POST['energyCategory'] ?? '';
 $EnergyContributor = $_POST['energyContributor'] ?? '';
-$EnergyDuration = $_POST['energyDuration'] ?? '';
+// $EnergyDuration = $_POST['energyDuration'] ?? '';
 $EnergySummary = $_POST['energySummary'] ?? '';
 $EnergyLink = $_POST['energyLink'] ?? '';
 
@@ -36,7 +36,7 @@ if ($EnergyTitle === '' || $EnergyCategory=== '') {
 
 $Energymedia=NULL;
 if(isset($_FILES["energyMedia"])&& $_FILES["energyMedia"]["error"]===0){
-        if($_FILES["energyMedia"]["size"]>262144000){
+        if($_FILES["energyMedia"]["size"]>1000000000){
             echo '<script>
                     alert("File size exceeds the 250MB limit.");
                     window.history.back();
@@ -88,17 +88,13 @@ try {
     $pdo->beginTransaction();
 
 
-    $query = "INSERT INTO energy 
-              (user_id, Energy_title, Energy_category, Energy_contributor, Energy_duration, 
-               Energy_media, Energy_summary, Energy_link)
-              VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    $query = "INSERT INTO energy (user_id, Energy_title, Energy_category, Energy_contributor, Energy_media, Energy_summary, Energy_link) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = $pdo->prepare($query);
     $stmt->execute([
         $userId,
         $EnergyTitle,
         $EnergyCategory,
         $EnergyContributor,
-        $EnergyDuration,
         $EnergyMedia,
         $EnergySummary,
         $EnergyLink

@@ -64,7 +64,6 @@ try {
                                data-media-type="<?php echo preg_match('/\.(mp4|mov|avi)$/i', $tip['Energy_media']) ? 'video' : 'image'; ?>"
                                data-media-src="<?php echo 'php/' . ltrim(htmlspecialchars($tip['Energy_media']), '/'); ?>"
                                data-alt="<?php echo htmlspecialchars($tip['Energy_title']); ?>"
-                               data-duration="<?php echo htmlspecialchars($tip['Energy_duration']); ?>"
                                data-uploader="<?php echo htmlspecialchars($tip['Energy_contributor'] ?: 'Anonymous'); ?>">
                                 <div class="card-media">
                                     <?php $media_path = 'php/' . ltrim(htmlspecialchars($tip['Energy_media']), '/'); ?>
