@@ -38,7 +38,7 @@ try {
     $pdo->beginTransaction();
 
     $query = "INSERT INTO program_customer
-              (user_id, program_id, Customer_name, Customer_email, Customer_phone)
+              (User_id, Program_id, Customer_name, Customer_email, Customer_phone)
               VALUES (?, ?, ?, ?, ?)";
     $stmt = $pdo->prepare($query);
     $stmt->execute([
@@ -52,7 +52,7 @@ try {
 
     $pdo->commit();
 
-    header('Location: ../homePage.php');
+    header('Location: ../programDetail.php?id=' . $programId . '&registered=success');
     exit;
 
 } catch (PDOException $e) {

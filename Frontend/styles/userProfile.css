@@ -294,9 +294,21 @@
 
         .empty-state {
             margin-top: 16px;
+            padding: 24px;
             color: var(--muted);
             font-size: 0.95rem;
             text-align: center;
+            line-height: 1.6;
+        }
+        
+        .empty-state a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .empty-state a:hover {
+            text-decoration: underline;
         }
 
         .profile-modal {
