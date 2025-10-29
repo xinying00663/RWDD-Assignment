@@ -1,0 +1,79 @@
+<?php
+session_start();
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+include "php/connect.php";
+
+if (!isset($_SESSION['user_id'])) {
+    header("Location: loginPage.html");
+    exit();
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Share a Community Story</title>
+    <link rel="stylesheet" href="styles/general.css">
+    <link rel="stylesheet" href="styles/common.css">
+    <link rel="stylesheet" href="styles/sidebar.css">
+    <link rel="stylesheet" href="styles/uploadPage.css">
+</head>
+<body data-page="community-upload">
+    <!-- Sidebar will be loaded here by sidebar.js -->
+    <main>
+        <section class="tabs-card upload-card">
+            <div class="section-header">
+                <h2>Share a gardening win</h2>
+                <p>Post your latest garden project or neighbourhood tip so others can learn from your experience.</p>
+            </div>
+            <form class="upload-form" action="php/uploadCommunity.php" method="POST" enctype="multipart/form-data">
+                <div class="upload-form__grid">
+                    <div class="input-group">
+                        <label for="communityTitle">Story title</label>
+                        <input type="text" id="communityTitle" name="communityTitle" placeholder="e.g. Pocket park before &amp; after" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="communityCategory">Category</label>
+                        <select id="communityCategory" name="communityCategory" required>
+                            <option value="projects">Projects</option>
+                            <option value="tips">Tips</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="communityContact">Contributor</label>
+                        <input type="text" id="communityContact" name="communityContact" placeholder="Your name or group">
+                    </div>
+                    <div class="input-group">
+                        <label for="communityLocation">Neighbourhood</label>
+                        <input type="text" id="communityLocation" name="communityLocation" placeholder="e.g. Block C Rooftop">
+                    </div>
+                    <div class="input-group input-group--full">
+                        <label for="communityMedia">Upload media</label>
+                        <input type="file" id="communityMedia" name="communityMedia" accept="image/*,video/*" required>
+                        <p class="input-help">Add MP4/MOV videos or JPG/PNG images to showcase your project.</p>
+                    </div>
+                    <div class="input-group input-group--full">
+                        <label for="communitySummary">What should neighbours know?</label>
+                        <textarea id="communitySummary" name="communitySummary" rows="5" placeholder="Share the story, your growing tips, or how to join in." required></textarea>
+                    </div>
+                    <div class="input-group input-group--full">
+                        <label for="communityLink">Resource link (optional)</label>
+                        <input type="url" id="communityLink" name="communityLink" placeholder="https://example.com/community-guide">
+                    </div>
+                </div>
+                <div class="upload-form__footer">
+                    <p class="helper-text">Stories appear on the Community feed once the moderation team gives the thumbs up.</p>
+                    <div class="upload-form__actions">
+                        <button type="button" class="button-cancel" onclick="window.location.href='communityPage.php'">Cancel</button>
+                        <button type="submit">Share story</button>
+                    </div>
+                </div>
+            </form>
+        </section>
+    </main>
+    <script src="script/sidebar.js?v=2"></script>
+</body>
+</html>
