@@ -11,7 +11,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 try {
-    $stmt = $pdo->query("SELECT Energy_id, Energy_title, Energy_category, Energy_contributor, Energy_duration, Energy_summary, Energy_media FROM energy ORDER BY Energy_id DESC");
+    $stmt = $pdo->query("SELECT Energy_id, Energy_title, Energy_category, Energy_contributor, Energy_summary, Energy_media FROM energy ORDER BY Energy_id DESC");
     $energy_tips = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     error_log("Energy tips fetch error: " . $e->getMessage());
@@ -85,9 +85,6 @@ try {
                                     </p>
                                     <div class="card-meta">
                                         <span class="uploader">By <?php echo htmlspecialchars($tip['Energy_contributor'] ?: 'Anonymous'); ?></span>
-                                        <?php if ($tip['Energy_duration']): ?>
-                                            <span><?php echo htmlspecialchars($tip['Energy_duration']); ?></span>
-                                        <?php endif; ?>
                                     </div>
                                 </div>
                             </a>

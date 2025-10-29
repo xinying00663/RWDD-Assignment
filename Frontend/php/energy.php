@@ -88,7 +88,7 @@ try {
     $pdo->beginTransaction();
 
 
-    $query = "INSERT INTO energy (user_id, Energy_title, Energy_category, Energy_contributor, Energy_media, Energy_summary, Energy_link) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    $query = "INSERT INTO energy (user_id, Energy_title, Energy_category, Energy_contributor, Energy_media, Energy_summary, Energy_link) VALUES (?, ?, ?, ?, ?, ?, ?)";
     $stmt = $pdo->prepare($query);
     $stmt->execute([
         $userId,
