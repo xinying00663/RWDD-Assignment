@@ -16,9 +16,17 @@ include "connect.php";
 
 
 $userId = $_SESSION['user_id'] ?? null;  
+$role = $_SESSION['role'] ?? 'user';
 if (!$userId) {
     http_response_code(401);
     echo "Authentication required.";
+    exit;
+}
+
+// Only admins can add programs
+if ($role !== 'admin') {
+    http_response_code(403);
+    echo "Admin privileges required.";
     exit;
 }
 

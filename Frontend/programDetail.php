@@ -22,6 +22,23 @@ include "php/connect.php";
 
 $programId = $_GET['id'] ?? null;
 $programData = null;
+// Determine admin role, with DB fallback if session role not set
+$isAdmin = false;
+if (isset($_SESSION['role'])) {
+    $isAdmin = ($_SESSION['role'] === 'admin');
+} else {
+    try {
+        $roleStmt = $pdo->prepare("SELECT Role FROM users WHERE UserID = ?");
+        $roleStmt->execute([$_SESSION['user_id']]);
+        $roleRow = $roleStmt->fetch(PDO::FETCH_ASSOC);
+        if ($roleRow) {
+            $_SESSION['role'] = $roleRow['Role'] ?? 'user';
+            $isAdmin = ($_SESSION['role'] === 'admin');
+        }
+    } catch (PDOException $e) {
+        error_log('Role fetch error: ' . $e->getMessage());
+    }
+}
 
 echo "<!-- Debug: programId from URL: " . var_export($programId, true) . " -->\n";
 
@@ -125,6 +142,12 @@ echo "<!-- Debug: Final programData before rendering: " . var_export($programDat
                 <div class="hero-actions">
                     <a class="primary-cta" href="#register">Register now</a>
                     <a class="secondary-cta" href="homePage.php">Back to programs</a>
+                    <?php if ($isAdmin): ?>
+                        <form method="POST" action="php/deleteProgram.php" style="display:inline-block" onsubmit="return confirm('Delete this program?');">
+                            <input type="hidden" name="program_id" value="<?php echo esc($programData['id']); ?>">
+                            <button type="submit" class="secondary-cta" style="background:#c62828;color:#fff;border:none;cursor:pointer;border-radius:999px;padding:10px 16px;">Delete program</button>
+                        </form>
+                    <?php endif; ?>
                 </div>
             </section>
             <section class="program-body">

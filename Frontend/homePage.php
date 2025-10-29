@@ -20,6 +20,24 @@ $stmt = $pdo->prepare($query);
 $stmt->execute([$userId]);  
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
+// Determine admin role, with DB fallback if session role not set
+$isAdmin = false;
+if (isset($_SESSION['role'])) {
+    $isAdmin = ($_SESSION['role'] === 'admin');
+} else {
+    try {
+        $roleStmt = $pdo->prepare("SELECT Role FROM users WHERE UserID = ?");
+        $roleStmt->execute([$userId]);
+        $roleRow = $roleStmt->fetch(PDO::FETCH_ASSOC);
+        if ($roleRow) {
+            $_SESSION['role'] = $roleRow['Role'] ?? 'user';
+            $isAdmin = ($_SESSION['role'] === 'admin');
+        }
+    } catch (PDOException $e) {
+        error_log('Role fetch error: ' . $e->getMessage());
+    }
+}
+
 // Fetch program IDs the user has already registered for
 $registeredProgramIds = [];
 try {
@@ -102,28 +120,36 @@ function esc($str) {
                     $isRegistered = in_array($program['ProgramID'], $registeredProgramIds);
                     $cardClass = $isRegistered ? 'highlight-card program-card is-registered' : 'highlight-card program-card';
                 ?>
-                <a href="programDetail.php?id=<?php echo esc($program['ProgramID']); ?>" class="<?php echo $cardClass; ?>">
-                    <div class="program-card__meta">
-                        <span class="program-card__tag">Community</span>
-                        <?php if ($program['Event_date_start'] || $program['Event_date_end']): ?>
-                        <span class="program-card__duration">
-                            <?php 
-                                $dateRange = formatDateRange($program['Event_date_start'], $program['Event_date_end']);
-                                echo $dateRange ?: 'Date TBC';
-                            ?>
-                        </span>
-                        <?php endif; ?>
-                    </div>
-                    <h3><?php echo esc($program['Program_name']); ?></h3>
-                    <p><?php echo esc($program['Program_location']); ?></p>
-                    <div class="program-card__actions">
-                        <?php if ($isRegistered): ?>
-                            <span class="program-card__link program-card__link--signed">Signed Up</span>
-                        <?php else: ?>
-                            <span class="program-card__link">View Program</span>
-                        <?php endif; ?>
-                    </div>
-                </a>
+                <div class="program-card-wrapper">
+                    <a href="programDetail.php?id=<?php echo esc($program['ProgramID']); ?>" class="<?php echo $cardClass; ?>">
+                        <div class="program-card__meta">
+                            <span class="program-card__tag">Community</span>
+                            <?php if ($program['Event_date_start'] || $program['Event_date_end']): ?>
+                            <span class="program-card__duration">
+                                <?php 
+                                    $dateRange = formatDateRange($program['Event_date_start'], $program['Event_date_end']);
+                                    echo $dateRange ?: 'Date TBC';
+                                ?>
+                            </span>
+                            <?php endif; ?>
+                        </div>
+                        <h3><?php echo esc($program['Program_name']); ?></h3>
+                        <p><?php echo esc($program['Program_location']); ?></p>
+                        <div class="program-card__actions">
+                            <?php if ($isRegistered): ?>
+                                <span class="program-card__link program-card__link--signed">Signed Up</span>
+                            <?php else: ?>
+                                <span class="program-card__link">View Program</span>
+                            <?php endif; ?>
+                        </div>
+                    </a>
+                    <?php if ($isAdmin): ?>
+                        <form method="POST" action="php/deleteProgram.php" class="program-card__delete" onsubmit="return confirm('Delete this program?');">
+                            <input type="hidden" name="program_id" value="<?php echo (int)$program['ProgramID']; ?>">
+                            <button type="submit" aria-label="Delete program">&times;</button>
+                        </form>
+                    <?php endif; ?>
+                </div>
                 <?php endforeach; ?>
                 <?php if (empty($programs)): ?>
                     <div class="empty-state">
@@ -132,8 +158,10 @@ function esc($str) {
                 <?php endif; ?>
             </div>
         </section>
-        <button type="button" class="add-button" aria-label="Add new program" 
-                onclick="window.location.href='upload.html'">+</button>
+    <?php if ($isAdmin): ?>
+    <button type="button" class="add-button" aria-label="Add new program" 
+        onclick="window.location.href='upload.html'">+</button>
+    <?php endif; ?>
     </main>
 
     <script src="script/sidebar.js?v=2"></script>
