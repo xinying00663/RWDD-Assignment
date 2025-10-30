@@ -55,11 +55,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['token'])) {
 
     echo '<script>
     alert("Your password has been successfully reset.");
-    window.location.href = "loginPage.html";
+    window.location.href = "../loginPage.html";
     </script>';
 } else {
     echo '<script>
     alert("Invalid request.");
-    window.location.href = "loginPage.html";
+    window.location.href = "../loginPage.html";
     </script>';
 }

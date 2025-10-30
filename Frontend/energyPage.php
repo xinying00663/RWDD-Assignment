@@ -124,7 +124,6 @@ try {
         <?php endif; ?>
     </main>
     <script src="script/sidebar.js?v=2"></script>
-    <script src="script/energyPage.js" defer></script>
     <script src="script/mediaFeed.js" defer></script>
 </body>
 </html>
