@@ -170,7 +170,9 @@ echo "<!-- Debug: Final programData before rendering: " . var_export($programDat
                     </div>
                 </div>
                 <div class="hero-actions">
-                    <?php if ($isRegistered): ?>
+                    <?php if ($isAdmin): ?>
+                        <button class="primary-cta" disabled style="opacity:0.6;cursor:not-allowed;">Admins cannot register</button>
+                    <?php elseif ($isRegistered): ?>
                         <button class="primary-cta" disabled style="opacity:0.6;cursor:not-allowed;">Registered</button>
                     <?php else: ?>
                         <button class="primary-cta" onclick="showRegisterModal()">Register now</button>

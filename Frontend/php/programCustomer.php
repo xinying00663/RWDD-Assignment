@@ -22,6 +22,14 @@ if (!$userId) {
     exit;
 }
 
+// Block admins from registering
+$role = $_SESSION['role'] ?? 'user';
+if ($role === 'admin') {
+    http_response_code(403);
+    echo "Admins cannot register for events.";
+    exit;
+}
+
 $programId = $_POST['programId'] ?? null;
 $CustomerName = $_POST['participantName'] ?? '';
 $CustomerEmail = $_POST['participantEmail'] ?? '';

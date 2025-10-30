@@ -1,171 +1,121 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
-session_start();
-
-include "connect.php";
-// echo "Database connected successfully!";
-
-// $userID = $_SESSION['user_id'] ?? null;  
-// if (!$userID) {
-//     http_response_code(401);
-//     echo "Authentication required.";
-//     window.location.href="login.php";
-//     exit;
-// }
-
-if($_SERVER["REQUEST_METHOD"]=="POST"){
-    echo '<script>alert("Swap page request received");</script>';
-
-    $title=$_POST["swapTitle"]??"";
-    $category=$_POST["swapCategory"]??"";
-    $itemCondition=$_POST["swapCondition"]??"";
-    $preferredExchange=$_POST["swapPreferred"]??"";
-    $description=$_POST["swapDetails"]??"";
-    $category=$_POST["swapCategory"]??"";
-    $userID=$_SESSION["user_id"]?? NULL;
-
-    $image_path=NULL;
-    if(isset($_FILES["swapMedia"])&& $_FILES["swapMedia"]["error"]===0){
-        if($_FILES["swapMedia"]["size"]>262144000){
-            echo '<script>
-                    alert("File size exceeds the 250MB limit.");
-                    window.history.back();
-                </script>';
-                exit;
-        }else{
-            $upload_dir="upload/swapItems/";
-            if(!is_dir($upload_dir)){
-                mkdir($upload_dir,0777,true);
-            }
-
-            $file_extension=strtolower(pathinfo($_FILES["swapMedia"]["name"],PATHINFO_EXTENSION));
-            $allowed_extension=["jpg","jpeg","png","gif","mp4","mov","avi"];
-
-            if(in_array($file_extension,$allowed_extension)){
-                $filename=uniqid().".".$file_extension;
-                $target_path=$upload_dir.$filename;
-
-                if(move_uploaded_file($_FILES["swapMedia"]["tmp_name"],$target_path)){
-                    $image_path=$target_path;
-                }else{
-                    echo '<script>
-                            alert("Failed to upload file.Please try again.");
-                            window.history.back();
-                        </script>';
-                        exit;
-                }
-            }else{
-                echo '<script>
-                        alert("Invalid file type. Please upload again.");
-                        window.history.back();
-                    </script>';
-                    exit;
-            }
-        }
-    }else{
-        $uploadError = $_FILES["swapMedia"]["error"] ?? 'Unknown error';
-        $errorMessages = [
-            UPLOAD_ERR_INI_SIZE => 'File exceeds upload_max_filesize directive in php.ini',
-            UPLOAD_ERR_FORM_SIZE => 'File exceeds MAX_FILE_SIZE directive in HTML form',
-            UPLOAD_ERR_PARTIAL => 'File was only partially uploaded',
-            UPLOAD_ERR_NO_FILE => 'No file was uploaded',
-            UPLOAD_ERR_NO_TMP_DIR => 'Missing temporary folder',
-            UPLOAD_ERR_CANT_WRITE => 'Failed to write file to disk',
-            UPLOAD_ERR_EXTENSION => 'A PHP extension stopped the file upload'
-        ];
-
-        $errorMessage = $errorMessages[$uploadError] ?? 'Unknown upload error';
-        echo '<script>
-                alert("File upload error: ' . $errorMessage . '");
-                window.history.back();
-              </script>';
-        exit;
-    }
-    
-    if(!$error && $image_path){
-        $itemID=uniqid('item_',true);
-        $stmt=$pdo->prepare("INSERT INTO items(ItemID,Title,Category,Description,Item_condition,Preferred_exchange,Image_path,Status,UserID) VALUES(?,?,?,?,?,?,?,?,?)");
-        $status="active";
-        if($stmt->execute([$user_id,$title,$category,$description,$itemCondition,$preferredExchange,$image_path,$status,$userID])){
-            header("Location:swapPage.php?success=item_added");
-            exit;
-        }else{
-            echo'<script>
-                   alert("Database error,please try again.");
-                   window.history.back();
-                </script>';
-                exit;
-        }
-    }
-    header('Location: ../homePage.php');
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    echo "Only POST allowed";
     exit;
 }
-?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>List a Swap Item</title>
-    <link rel="stylesheet" href="../styles/general.css">
-    <link rel="stylesheet" href="../styles/common.css">
-    <link rel="stylesheet" href="../styles/sidebar.css">
-    <link rel="stylesheet" href="../styles/uploadPage.css">
-</head>
-<body data-page="swap-upload">
-    <!-- Sidebar will be loaded here by sidebar.js -->
-    <main>
-        <section class="tabs-card upload-card">
-            <div class="section-header">
-                <h2>List a swap item</h2>
-                <p>Share a photo or short clip of what you'd like to swap and let neighbours know what you're hoping for in return.</p>
-            </div>
-            <form class="upload-form" action="#" method="post" enctype="multipart/form-data">
-                <div class="upload-form__grid">
-                    <div class="input-group">
-                        <label for="swapTitle">Item name</label>
-                        <input type="text" id="swapTitle" name="swapTitle" placeholder="e.g. Balcony herb starter kit" required>
-                    </div>
-                    <div class="input-group">
-                        <label for="swapCategory">Category</label>
-                        <select id="swapCategory" name="swapCategory" required>
-                            <option value="home-grown">Home-grown</option>
-                            <option value="eco-friendly">Eco-friendly</option>
-                        </select>
-                    </div>
-                    <div class="input-group">
-                        <label for="swapCondition">Condition</label>
-                        <input type="text" id="swapCondition" name="swapCondition" placeholder="e.g. Rooted cuttings, lightly used">
-                    </div>
-                    <div class="input-group">
-                        <label for="swapPreferred">Preferred exchange</label>
-                        <input type="text" id="swapPreferred" name="swapPreferred" placeholder="e.g. Open to seeds or compost bins">
-                    </div>
-                    <div class="input-group input-group--full">
-                        <label for="swapMedia">Upload media</label>
-                        <input type="file" id="swapMedia" name="swapMedia" accept="image/*,video/*" required>
-                        <p class="input-help">Select clear images or short videos (max 250&nbsp;MB) to help neighbours see the item.</p>
-                    </div>
-                    <div class="input-group input-group--full">
-                        <label for="swapDetails">Item details</label>
-                        <textarea id="swapDetails" name="swapDetails" rows="5" placeholder="Tell people what makes this item special and any pick-up info." required></textarea>
-                    </div>
-                </div>
-                <div class="upload-form__footer">
-                    <p class="helper-text">We'll publish your listing once it meets community swap guidelines.</p>
-                    <div class="upload-form__actions">
-                        <button type="button" class="button-cancel" onclick="window.location.href='swapPage.html'">Cancel</button>
-                        <button type="submit">Post listing</button>
-                    </div>
-                </div>
-            </form>
-        </section>
-    </main>
-    <!-- <script src="script/sidebar.js?v=2"></script>
-    <script src="script/uploadShared.js" defer></script>
-    <script src="script/uploadSwap.js" defer></script> -->
-</body>
-</html>
+session_start(); 
+
+include "connect.php";
+
+$userId = $_SESSION['user_id'] ?? null;  
+if (!$userId) {
+    http_response_code(401);
+    echo "Authentication required.";
+    exit;
+}
+
+$swapTitle = $_POST['swapTitle'] ?? '';
+$swapCategory = $_POST['swapCategory'] ?? '';
+$swapCondition = $_POST['swapCondition'] ?? '';
+$swapPreferred = $_POST['swapPreferred'] ?? '';
+$swapDetails = $_POST['swapDetails'] ?? '';
+
+if ($swapTitle === '' || $swapCategory === '') {
+    http_response_code(400);
+    echo "Required fields are missing.";
+    exit;
+}
+
+$swapMedia = NULL;
+if (isset($_FILES["swapMedia"]) && $_FILES["swapMedia"]["error"] === 0) {
+    if ($_FILES["swapMedia"]["size"] > 1000000000) {
+        echo '<script>
+                alert("File size exceeds the 250MB limit.");
+                window.history.back();
+            </script>';
+        exit;
+    } else {
+        $upload_dir = "upload/swapItems/";
+        if (!is_dir($upload_dir)) {
+            mkdir($upload_dir, 0777, true);
+        }
+
+        $file_extension = strtolower(pathinfo($_FILES["swapMedia"]["name"], PATHINFO_EXTENSION));
+        $allowed_extension = ["jpg", "jpeg", "png", "gif", "mp4", "mov", "avi"];
+
+        if (in_array($file_extension, $allowed_extension)) {
+            $filename = uniqid() . "." . $file_extension;
+            $target_path = $upload_dir . $filename;
+
+            if (move_uploaded_file($_FILES["swapMedia"]["tmp_name"], $target_path)) {
+                $swapMedia = $target_path;
+            } else {
+                echo '<script>
+                        alert("Failed to upload file. Please try again.");
+                        window.history.back();
+                    </script>';
+                exit;
+            }
+        } else {
+            echo '<script>
+                    alert("Invalid file type. Please upload again.");
+                    window.history.back();
+                </script>';
+            exit;
+        }
+    }
+} else {
+    echo '<script>
+            alert("No file uploaded. Please select a file to upload.");
+            window.history.back();
+        </script>';
+    exit;
+}
+
+try {
+    if (!isset($pdo) || !($pdo instanceof PDO)) {
+        throw new Exception("Database connection not available.");
+    }
+
+    $pdo->beginTransaction();
+
+    $query = "INSERT INTO items (UserID, Title, Category, Description, Item_condition, Preferred_exchange, Image_path, Status) VALUES (?, ?, ?, ?, ?, ?, ?, 'Available')";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute([
+        $userId,
+        $swapTitle,
+        $swapCategory,
+        $swapDetails,
+        $swapCondition,
+        $swapPreferred,
+        $swapMedia
+    ]);
+
+    $pdo->commit();
+
+    header('Location: ../swapPage.php');
+    exit;
+
+} catch (PDOException $e) {
+    if (isset($pdo) && $pdo->inTransaction()) $pdo->rollBack();
+    error_log('DB error: ' . $e->getMessage());
+    http_response_code(500);
+    echo "Database error.";
+    exit;
+} catch (Exception $e) {
+    if (isset($pdo) && $pdo->inTransaction()) $pdo->rollBack();
+    error_log('Error: ' . $e->getMessage());
+    http_response_code(500);
+    echo $e->getMessage();
+    exit;
+} finally {
+    if (isset($stmt)) $stmt = null;
+    $pdo = $pdo ?? null;
+}
+?>

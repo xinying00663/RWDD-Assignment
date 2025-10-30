@@ -4,19 +4,45 @@ ini_set('display_errors', 1);
 
 session_start();
 
-include "connect.php";
-// echo "Database connected successfully!";
+include "php/connect.php";
 
-// $userID = $_SESSION['user_id'] ?? null;  
-// if (!$userID) {
-//     http_response_code(401);
-//     echo "Authentication required.";
-//     exit;
-// }
+// Block admins from swapping
+$role = $_SESSION['role'] ?? 'user';
+if ($role === 'admin') {
+    echo '<script>alert("Admins cannot swap items."); window.location.href="swapPage.php";</script>';
+    exit;
+}
+
+// Resolve selected item (GET) for display
+$itemId = 0;
+if (isset($_GET['id'])) {
+    $itemId = (int)$_GET['id'];
+} elseif (isset($_GET['item_id'])) {
+    $itemId = (int)$_GET['item_id'];
+}
+
+$itemData = null;
+if ($itemId > 0) {
+    try {
+        $stmt = $pdo->prepare("SELECT i.ItemID, i.UserID, i.Title, i.Category, i.Description, i.Image_path, i.Status, u.Username AS OwnerUsername
+                               FROM items i
+                               LEFT JOIN users u ON i.UserID = u.UserID
+                               WHERE i.ItemID = ? LIMIT 1");
+        $stmt->execute([$itemId]);
+        $itemData = $stmt->fetch(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        error_log('Fetch item for confirm error: ' . $e->getMessage());
+    }
+}
+
+$isOwner = false;
+if ($itemData && isset($_SESSION['user_id'])) {
+    $isOwner = ((int)$itemData['UserID'] === (int)$_SESSION['user_id']);
+}
 
 // Handle swap request submission
 if($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST["swap_request"])){
-    $itemID=$_POST["item_id"] ?? $_GET["item_id"] ?? 0;
+    $itemID=$_POST["item_id"] ?? $_GET["item_id"] ?? $_GET['id'] ?? 0;
     $offerTitle=$_POST["offer_title"] ??"";
     $offerDescription=$_POST["offer_description"] ??"";
     $offerNotes=$_POST["offer_notes"] ??"";
@@ -51,49 +77,22 @@ if($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST["swap_request"])){
             $ownerID=$item["UserID"];
             $itemTitle=$item["Title"];
 
-            $sql="SELECT ExchangeID FROM exchange WHERE ItemID=:ItemID AND RequesterID=:RequesterID AND Status='Pending'";
+            // Prevent self-request (requester is the owner)
+            if ((int)$ownerID === (int)$requesterID) {
+                echo '<script>alert("You cannot send a swap request to your own listing.")</script>';
+                header('Location: swapPage.php');
+                exit;
+            }
+
+            $sql="SELECT ExchangeID FROM exchange WHERE ItemID=:ItemID AND RequesterID=:RequesterID AND status='pending'";
             $stmt=$pdo->prepare($sql);
             $stmt->execute(["ItemID"=>$itemID,"RequesterID"=>$requesterID]);
 
             if($stmt->rowCount()==0){
-                $offerID = uniqid('offer_', true);
-                $sql="INSERT INTO exchange(ItemID,RequesterID,OwnerID,OfferID,Offer_Description,Offer_Notes,Offer_Image,Status,Exchange_Timestamp)Values(:ItemID,:RequesterID,:OwnerID,:OfferID,:Offer_Description,:Offer_Notes,:Offer_Image,'Pending',NOW())";
+                $sql="INSERT INTO exchange(ItemID,RequesterID,OwnerID,Offer_title,Offer_description,Offer_notes,Offer_image,status,Exchange_timestamp)Values(:ItemID,:RequesterID,:OwnerID,:Offer_title,:Offer_description,:Offer_notes,:Offer_image,'pending',NOW())";
                 $stmt=$pdo->prepare($sql);
-                $stmt->execute([":ItemID"=>$itemID,":RequesterID"=>$requesterID,":OwnerID"=>$ownerID,":OfferID"=>$offerID,":Offer_Description"=>$offerDescription,":Offer_Notes"=>$offerNotes,":Offer_Image"=>$offerImagePath]);
-              
-                $sql = "SELECT ConversationID FROM conversation 
-                        WHERE ((User1ID = :User1ID AND User2ID = :User2ID) 
-                        OR (User1ID = :User2ID AND User2ID = :User1ID))
-                        AND ItemID = :ItemID";
-                $stmt = $pdo->prepare($sql);
-                $stmt->execute([":User1ID" => $requesterID,":User2ID" => $ownerID,":ItemID" => $itemID]);
-                
-                $existingConversation = $stmt->fetch(PDO::FETCH_ASSOC);
-                
-                if ($existingConversation) {
-                    $conversationID = $existingConversation['ConversationID'];
-                    
-                    // Update conversation timestamp
-                    $sql = "UPDATE conversation SET Last_Updated = NOW() WHERE ConversationID = :ConversationID";
-                    $stmt = $pdo->prepare($sql);
-                    $stmt->execute([":ConversationID" => $conversationID]);
-                } else {
-                    // Create conversation between requester and owner
-                    $sql = "INSERT INTO conversation (User1ID, User2ID, Last_Updated, ItemID) VALUES (:User1ID, :User2ID, NOW(), :ItemID)";
-                    $stmt = $pdo->prepare($sql);
-                    $stmt->execute([":User1ID" => $requesterID,":User2ID" => $ownerID,":ItemID" => $itemID]);
-                    $conversationID = $pdo->lastInsertId();
-                }
-                    // Add initial message about the swap request
-                    $initialMessage = "Swap request submitted for: " . $itemTitle . ". Offer: " . $offerTitle;
-                    $sql = "INSERT INTO message (ConversationID, SenderID, Message_Content, Chat_Timestamp, is_system) VALUES (:ConversationID, 0, :Message_Content, NOW(), 1)";
-                    $stmt = $pdo->prepare($sql);
-                    $stmt->execute([":ConversationID" => $conversationID,":Message_Content" => $initialMessage]);
-
-                    $sql = "UPDATE conversation SET ExchangeID = :ExchangeID WHERE ConversationID = :ConversationID";
-                    $stmt = $pdo->prepare($sql);
-                    $stmt->execute([":ExchangeID" => $offerID,":ConversationID" => $conversationID]);
-                    echo '<script>alert("Swap request sent successfully!")</script>';
+                $stmt->execute([":ItemID"=>$itemID,":RequesterID"=>$requesterID,":OwnerID"=>$ownerID,":Offer_title"=>$offerTitle,":Offer_description"=>$offerDescription,":Offer_notes"=>$offerNotes,":Offer_image"=>$offerImagePath]);
+                echo '<script>alert("Swap request sent successfully!")</script>';
             }else{
                 echo '<script>alert("You have already sent a swap request for this item.")</script>';
             }
@@ -103,8 +102,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST["swap_request"])){
     }catch(PDOException $e){
             echo '<script>alert("Error: '.$e->getMessage().'")</script>';
     }
-
-    header('Location: ../inboxPage.php?conversation_id=' . $conversationID);
+    header('Location: swapPage.php');
     exit;
 }
 ?>
@@ -115,32 +113,54 @@ if($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST["swap_request"])){
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Confirm Swap</title>
-    <link rel="stylesheet" href="../styles/general.css">
-    <link rel="stylesheet" href="../styles/common.css">
-    <link rel="stylesheet" href="../styles/sidebar.css">
-    <link rel="stylesheet" href="../styles/uploadPage.css">
-    <link rel="stylesheet" href="../styles/swapConfirm.css">
+    <link rel="stylesheet" href="styles/general.css">
+    <link rel="stylesheet" href="styles/common.css">
+    <link rel="stylesheet" href="styles/sidebar.css">
+    <link rel="stylesheet" href="styles/uploadPage.css">
+    <link rel="stylesheet" href="styles/swapConfirm.css">
 </head>
 <body data-page="swap-confirm">
     <!-- Sidebar will be loaded here by sidebar.js -->
     <main>
         <section class="tabs-card swap-confirm-card" aria-labelledby="swapConfirmHeading">
             <div class="section-header">
-                <h2 id="swapConfirmHeading">Swap for <span id="selectedItemTitle">this item</span></h2>
+                <h2 id="swapConfirmHeading">Swap for <span><?php echo htmlspecialchars($itemData['Title'] ?? 'this item'); ?></span></h2>
                 <p>Share what you can offer in return so the owner can review and confirm the swap.</p>
             </div>
             <div class="swap-confirm__content">
                 <article class="swap-confirm__item" aria-live="polite">
                     <div class="swap-confirm__media">
-                        <img id="selectedItemImage" src="../Pictures/landingPage/swap-item-pic.jpg" alt="Selected swap item">
+                        <?php 
+                        $imageRel = null;
+                        if (!empty($itemData['Image_path'])) {
+                            $imageRel = 'php/' . ltrim($itemData['Image_path'], '/');
+                        }
+                        ?>
+                        <img src="<?php echo htmlspecialchars($imageRel ?: 'Pictures/landingPage/swap-item-pic.jpg'); ?>" alt="<?php echo htmlspecialchars($itemData['Title'] ?? 'Selected swap item'); ?>">
                     </div>
                     <div class="swap-confirm__details">
-                        <span class="swap-confirm__tag" id="selectedItemTag">Swap item</span>
-                        <h3 id="selectedItemName">Selected swap item</h3>
-                        <p id="selectedItemDescription">Choose a listing from the swap feed to see the details here.</p>
+                        <span class="swap-confirm__tag"><?php echo htmlspecialchars($itemData['Category'] ?? 'Swap item'); ?></span>
+                        <h3><?php echo htmlspecialchars($itemData['Title'] ?? 'Selected swap item'); ?></h3>
+                        <p><?php echo htmlspecialchars($itemData['Description'] ?? 'Choose a listing from the swap feed to see the details here.'); ?></p>
+                        <?php if (!empty($itemData['OwnerUsername'])): ?>
+                            <div class="card-meta" style="margin-top:8px;color:#476052;">
+                                Listed by <?php echo htmlspecialchars($itemData['OwnerUsername']); ?>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </article>
-                <form id="swapOfferForm" class="upload-form swap-confirm__form" action="#" method="post" enctype="multipart/form-data">
+                <?php if ($itemData && $isOwner): ?>
+                    <div class="upload-form" style="background:#fff3cd;border:1px solid #ffeeba;color:#856404;border-radius:12px;padding:16px;">
+                        <strong>This is your listing.</strong>
+                        <p style="margin:6px 0 0;">You can't send a swap request to your own item. Go back to the swap feed to view other listings.</p>
+                        <div class="upload-form__actions" style="margin-top:12px;">
+                            <button type="button" class="button-cancel" onclick="window.location.href='swapPage.php'">Back to swap feed</button>
+                        </div>
+                    </div>
+                <?php else: ?>
+                <form id="swapOfferForm" class="upload-form swap-confirm__form" action="swapConfirm.php?item_id=<?php echo (int)($itemData['ItemID'] ?? $itemId); ?>" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="swap_request" value="1">
+                    <input type="hidden" name="item_id" value="<?php echo (int)($itemData['ItemID'] ?? $itemId); ?>">
                     <div class="upload-form__grid">
                         <div class="input-group input-group--full">
                             <label for="offerMedia">Upload your item photo</label>
@@ -149,33 +169,33 @@ if($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST["swap_request"])){
                         </div>
                         <div class="input-group">
                             <label for="offerTitle">Your item name</label>
-                            <input type="text" id="offerTitle" name="offerTitle" placeholder="e.g. Handwoven market tote" required>
+                            <input type="text" id="offerTitle" name="offer_title" placeholder="e.g. Handwoven market tote" required>
                         </div>
                         <div class="input-group input-group--full">
                             <label for="offerDescription">Describe your item</label>
-                            <textarea id="offerDescription" name="offerDescription" rows="5" placeholder="Explain the condition, pick-up timing, or what makes it a good swap." required></textarea>
+                            <textarea id="offerDescription" name="offer_description" rows="5" placeholder="Explain the condition, pick-up timing, or what makes it a good swap." required></textarea>
                         </div>
                         <div class="input-group input-group--full">
                             <label for="offerNotes">Message to the owner (optional)</label>
-                            <textarea id="offerNotes" name="offerNotes" rows="4" placeholder="Add extra context or propose a meeting spot."></textarea>
+                            <textarea id="offerNotes" name="offer_notes" rows="4" placeholder="Add extra context or propose a meeting spot."></textarea>
                         </div>
                     </div>
                     <div class="upload-form__footer">
-                        <p class="helper-text">We'll notify the owner of <span id="selectedItemNameInline">this item</span> once you confirm.</p>
+                        <p class="helper-text">We'll notify the owner of <span><?php echo htmlspecialchars($itemData['Title'] ?? 'this item'); ?></span> once you confirm.</p>
                         <div class="upload-form__actions">
-                            <button type="button" class="button-cancel" onclick="window.location.href='swapPage.html'">Back to swap feed</button>
+                            <button type="button" class="button-cancel" onclick="window.location.href='swapPage.php'">Back to swap feed</button>
                             <button type="submit">Confirm swap request</button>
                         </div>
                     </div>
                     <div class="swap-confirm__success" id="swapConfirmSuccess" role="status" aria-live="polite" tabindex="-1">
                         <strong>Swap request sent!</strong>
-                        <p>We'll let you know in your inbox when the owner responds.</p>
+                        <p>The owner will review your offer and respond soon.</p>
                     </div>
                 </form>
+                <?php endif; ?>
             </div>
         </section>
     </main>
-    <!-- <script src="script/sidebar.js?v=2"></script>
-    <script src="script/swapConfirm.js" defer></script> -->
+    <script src="script/sidebar.js?v=2"></script>
 </body>
 </html>
