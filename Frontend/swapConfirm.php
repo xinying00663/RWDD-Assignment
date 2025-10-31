@@ -92,6 +92,21 @@ if($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST["swap_request"])){
                 $sql="INSERT INTO exchange(ItemID,RequesterID,OwnerID,Offer_title,Offer_description,Offer_notes,Offer_image,status,Exchange_timestamp)Values(:ItemID,:RequesterID,:OwnerID,:Offer_title,:Offer_description,:Offer_notes,:Offer_image,'pending',NOW())";
                 $stmt=$pdo->prepare($sql);
                 $stmt->execute([":ItemID"=>$itemID,":RequesterID"=>$requesterID,":OwnerID"=>$ownerID,":Offer_title"=>$offerTitle,":Offer_description"=>$offerDescription,":Offer_notes"=>$offerNotes,":Offer_image"=>$offerImagePath]);
+                
+                $exchangeID = $pdo->lastInsertId();
+                
+                // Get requester's username
+                $stmt = $pdo->prepare("SELECT Username FROM users WHERE UserID = ?");
+                $stmt->execute([$requesterID]);
+                $requesterUser = $stmt->fetch(PDO::FETCH_ASSOC);
+                $requesterName = $requesterUser['Username'] ?? 'Someone';
+                
+                // Create notification for the owner
+                $notificationMessage = "Hi, " . $requesterName . " wants to swap with you using \"" . $offerTitle . "\" for your item \"" . $itemTitle . "\"";
+                $sql = "INSERT INTO notifications (UserID, Message, ExchangeID, Is_read, Notification_Timestamp) VALUES (:UserID, :Message, :ExchangeID, 0, NOW())";
+                $stmt = $pdo->prepare($sql);
+                $stmt->execute([":UserID" => $ownerID, ":Message" => $notificationMessage, ":ExchangeID" => $exchangeID]);
+                
                 echo '<script>alert("Swap request sent successfully!")</script>';
             }else{
                 echo '<script>alert("You have already sent a swap request for this item.")</script>';

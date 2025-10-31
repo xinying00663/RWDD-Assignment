@@ -1,107 +1,146 @@
 
 (function () {
-  const conversations = [
-    {
-      name: "Pocket Park Revival",
-      avatar: "PR",
-      time: "Just now",
-      status: "new",
-      messages: [
-        { sender: "other", text: "Need extra gloves for Saturday?" },
-        { sender: "user", text: "I can bring 3 pairs!" }
-      ]
-    },
-    {
-      name: "Herb Lab Volunteers",
-      avatar: "HL",
-      time: "2h ago",
-      status: "waiting",
-      messages: [
-        { sender: "other", text: "Weekly produce drop confirmed." },
-        { sender: "user", text: "Yes, I can help document yields." }
-      ]
-    },
-    {
-      name: "Swap HQ",
-      avatar: "SW",
-      time: "Yesterday",
-      status: "",
-      messages: [
-        { sender: "other", text: "Lisa accepted your blender listing." },
-        { sender: "user", text: "Great! Let's arrange a meetup." }
-      ]
-    },
-    {
-      name: "Compost Cooperative",
-      avatar: "CC",
-      time: "Mon",
-      status: "",
-      messages: [
-        { sender: "other", text: "Reminder: bring brown materials." }
-      ]
-    }
-  ];
-
+  // Fetch notifications from backend
+  let notifications = [];
+  
   const list = document.getElementById("conversationItems");
   const conversationList = document.querySelector(".conversation-list");
   const chatbox = document.getElementById("chatbox");
   const chatTitle = document.getElementById("chatTitle");
   const chatMessages = document.getElementById("chatMessages");
   const messageInput = document.getElementById("messageInput");
-  let currentChat = null;
+  const newBadge = document.querySelector(".status-pill.new");
+  let currentNotification = null;
+
+  // Fetch notifications on page load
+  async function fetchNotifications() {
+    try {
+      const response = await fetch('php/getNotifications.php');
+      
+      // Check if response is ok
+      if (!response.ok) {
+        throw new Error('HTTP error ' + response.status);
+      }
+      
+      // Get response text first to debug
+      const text = await response.text();
+      
+      // Try to parse as JSON
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (e) {
+        console.error('Response is not valid JSON:', text.substring(0, 200));
+        list.innerHTML = '<p style="padding: 20px; text-align: center; color: #e74c3c;">Error loading notifications. Please check if you are logged in.</p>';
+        return;
+      }
+      
+      if (data.success) {
+        notifications = data.notifications || [];
+        if (newBadge) {
+          const count = data.unread_count || 0;
+          newBadge.textContent = count + ' new';
+          if (count === 0) {
+            newBadge.style.display = 'none';
+          }
+        }
+        renderList();
+      } else {
+        console.error('Failed to load notifications:', data.message);
+        if (data.message === 'Not authenticated') {
+          list.innerHTML = '<p style="padding: 20px; text-align: center; color: #e74c3c;">Please <a href="loginPage.html">login</a> to view notifications.</p>';
+        } else {
+          list.innerHTML = '<p style="padding: 20px; text-align: center; color: #e74c3c;">Error: ' + data.message + '</p>';
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching notifications:', error);
+      list.innerHTML = '<p style="padding: 20px; text-align: center; color: #e74c3c;">Network error. Please check your connection.</p>';
+    }
+  }
 
   function renderList() {
     list.innerHTML = "";
-    conversations.forEach((conv) => {
+    
+    if (notifications.length === 0) {
+      list.innerHTML = '<p style="padding: 20px; text-align: center; color: #666;">No notifications yet</p>';
+      return;
+    }
+    
+    notifications.forEach((notif) => {
       const item = document.createElement("div");
       item.className = "conversation-item";
-      if (currentChat && currentChat.name === conv.name) {
+      if (notif.Is_read == 0) {
+        item.classList.add("unread");
+      }
+      if (currentNotification && currentNotification.NotificationID === notif.NotificationID) {
         item.classList.add("active");
       }
-      const preview = conv.messages.length ? conv.messages[conv.messages.length - 1].text : "";
+      
+      // Format timestamp
+      const timestamp = new Date(notif.Notification_Timestamp);
+      const now = new Date();
+      const diffMs = now - timestamp;
+      const diffMins = Math.floor(diffMs / 60000);
+      let timeStr = '';
+      
+      if (diffMins < 1) {
+        timeStr = 'Just now';
+      } else if (diffMins < 60) {
+        timeStr = diffMins + 'm ago';
+      } else if (diffMins < 1440) {
+        timeStr = Math.floor(diffMins / 60) + 'h ago';
+      } else {
+        timeStr = Math.floor(diffMins / 1440) + 'd ago';
+      }
+      
+      // Create preview (first 60 chars of message)
+      const preview = notif.Message.length > 60 ? notif.Message.substring(0, 60) + '...' : notif.Message;
+      
       item.innerHTML = `
-        <div class="avatar">${conv.avatar}</div>
-        <strong>${conv.name}</strong>
+        <div class="avatar">SW</div>
+        <strong>Swap Notification</strong>
         <div class="conversation-meta">
-          <span>${conv.time}</span>
+          <span>${timeStr}</span>
         </div>
         <p>${preview}</p>
       `;
-      if (conv.status) {
+      
+      if (notif.Is_read == 0) {
         const statusPill = document.createElement("span");
-        statusPill.className = `status-pill ${conv.status}`;
-        statusPill.textContent = conv.status;
+        statusPill.className = "status-pill new";
+        statusPill.textContent = "new";
         item.querySelector(".conversation-meta").appendChild(statusPill);
       }
-      item.addEventListener("click", () => openChat(conv));
+      
+      item.addEventListener("click", () => openNotification(notif));
       list.appendChild(item);
     });
   }
 
-  function renderMessages(conv) {
-    chatMessages.innerHTML = "";
-    conv.messages.forEach((msg) => {
-      const bubble = document.createElement("div");
-      bubble.className = `chat-message ${msg.sender}`;
-      bubble.textContent = msg.text;
-      chatMessages.appendChild(bubble);
-    });
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-  }
-
-  function openChat(conv) {
-    chatTitle.textContent = conv.name;
-    currentChat = conv;
-    renderMessages(conv);
-    chatbox.classList.add("is-active");
-    conversationList.classList.add("is-hidden");
-    renderList();
+  function openNotification(notif) {
+    // If notification has ExchangeID, redirect to view swap request page
+    if (notif.ExchangeID) {
+      window.location.href = 'php/viewSwapRequest.php?exchange_id=' + notif.ExchangeID;
+    } else {
+      // Otherwise, show in chat view
+      chatTitle.textContent = "Swap Notification";
+      currentNotification = notif;
+      chatMessages.innerHTML = `
+        <div class="chat-message other">
+          ${notif.Message}
+        </div>
+      `;
+      chatbox.classList.add("is-active");
+      conversationList.classList.add("is-hidden");
+      renderList();
+    }
   }
 
   function goBack() {
     conversationList.classList.remove("is-hidden");
     chatbox.classList.remove("is-active");
-    currentChat = null;
+    currentNotification = null;
     chatTitle.textContent = "Chat";
     chatMessages.innerHTML = "";
     messageInput.value = "";
@@ -109,17 +148,13 @@
   }
 
   function sendMessage() {
-    const text = messageInput.value.trim();
-    if (!text || !currentChat) {
-      return;
-    }
-    currentChat.messages.push({ sender: "user", text });
-    messageInput.value = "";
-    renderMessages(currentChat);
-    renderList();
+    // Not applicable for notifications view
+    return;
   }
 
-  renderList();
+  // Initialize
+  fetchNotifications();
+  
   window.goBack = goBack;
   window.sendMessage = sendMessage;
 })();

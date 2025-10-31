@@ -117,7 +117,6 @@ try {
                                             <?php endif; ?>
                                         </div>
                                     <?php endif; ?>
-                                    <span class="swap-card__cta">Message to swap</span>
                                 </div>
                             <?php if (!$isAdmin): ?>
                             </a>
