@@ -63,6 +63,28 @@
     line-height: 1.6;
 }
 
+/* Inline style replacements */
+.swap-confirm__details .card-meta {
+    margin-top: 8px;
+    color: #476052;
+}
+
+.warning-box {
+    background: #fff3cd;
+    border: 1px solid #ffeeba;
+    color: #856404;
+    border-radius: 12px;
+    padding: 16px;
+}
+
+.warning-box p {
+    margin: 6px 0 0;
+}
+
+.warning-box .upload-form__actions {
+    margin-top: 12px;
+}
+
 .swap-confirm__form {
     flex: 1 1 360px;
 }

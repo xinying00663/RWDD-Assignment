@@ -194,7 +194,7 @@ function formatDate($date) {
             <?php if (count($allRegistered) > 0): ?>
                 <?php foreach ($allRegistered as $program): ?>
                     <article class="activity-item">
-                        <strong><a href="programDetail.php?id=<?php echo $program['ProgramID']; ?>" style="color:#2d8d60;text-decoration:none;"><?php echo htmlspecialchars($program['Program_name']); ?></a></strong>
+                        <strong><a class="program-link" href="programDetail.php?id=<?php echo $program['ProgramID']; ?>"><?php echo htmlspecialchars($program['Program_name']); ?></a></strong>
                         <p>
                             <?php 
                             $dateStart = $program['Event_date_start'] ?? '';
@@ -209,7 +209,7 @@ function formatDate($date) {
                     </article>
                 <?php endforeach; ?>
             <?php else: ?>
-                <p class="empty-state">You haven't registered for any programs yet. <a href="homePage.php" style="color:#2d8d60;">Browse programs</a></p>
+                <p class="empty-state">You haven't registered for any programs yet. <a class="program-link" href="homePage.php">Browse programs</a></p>
             <?php endif; ?>
         </div>
     </div>
@@ -223,26 +223,26 @@ function formatDate($date) {
                     <div class="activity-feed">
                         <?php if (count($userPosts) > 0): ?>
                             <?php foreach ($userPosts as $post): ?>
-                                <article class="activity-item" style="position:relative;display:flex;gap:16px;">
+                                <article class="activity-item">
                                     <?php if ($post['Community_media']): ?>
-                                        <div style="width:80px;height:80px;flex-shrink:0;border-radius:8px;overflow:hidden;background:#f5f5f5;">
+                                        <div class="activity-thumbnail">
                                             <?php 
                                             $media_path = 'php/' . ltrim(htmlspecialchars($post['Community_media']), '/');
                                             $ext = strtolower(pathinfo($post['Community_media'], PATHINFO_EXTENSION));
                                             if (in_array($ext, ['mp4', 'mov', 'avi'])): 
                                             ?>
-                                                <video style="width:100%;height:100%;object-fit:cover;">
+                                                <video>
                                                     <source src="<?php echo $media_path; ?>">
                                                 </video>
                                             <?php else: ?>
-                                                <img src="<?php echo $media_path; ?>" alt="Post media" style="width:100%;height:100%;object-fit:cover;">
+                                                <img src="<?php echo $media_path; ?>" alt="Post media">
                                             <?php endif; ?>
                                         </div>
                                     <?php endif; ?>
-                                    <div style="flex:1;">
+                                    <div class="activity-content">
                                         <span class="time"><?php echo formatDate($post['created_at']); ?></span>
                                         <strong><?php echo htmlspecialchars($post['Community_title']); ?></strong>
-                                        <span style="display:inline-block;margin-left:8px;padding:2px 8px;background:rgba(45,141,96,0.1);color:#2d8d60;border-radius:12px;font-size:0.75rem;font-weight:600;">
+                                        <span class="activity-badge">
                                             <?php echo ucfirst($post['Community_category']); ?>
                                         </span>
                                         <p><?php echo htmlspecialchars($post['Community_summary']); ?></p>
@@ -250,7 +250,7 @@ function formatDate($date) {
                                 </article>
                             <?php endforeach; ?>
                         <?php else: ?>
-                            <p class="empty-state">You have not posted anything yet. Share your first story from the <a href="uploadCommunity.php" style="color:#2d8d60;">upload page</a> to see it here.</p>
+                            <p class="empty-state">You have not posted anything yet. Share your first story from the <a class="program-link" href="uploadCommunity.php">upload page</a> to see it here.</p>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -299,10 +299,10 @@ function formatDate($date) {
                     </label>
                 </div>
                 <?php if ($updateError): ?>
-                    <p class="profile-modal__error" style="color: red;"><?php echo htmlspecialchars($updateError); ?></p>
+                    <p class="profile-modal__error"><?php echo htmlspecialchars($updateError); ?></p>
                 <?php endif; ?>
                 <?php if (isset($_GET['updated']) && $_GET['updated'] === 'true'): ?>
-                    <p class="profile-modal__success" style="color: green;">Profile updated successfully!</p>
+                    <p class="profile-modal__success">Profile updated successfully!</p>
                 <?php endif; ?>
                 <input type="hidden" name="update_profile" value="1">
                 <div class="profile-modal__actions">

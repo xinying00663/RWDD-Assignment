@@ -158,17 +158,17 @@ if($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST["swap_request"])){
                         <h3><?php echo htmlspecialchars($itemData['Title'] ?? 'Selected swap item'); ?></h3>
                         <p><?php echo htmlspecialchars($itemData['Description'] ?? 'Choose a listing from the swap feed to see the details here.'); ?></p>
                         <?php if (!empty($itemData['OwnerUsername'])): ?>
-                            <div class="card-meta" style="margin-top:8px;color:#476052;">
+                            <div class="card-meta">
                                 Listed by <?php echo htmlspecialchars($itemData['OwnerUsername']); ?>
                             </div>
                         <?php endif; ?>
                     </div>
                 </article>
                 <?php if ($itemData && $isOwner): ?>
-                    <div class="upload-form" style="background:#fff3cd;border:1px solid #ffeeba;color:#856404;border-radius:12px;padding:16px;">
+                    <div class="upload-form warning-box">
                         <strong>This is your listing.</strong>
-                        <p style="margin:6px 0 0;">You can't send a swap request to your own item. Go back to the swap feed to view other listings.</p>
-                        <div class="upload-form__actions" style="margin-top:12px;">
+                        <p>You can't send a swap request to your own item. Go back to the swap feed to view other listings.</p>
+                        <div class="upload-form__actions">
                             <button type="button" class="button-cancel" onclick="window.location.href='swapPage.php'">Back to swap feed</button>
                         </div>
                     </div>

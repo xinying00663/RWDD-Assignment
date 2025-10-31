@@ -442,6 +442,38 @@ main .register-intro {
     cursor: pointer;
 }
 
+/* Inline style replacements */
+.success-message {
+    background: #d4edda;
+    color: #155724;
+    padding: 16px 24px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #c3e6cb;
+}
+
+.is-disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.inline-form {
+    display: inline-block;
+}
+
+.danger-cta {
+    background: #c62828;
+    color: #fff !important;
+}
+
+.modal-content input[readonly] {
+    background: #f5f5f5;
+}
+
+.is-hidden {
+    display: none !important;
+}
+
 @media (max-width: 900px) {
     .program-hero {
         padding: 36px;

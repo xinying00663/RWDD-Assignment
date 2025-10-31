@@ -1,7 +1,13 @@
 (() => {
     console.log('Sidebar script loaded');
-    
-    // Sidebar HTML template
+
+    // Determine base path depending on current page location
+    const pathname = window.location.pathname.replace(/\\/g, '/');
+    // Heuristic: if page is under /php/, we need to go up one level for assets and links
+    const needsParent = /\/php\//.test(pathname);
+    const base = needsParent ? '../' : '';
+
+    // Sidebar HTML template (paths prefixed with base)
     const sidebarHTML = `
 <button class="sidebar-toggle" type="button" data-sidebar-toggle aria-controls="sidebar" aria-expanded="false">
     <span class="sidebar-toggle__icon" aria-hidden="true"></span>
@@ -10,35 +16,35 @@
 <div class="sidebar-backdrop" id="sidebarBackdrop" hidden></div>
 <aside id="sidebar" class="sidebar" aria-label="Primary navigation">
     <div class="logo">
-        <a href="homePage.php">
-            <img src="Pictures/logo.jpeg" alt="EcoGo Logo">
+        <a href="${base}homePage.php">
+            <img src="${base}Pictures/logo.jpeg" alt="EcoGo Logo">
         </a>
     </div>
     <nav>
-        <a href="homePage.php" data-page="recycling">
-            <img src="Pictures/sidebar/recycle-sign.png" alt="Home Icon">
+        <a href="${base}homePage.php" data-page="recycling">
+            <img src="${base}Pictures/sidebar/recycle-sign.png" alt="Home Icon">
             <p>Recycling Program</p>
         </a>
-        <a href="energyPage.php" data-page="energy">
-            <img src="Pictures/sidebar/lamp.png" alt="Home Icon">
+        <a href="${base}energyPage.php" data-page="energy">
+            <img src="${base}Pictures/sidebar/lamp.png" alt="Home Icon">
             <p>Energy Conservation Tips</p>
         </a>
-        <a href="communityPage.php" data-page="community">
-            <img src="Pictures/sidebar/garden.png" alt="Home Icon">
+        <a href="${base}communityPage.php" data-page="community">
+            <img src="${base}Pictures/sidebar/garden.png" alt="Home Icon">
             <p>Gardening Community</p>
         </a>
-        <a href="swapPage.php" data-page="swap">
-            <img src="Pictures/sidebar/swap.png" alt="Home Icon">
+        <a href="${base}swapPage.php" data-page="swap">
+            <img src="${base}Pictures/sidebar/swap.png" alt="Home Icon">
             <p>Swap Items</p>
         </a>
-        <a href="inboxPage.html" data-page="inbox">
-            <img src="Pictures/sidebar/inbox.png" alt="Home Icon">
+        <a href="${base}inboxPage.html" data-page="inbox">
+            <img src="${base}Pictures/sidebar/inbox.png" alt="Home Icon">
             <p>Inbox</p>
         </a>
     </nav>
     <div class="profile">
-        <a href="userProfile.php" data-page="user-profile">
-            <img src="Pictures/sidebar/user.png" alt="Home Icon">
+        <a href="${base}userProfile.php" data-page="user-profile">
+            <img src="${base}Pictures/sidebar/user.png" alt="Home Icon">
             <p>User Profile</p>
         </a>
     </div>

@@ -80,156 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="../styles/general.css">
     <link rel="stylesheet" href="../styles/common.css">
     <link rel="stylesheet" href="../styles/sidebar.css">
-    <link rel="stylesheet" href="../styles/swapConfirm.css">
-    <style>
-        .swap-details-container {
-            max-width: 900px;
-            margin: 40px auto;
-            padding: 20px;
-        }
-        .swap-card {
-            background: white;
-            border-radius: 12px;
-            padding: 30px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-        .swap-card h2 {
-            color: #476052;
-            margin-bottom: 20px;
-            font-size: 24px;
-        }
-        .swap-info-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-        .info-section h3 {
-            color: #476052;
-            font-size: 18px;
-            margin-bottom: 15px;
-            border-bottom: 2px solid #e0e0e0;
-            padding-bottom: 8px;
-        }
-        .info-item {
-            margin-bottom: 15px;
-        }
-        .info-label {
-            font-weight: 600;
-            color: #666;
-            display: block;
-            margin-bottom: 5px;
-        }
-        .info-value {
-            color: #333;
-        }
-        .swap-image {
-            width: 100%;
-            max-height: 300px;
-            object-fit: cover;
-            border-radius: 8px;
-            margin-top: 10px;
-        }
-        .action-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-top: 30px;
-        }
-        .btn-accept {
-            background: #4CAF50;
-            color: white;
-            padding: 12px 30px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        .btn-accept:hover {
-            background: #45a049;
-        }
-        .btn-reject {
-            background: #f44336;
-            color: white;
-            padding: 12px 30px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        .btn-reject:hover {
-            background: #da190b;
-        }
-        .btn-back {
-            background: #666;
-            color: white;
-            padding: 12px 30px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            transition: background 0.3s;
-        }
-        .btn-back:hover {
-            background: #555;
-        }
-        .status-badge {
-            display: inline-block;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 600;
-            text-transform: capitalize;
-        }
-        .status-pending {
-            background: #fff3cd;
-            color: #856404;
-        }
-        .status-accepted {
-            background: #d4edda;
-            color: #155724;
-        }
-        .status-declined {
-            background: #f8d7da;
-            color: #721c24;
-        }
-        .contact-card {
-            background: #f7faf7;
-            border: 1px solid #dfe7df;
-            border-radius: 12px;
-            padding: 20px;
-            margin-top: 20px;
-        }
-        .contact-card h3 {
-            margin: 0 0 12px 0;
-            font-size: 18px;
-            color: #2f4b3f;
-        }
-        .contact-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-        }
-        .contact-item .label {
-            font-size: 12px;
-            color: #6b7b73;
-            text-transform: uppercase;
-            letter-spacing: .4px;
-        }
-        .contact-item .value {
-            display: block;
-            color: #25322d;
-            font-weight: 600;
-        }
-    </style>
+    <link rel="stylesheet" href="../styles/swapRequestDetail.css">
 </head>
 <body data-page="inbox">
     <main>
@@ -310,7 +161,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <?php endif; ?>
 
                 <?php if ($exchange['status'] === 'pending' && $isRequester): ?>
-                    <p style="text-align:center; margin-top: 10px; color:#476052; font-weight:600;">Your request is pending the owner's decision.</p>
+                    <p class="swap-status-message pending">Your request is pending the owner's decision.</p>
                 <?php endif; ?>
 
                 <?php if ($exchange['status'] === 'accepted'): ?>
@@ -360,7 +211,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <?php endif; ?>
                     </div>
                 <?php elseif ($exchange['status'] === 'declined' && $isRequester): ?>
-                    <p style="text-align:center; margin-top: 10px; color:#8a1c1c; font-weight:600;">Your swap request was declined. Your item remains available.</p>
+                    <p class="swap-status-message declined">Your swap request was declined. The item remains available on the swap page.</p>
                 <?php endif; ?>
 
                 <div class="action-buttons" style="margin-top: 20px;">
