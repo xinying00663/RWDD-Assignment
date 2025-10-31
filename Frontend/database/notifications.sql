@@ -42,7 +42,7 @@ CREATE TABLE `notifications` (
 --
 -- Indexes for table `notifications`
 --
-ALTER TABLE `notifications`
+ALTER TABLE `notifications
   ADD PRIMARY KEY (`NotificationID`),
   ADD KEY `UserID` (`UserID`);
 
@@ -53,7 +53,7 @@ ALTER TABLE `notifications`
 --
 -- AUTO_INCREMENT for table `notifications`
 --
-ALTER TABLE `notifications`
+ALTER TABLE `notifications
   MODIFY `NotificationID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -63,7 +63,7 @@ ALTER TABLE `notifications`
 --
 -- Constraints for table `notifications`
 --
-ALTER TABLE `notifications`
+ALTER TABLE `notifications
   ADD CONSTRAINT `notifications_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `users` (`UserID`);
 COMMIT;
 
