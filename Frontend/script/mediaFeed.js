@@ -11,9 +11,10 @@
         function applyFilter(value) {
             const cards = Array.from(grid.querySelectorAll(".media-card"));
             cards.forEach((card) => {
+                const wrapper = card.closest('.media-card-wrapper') || card;
                 const matches = value === "all" || card.dataset.category === value;
-                card.style.display = matches ? "" : "none";
-                card.setAttribute("aria-hidden", matches ? "false" : "true");
+                wrapper.style.display = matches ? "" : "none";
+                wrapper.setAttribute("aria-hidden", matches ? "false" : "true");
             });
         }
 

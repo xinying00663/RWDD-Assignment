@@ -17,7 +17,7 @@
                 <h2>List a swap item</h2>
                 <p>Share a photo or short clip of what you'd like to swap and let neighbours know what you're hoping for in return.</p>
             </div>
-            <form class="upload-form" action="#" method="post">
+            <form class="upload-form" action="php/uploadSwap.php" method="post" enctype="multipart/form-data">
                 <div class="upload-form__grid">
                     <div class="input-group">
                         <label for="swapTitle">Item name</label>
@@ -59,7 +59,8 @@
         </section>
     </main>
     <script src="script/sidebar.js?v=2"></script>
-    <script src="script/uploadShared.js" defer></script>
-    <script src="script/uploadSwap.js" defer></script>
+    <!-- <script src="script/uploadShared.js" defer></script>
+    <script src="script/uploadSwap.js" defer></script> -->
 </body>
 </html>
+

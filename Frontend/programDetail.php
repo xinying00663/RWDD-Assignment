@@ -22,6 +22,38 @@ include "php/connect.php";
 
 $programId = $_GET['id'] ?? null;
 $programData = null;
+$userId = $_SESSION['user_id'] ?? null;
+$userData = null;
+$isRegistered = false;
+
+// Fetch current user data
+if ($userId) {
+    try {
+        $userStmt = $pdo->prepare("SELECT Username, Full_Name, Email, Phone_Number FROM users WHERE UserID = ?");
+        $userStmt->execute([$userId]);
+        $userData = $userStmt->fetch(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        error_log('User fetch error: ' . $e->getMessage());
+    }
+}
+
+// Determine admin role, with DB fallback if session role not set
+$isAdmin = false;
+if (isset($_SESSION['role'])) {
+    $isAdmin = ($_SESSION['role'] === 'admin');
+} else {
+    try {
+        $roleStmt = $pdo->prepare("SELECT Role FROM users WHERE UserID = ?");
+        $roleStmt->execute([$userId]);
+        $roleRow = $roleStmt->fetch(PDO::FETCH_ASSOC);
+        if ($roleRow) {
+            $_SESSION['role'] = $roleRow['Role'] ?? 'user';
+            $isAdmin = ($_SESSION['role'] === 'admin');
+        }
+    } catch (PDOException $e) {
+        error_log('Role fetch error: ' . $e->getMessage());
+    }
+}
 
 echo "<!-- Debug: programId from URL: " . var_export($programId, true) . " -->\n";
 
@@ -60,6 +92,15 @@ if ($programId) {
             $sections = $sectionStmt->fetchAll(PDO::FETCH_ASSOC);
             $program['sections'] = $sections;
             $programData = $program; // Assign the fetched program data
+            
+            // Check if user is already registered
+            if ($userId) {
+                $regCheckStmt = $pdo->prepare("SELECT COUNT(*) as count FROM program_customer WHERE User_id = ? AND Program_id = ?");
+                $regCheckStmt->execute([$userId, $programId]);
+                $regCheck = $regCheckStmt->fetch(PDO::FETCH_ASSOC);
+                $isRegistered = ($regCheck['count'] > 0);
+            }
+            
             echo "<!-- Debug: programData after sections: " . var_export($programData, true) . " -->\n";
         } else {
             echo "<!-- Debug: No program found with ID: " . var_export($programId, true) . " -->\n";
@@ -87,6 +128,12 @@ echo "<!-- Debug: Final programData before rendering: " . var_export($programDat
 <body data-page="recycling">
     <!-- Sidebar will be loaded here by sidebar.js -->
     <main>
+        <?php if (isset($_GET['registered']) && $_GET['registered'] === 'success'): ?>
+        <div class="success-message" style="background:#d4edda;color:#155724;padding:16px 24px;border-radius:12px;margin-bottom:20px;border:1px solid #c3e6cb;">
+            ✓ Registration successful! The coordinator will contact you soon.
+        </div>
+        <?php endif; ?>
+        
         <?php if ($programData): ?>
         <?php
             // Prepare variables for the view, providing fallbacks
@@ -123,8 +170,20 @@ echo "<!-- Debug: Final programData before rendering: " . var_export($programDat
                     </div>
                 </div>
                 <div class="hero-actions">
-                    <a class="primary-cta" href="#register">Register now</a>
+                    <?php if ($isAdmin): ?>
+                        <button class="primary-cta" disabled style="opacity:0.6;cursor:not-allowed;">Admins cannot register</button>
+                    <?php elseif ($isRegistered): ?>
+                        <button class="primary-cta" disabled style="opacity:0.6;cursor:not-allowed;">Registered</button>
+                    <?php else: ?>
+                        <button class="primary-cta" onclick="showRegisterModal()">Register now</button>
+                    <?php endif; ?>
                     <a class="secondary-cta" href="homePage.php">Back to programs</a>
+                    <?php if ($isAdmin): ?>
+                        <form method="POST" action="php/deleteProgram.php" style="display:inline-block" onsubmit="return confirm('Delete this program?');">
+                            <input type="hidden" name="program_id" value="<?php echo esc($programData['id']); ?>">
+                            <button type="submit" class="secondary-cta" style="background:#c62828;color:#fff;border:none;cursor:pointer;border-radius:999px;padding:10px 16px;">Delete program</button>
+                        </form>
+                    <?php endif; ?>
                 </div>
             </section>
             <section class="program-body">
@@ -177,10 +236,43 @@ echo "<!-- Debug: Final programData before rendering: " . var_export($programDat
                     </ul>
                 </div>
             </section>
-            <section class="program-register" id="register">
+            
+            <!-- Registration Confirmation Modal -->
+            <div id="registerModal" class="modal" style="display:none;">
+                <div class="modal-content">
+                    <h2>Confirm Registration</h2>
+                    <p class="modal-intro">Please review your information before registering for <strong><?php echo $title; ?></strong>.</p>
+                    <form id="confirmRegisterForm" action="php/programCustomer.php" method="POST">
+                        <input type="hidden" name="programId" value="<?php echo esc($programData['id']); ?>">
+                        
+                        <div class="form-field">
+                            <label>Full Name</label>
+                            <input type="text" name="participantName" value="<?php echo esc($userData['Full_Name'] ?? $userData['Username'] ?? ''); ?>" readonly style="background:#f5f5f5;">
+                        </div>
+                        
+                        <div class="form-field">
+                            <label>Email</label>
+                            <input type="email" name="participantEmail" value="<?php echo esc($userData['Email'] ?? ''); ?>" readonly style="background:#f5f5f5;">
+                        </div>
+                        
+                        <div class="form-field">
+                            <label>Phone Number</label>
+                            <input type="tel" name="participantPhone" value="<?php echo esc($userData['Phone_Number'] ?? ''); ?>" readonly style="background:#f5f5f5;">
+                        </div>
+                        
+                        <div class="modal-actions">
+                            <button type="button" class="secondary-cta" onclick="closeRegisterModal()">Cancel</button>
+                            <button type="submit" class="primary-cta">Confirm Registration</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <section class="program-register" id="register" style="display:none;">
                 <h2>Reserve your spot</h2>
                 <p class="register-intro">Complete the form and the coordinator will reach out with onboarding details for the <span id="registerProgramName"><?php echo $title; ?></span>.</p>
-                <form class="register-form" id="programRegisterForm">
+                <form class="register-form" id="programRegisterForm" action="php/programCustomer.php" method="post">
+                    <input type="hidden" name="programId" value="<?php echo esc($programData['id']); ?>">
                     <div class="form-field">
                         <label for="participantName">Full name</label>
                         <input type="text" id="participantName" name="participantName" placeholder="e.g. Nur Aisyah" required>
@@ -210,5 +302,22 @@ echo "<!-- Debug: Final programData before rendering: " . var_export($programDat
         <?php endif; ?>
     </main>
     <script src="script/sidebar.js?v=2"></script>
+    <script>
+        function showRegisterModal() {
+            document.getElementById('registerModal').style.display = 'flex';
+        }
+        
+        function closeRegisterModal() {
+            document.getElementById('registerModal').style.display = 'none';
+        }
+        
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('registerModal');
+            if (event.target === modal) {
+                closeRegisterModal();
+            }
+        }
+    </script>
 </body>
 </html>

@@ -10,8 +10,26 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
+// Determine admin role, with DB fallback if session role not set
+$isAdmin = false;
+if (isset($_SESSION['role'])) {
+    $isAdmin = ($_SESSION['role'] === 'admin');
+} else {
+    try {
+        $roleStmt = $pdo->prepare("SELECT Role FROM users WHERE UserID = ?");
+        $roleStmt->execute([$_SESSION['user_id']]);
+        $roleRow = $roleStmt->fetch(PDO::FETCH_ASSOC);
+        if ($roleRow) {
+            $_SESSION['role'] = $roleRow['Role'] ?? 'user';
+            $isAdmin = ($_SESSION['role'] === 'admin');
+        }
+    } catch (PDOException $e) {
+        error_log('Role fetch error: ' . $e->getMessage());
+    }
+}
+
 try {
-    $stmt = $pdo->query("SELECT Energy_id, Energy_title, Energy_category, Energy_contributor, Energy_duration, Energy_summary, Energy_media FROM energy ORDER BY Energy_id DESC");
+    $stmt = $pdo->query("SELECT Energy_id, Energy_title, Energy_category, Energy_contributor, Energy_summary, Energy_media FROM energy ORDER BY Energy_id DESC");
     $energy_tips = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     error_log("Energy tips fetch error: " . $e->getMessage());
@@ -24,12 +42,12 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EcoGo Energy Playbook</title>
-    <link rel="stylesheet" href="styles/general.css">
-    <link rel="stylesheet" href="styles/common.css">
-    <link rel="stylesheet" href="styles/sidebar.css">
-    <link rel="stylesheet" href="styles/mediaFeed.css">
-    <link rel="stylesheet" href="styles/addButton.css">
-    <link rel="stylesheet" href="styles/energyPage.css">
+    <link rel="stylesheet" href="styles/general.css?v=6">
+    <link rel="stylesheet" href="styles/common.css?v=6">
+    <link rel="stylesheet" href="styles/sidebar.css?v=6">
+    <link rel="stylesheet" href="styles/mediaFeed.css?v=6">
+    <link rel="stylesheet" href="styles/addButton.css?v=6">
+    <link rel="stylesheet" href="styles/energyPage.css?v=6">
 </head>
 <body data-page="energy">
     <!-- Sidebar will be loaded here by sidebar.js -->
@@ -55,6 +73,7 @@ try {
                     </div>
                 <?php else: ?>
                     <?php foreach ($energy_tips as $tip): ?>
+                        <div class="media-card-wrapper">
                         <article class="media-card" data-category="<?php echo htmlspecialchars($tip['Energy_category']); ?>">
                             <a href="mediaDetail.html" class="media-card__link"
                                data-page="energy"
@@ -64,7 +83,6 @@ try {
                                data-media-type="<?php echo preg_match('/\.(mp4|mov|avi)$/i', $tip['Energy_media']) ? 'video' : 'image'; ?>"
                                data-media-src="<?php echo 'php/' . ltrim(htmlspecialchars($tip['Energy_media']), '/'); ?>"
                                data-alt="<?php echo htmlspecialchars($tip['Energy_title']); ?>"
-                               data-duration="<?php echo htmlspecialchars($tip['Energy_duration']); ?>"
                                data-uploader="<?php echo htmlspecialchars($tip['Energy_contributor'] ?: 'Anonymous'); ?>">
                                 <div class="card-media">
                                     <?php $media_path = 'php/' . ltrim(htmlspecialchars($tip['Energy_media']), '/'); ?>
@@ -86,21 +104,26 @@ try {
                                     </p>
                                     <div class="card-meta">
                                         <span class="uploader">By <?php echo htmlspecialchars($tip['Energy_contributor'] ?: 'Anonymous'); ?></span>
-                                        <?php if ($tip['Energy_duration']): ?>
-                                            <span><?php echo htmlspecialchars($tip['Energy_duration']); ?></span>
-                                        <?php endif; ?>
                                     </div>
                                 </div>
                             </a>
                         </article>
+                        <?php if ($isAdmin): ?>
+                            <form method="POST" action="php/deleteEnergy.php" class="media-card__delete" onsubmit="return confirm('Delete this tip?');">
+                                <input type="hidden" name="energy_id" value="<?php echo (int)$tip['Energy_id']; ?>">
+                                <button type="submit" aria-label="Delete energy tip">&times;</button>
+                            </form>
+                        <?php endif; ?>
+                        </div>
                     <?php endforeach; ?>
                 <?php endif; ?>
             </div>
         </section>
+        <?php if ($isAdmin): ?>
         <button type="button" class="add-button" aria-label="Submit energy tip" onclick="window.location.href='uploadEnergy.html'">+</button>
+        <?php endif; ?>
     </main>
     <script src="script/sidebar.js?v=2"></script>
-    <script src="script/energyPage.js" defer></script>
     <script src="script/mediaFeed.js" defer></script>
 </body>
 </html>

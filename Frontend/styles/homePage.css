@@ -48,6 +48,8 @@
     background: #ffffff;
     border: 1px solid rgba(26, 49, 38, 0.12);
     box-shadow: 0 16px 30px rgba(26, 49, 38, 0.1);
+    color: inherit;
+    text-decoration: none;
 }
 
 .program-card:hover {
@@ -143,6 +145,14 @@
     background: #214235;
 }
 
+.program-card__link--signed {
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    cursor: default;
+    pointer-events: none; /* Prevents hover effects */
+}
+
 .program-card__spots {
     color: #2f5848;
     font-size: 0.9rem;
@@ -157,4 +167,34 @@
 .program-card.user-submission {
     border-style: dashed;
     border-color: rgba(26, 49, 38, 0.24);
+}
+
+/* Admin delete overlay for program cards */
+.program-card-wrapper {
+    position: relative;
+}
+
+.program-card__delete {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 3;
+}
+
+.program-card__delete button {
+    background: #c62828;
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    width: 32px;
+    height: 32px;
+    line-height: 30px;
+    text-align: center;
+    font-size: 18px;
+    cursor: pointer;
+    box-shadow: 0 6px 14px rgba(198, 40, 40, 0.35);
+}
+
+.program-card__delete button:hover {
+    background: #b71c1c;
 }

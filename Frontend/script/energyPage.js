@@ -16,10 +16,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         cards.forEach(card => {
             const cardCategory = card.getAttribute('data-category');
-            
-            // Show the card if its category matches the selection, or if "Everything" is selected.
             const shouldShow = (selectedCategory === 'all' || cardCategory === selectedCategory);
-            card.style.display = shouldShow ? '' : 'none';
+            const wrapper = card.closest('.media-card-wrapper') || card;
+            wrapper.style.display = shouldShow ? '' : 'none';
+            wrapper.setAttribute('aria-hidden', shouldShow ? 'false' : 'true');
         });
     });
 });

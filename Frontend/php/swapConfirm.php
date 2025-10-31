@@ -104,7 +104,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST["swap_request"])){
             echo '<script>alert("Error: '.$e->getMessage().'")</script>';
     }
 
-    header('Location: ../inboxPage.php?conversation_id=' . $conversationID);
+    header('Location: ../swapPage.php');
     exit;
 }
 ?>

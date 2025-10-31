@@ -63,6 +63,77 @@ FROM users WHERE UserID = ?";
 $stmt = $pdo->prepare($query);
 $stmt->execute([$userId]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+// Get statistics
+// Programs Joined
+$programsJoinedQuery = "SELECT COUNT(*) as count FROM program_customer WHERE User_id = ?";
+$programsJoinedStmt = $pdo->prepare($programsJoinedQuery);
+$programsJoinedStmt->execute([$userId]);
+$programsJoined = $programsJoinedStmt->fetch(PDO::FETCH_ASSOC)['count'] ?? 0;
+
+// Projects Shared (community posts with category 'projects')
+$projectsSharedQuery = "SELECT COUNT(*) as count FROM community WHERE user_id = ? AND Community_category = 'projects'";
+$projectsSharedStmt = $pdo->prepare($projectsSharedQuery);
+$projectsSharedStmt->execute([$userId]);
+$projectsShared = $projectsSharedStmt->fetch(PDO::FETCH_ASSOC)['count'] ?? 0;
+
+// Tips Shared (community posts with category 'tips')
+$tipsSharedQuery = "SELECT COUNT(*) as count FROM community WHERE user_id = ? AND Community_category = 'tips'";
+$tipsSharedStmt = $pdo->prepare($tipsSharedQuery);
+$tipsSharedStmt->execute([$userId]);
+$tipsShared = $tipsSharedStmt->fetch(PDO::FETCH_ASSOC)['count'] ?? 0;
+
+// Get upcoming registered programs (future or ongoing events)
+// First, let's check all registered programs without date filter
+$allRegisteredQuery = "SELECT pc.Customer_id, pc.User_id, pc.Program_id, p.ProgramID, p.Program_name 
+                       FROM program_customer pc 
+                       LEFT JOIN program p ON p.ProgramID = pc.Program_id 
+                       WHERE pc.User_id = ?";
+$allRegisteredStmt = $pdo->prepare($allRegisteredQuery);
+$allRegisteredStmt->execute([$userId]);
+$allRegistered = $allRegisteredStmt->fetchAll(PDO::FETCH_ASSOC);
+
+echo "<!-- Debug: All registered programs (no filter) = " . print_r($allRegistered, true) . " -->\n";
+
+$upcomingProgramsQuery = "SELECT p.ProgramID, p.Program_name, p.Program_location, p.Event_date_start, p.Event_date_end 
+                          FROM program p 
+                          INNER JOIN program_customer pc ON p.ProgramID = pc.Program_id 
+                          WHERE pc.User_id = ? AND (p.Event_date_start >= CURDATE() OR p.Event_date_end >= CURDATE() OR p.Event_date_start IS NULL OR p.Event_date_end IS NULL)
+                          ORDER BY p.Event_date_start ASC";
+$upcomingProgramsStmt = $pdo->prepare($upcomingProgramsQuery);
+$upcomingProgramsStmt->execute([$userId]);
+$upcomingPrograms = $upcomingProgramsStmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Debug output
+echo "<!-- Debug: userId = " . $userId . " -->\n";
+echo "<!-- Debug: upcomingPrograms count = " . count($upcomingPrograms) . " -->\n";
+echo "<!-- Debug: upcomingPrograms = " . print_r($upcomingPrograms, true) . " -->\n";
+
+// Get user's community posts
+$userPostsQuery = "SELECT Community_id, Community_title, Community_category, Community_media, Community_summary, created_at 
+                   FROM community 
+                   WHERE user_id = ? 
+                   ORDER BY created_at DESC";
+$userPostsStmt = $pdo->prepare($userPostsQuery);
+$userPostsStmt->execute([$userId]);
+$userPosts = $userPostsStmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Debug output
+echo "<!-- Debug: userPosts count = " . count($userPosts) . " -->\n";
+echo "<!-- Debug: userPosts = " . print_r($userPosts, true) . " -->\n";
+
+// Helper function to format dates
+function formatDate($date) {
+    if (!$date) return '';
+    $timestamp = strtotime($date);
+    $now = time();
+    $diff = $now - $timestamp;
+    
+    if ($diff < 86400) return 'Today';
+    if ($diff < 172800) return 'Yesterday';
+    if ($diff < 604800) return date('D', $timestamp); // Day name like "Mon"
+    return date('M j, Y', $timestamp);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -100,15 +171,15 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
             <div class="impact-stats">
                 <article>
                     <span class="label">Programs Joined</span>
-                    <strong>5</strong>
+                    <strong><?php echo $programsJoined; ?></strong>
                 </article>
                 <article>
                     <span class="label">Projects Shared</span>
-                    <strong>10</strong>
+                    <strong><?php echo $projectsShared; ?></strong>
                 </article>
                 <article>
                     <span class="label">Tips Shared</span>
-                    <strong>7</strong>
+                    <strong><?php echo $tipsShared; ?></strong>
                 </article>
             </div>
         </section>
@@ -117,56 +188,71 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
                 <button class="tab-btn" type="button" data-target="posts">My Posts</button>
             </section>
             <section id="programs" class="profile-content active">
-                <div class="profile-card">
-                    <h2>Upcoming</h2>
-                    <div class="activity-feed">
-                        <article class="activity-item">
-                            <span class="time">Yesterday</span>
-                            <strong>Shared zero-waste workshop toolkit</strong>
-                            <p>Uploaded facilitation slides and translation notes for community partners.</p>
-                        </article>
-                        <article class="activity-item">
-                            <span class="time">Mon</span>
-                            <strong>Closed Herb Lab harvest recap</strong>
-                            <p>Logged 38 kg of produce redistributed and tagged photo album for social media.</p>
-                        </article>
-                        <article class="activity-item">
-                            <span class="time">Sat</span>
-                            <strong>Mentored new compost leads</strong>
-                            <p>Trained 4 volunteers on aeration schedule and safety gear requirements.</p>
-                        </article>
-                    </div>
-                </div>
-                <div class="profile-card">
-                    <h2>Recent activity</h2>
-                    <div class="activity-feed">
-                        <article class="activity-item">
-                            <span class="time">Yesterday</span>
-                            <strong>Shared zero-waste workshop toolkit</strong>
-                            <p>Uploaded facilitation slides and translation notes for community partners.</p>
-                        </article>
-                        <article class="activity-item">
-                            <span class="time">Mon</span>
-                            <strong>Closed Herb Lab harvest recap</strong>
-                            <p>Logged 38 kg of produce redistributed and tagged photo album for social media.</p>
-                        </article>
-                        <article class="activity-item">
-                            <span class="time">Sat</span>
-                            <strong>Mentored new compost leads</strong>
-                            <p>Trained 4 volunteers on aeration schedule and safety gear requirements.</p>
-                        </article>
-                    </div>
-                </div>
-
-            </section>
+    <div class="profile-card">
+        <h2>Registered Events</h2>
+        <div class="activity-feed">
+            <?php if (count($allRegistered) > 0): ?>
+                <?php foreach ($allRegistered as $program): ?>
+                    <article class="activity-item">
+                        <strong><a href="programDetail.php?id=<?php echo $program['ProgramID']; ?>" style="color:#2d8d60;text-decoration:none;"><?php echo htmlspecialchars($program['Program_name']); ?></a></strong>
+                        <p>
+                            <?php 
+                            $dateStart = $program['Event_date_start'] ?? '';
+                            $dateEnd = $program['Event_date_end'] ?? '';
+                            if ($dateStart && $dateEnd) {
+                                echo date('M j, Y', strtotime($dateStart)) . ' - ' . date('M j, Y', strtotime($dateEnd));
+                            } elseif ($dateStart) {
+                                echo 'Starts ' . date('M j, Y', strtotime($dateStart));
+                            }
+                            ?>
+                        </p>
+                    </article>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p class="empty-state">You haven't registered for any programs yet. <a href="homePage.php" style="color:#2d8d60;">Browse programs</a></p>
+            <?php endif; ?>
+        </div>
+    </div>
+</section>
             <section id="posts" class="profile-content">
                 <div class="profile-card">
                     <div class="profile-card__header">
                         <h2>My Posts</h2>
                         <p>Check the projects, tips, and swaps you have shared with neighbours.</p>
                     </div>
-                    <div class="activity-feed" data-profile-posts></div>
-                    <p class="empty-state" data-profile-posts-empty hidden>You have not posted anything yet. Share your first story from the upload pages to see it here.</p>
+                    <div class="activity-feed">
+                        <?php if (count($userPosts) > 0): ?>
+                            <?php foreach ($userPosts as $post): ?>
+                                <article class="activity-item" style="position:relative;display:flex;gap:16px;">
+                                    <?php if ($post['Community_media']): ?>
+                                        <div style="width:80px;height:80px;flex-shrink:0;border-radius:8px;overflow:hidden;background:#f5f5f5;">
+                                            <?php 
+                                            $media_path = 'php/' . ltrim(htmlspecialchars($post['Community_media']), '/');
+                                            $ext = strtolower(pathinfo($post['Community_media'], PATHINFO_EXTENSION));
+                                            if (in_array($ext, ['mp4', 'mov', 'avi'])): 
+                                            ?>
+                                                <video style="width:100%;height:100%;object-fit:cover;">
+                                                    <source src="<?php echo $media_path; ?>">
+                                                </video>
+                                            <?php else: ?>
+                                                <img src="<?php echo $media_path; ?>" alt="Post media" style="width:100%;height:100%;object-fit:cover;">
+                                            <?php endif; ?>
+                                        </div>
+                                    <?php endif; ?>
+                                    <div style="flex:1;">
+                                        <span class="time"><?php echo formatDate($post['created_at']); ?></span>
+                                        <strong><?php echo htmlspecialchars($post['Community_title']); ?></strong>
+                                        <span style="display:inline-block;margin-left:8px;padding:2px 8px;background:rgba(45,141,96,0.1);color:#2d8d60;border-radius:12px;font-size:0.75rem;font-weight:600;">
+                                            <?php echo ucfirst($post['Community_category']); ?>
+                                        </span>
+                                        <p><?php echo htmlspecialchars($post['Community_summary']); ?></p>
+                                    </div>
+                                </article>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <p class="empty-state">You have not posted anything yet. Share your first story from the <a href="uploadCommunity.php" style="color:#2d8d60;">upload page</a> to see it here.</p>
+                        <?php endif; ?>
+                    </div>
                 </div>
             </section>
     </main>
@@ -227,6 +313,21 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
         </div>
     </div>
     <script src="script/sidebar.js?v=2"></script>
+    <script>
+        // Tab switching functionality
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Remove active class from all tabs and content
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.profile-content').forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked tab and corresponding content
+                this.classList.add('active');
+                const target = this.getAttribute('data-target');
+                document.getElementById(target).classList.add('active');
+            });
+        });
+    </script>
     <!-- <script src="script/userProfile.js" defer></script> -->
 </body>
 </html>

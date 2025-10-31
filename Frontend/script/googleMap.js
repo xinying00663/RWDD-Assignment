@@ -10,54 +10,12 @@ function initMap() {
     center: center,
   });
 
-  // Example marker (now stored in a variable!)
-  const marker = new google.maps.Marker({
-    position: center,
-    map: map,
-    title: "Recycling Drive",
-  });
+  // Store the map globally so addServerMarkers can use it
+  window.map = map;
 
-  const info = new google.maps.InfoWindow({
-    content: "<b>Recycling Drive</b><br>Community Hall<br>Bring recyclables!"
-  });
-
-  marker.addListener("click", function () {
-    info.open(map, marker);
-  });
-
-  // Attach search bar to Google Places
-  const input = document.getElementById("searchInput");
-  const searchBox = new google.maps.places.SearchBox(input);
-
-  // Bias results to map bounds
-  map.addListener("bounds_changed", function () {
-    searchBox.setBounds(map.getBounds());
-  });
-
-  searchBox.addListener("places_changed", function () {
-    const places = searchBox.getPlaces();
-    if (places.length === 0) return;
-
-    const bounds = new google.maps.LatLngBounds();
-
-    places.forEach(function (place) {
-      if (!place.geometry) return;
-
-      // Drop marker at searched place
-      new google.maps.Marker({
-        map: map,
-        title: place.name,
-        position: place.geometry.location
-      });
-
-      if (place.geometry.viewport) {
-        bounds.union(place.geometry.viewport);
-      } else {
-        bounds.extend(place.geometry.location);
-      }
-    });
-
-    map.fitBounds(bounds);
-  });
+  // Call the function to add server-side program markers
+  if (typeof window.addServerMarkers === 'function') {
+    window.addServerMarkers();
+  }
 }
 

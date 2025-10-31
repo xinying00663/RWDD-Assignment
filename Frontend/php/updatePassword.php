@@ -9,10 +9,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['token'])) {
     $new_password = $_POST['new_password'] ?? '';
     $confirm_password = $_POST['confirm_password'] ?? '';
 
-    // Debug: show incoming values (remove after debugging)
-    echo "Token received: " . htmlspecialchars($token) . "<br>";
-    echo "New password: " . htmlspecialchars($new_password) . "<br>";
-    echo "Confirm password: " . htmlspecialchars($confirm_password) . "<br>";
 
     // 1) Get the token row WITHOUT checking expiry in SQL
     $stmt = $pdo->prepare("SELECT user_id, expires_at FROM password_resets WHERE token = ?");
@@ -24,11 +20,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['token'])) {
         exit;
     }
 
-    // Debug: show DB expiry and MySQL NOW/UTC for comparison
-    echo "Expiry in DB: " . $reset_request['expires_at'] . "<br>";
-    $mysqlTimes = $pdo->query("SELECT NOW() AS now_local, UTC_TIMESTAMP() AS now_utc")->fetch(PDO::FETCH_ASSOC);
-    echo "MySQL NOW(): " . $mysqlTimes['now_local'] . "<br>";
-    echo "MySQL UTC_TIMESTAMP(): " . $mysqlTimes['now_utc'] . "<br>";
 
     // 2) Parse expiry from DB and compare in PHP using same timezone
     // Important: assume DB stores DATETIME in the same logical timezone as you use below.
@@ -62,7 +53,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['token'])) {
     $stmt = $pdo->prepare("DELETE FROM password_resets WHERE token = ?");
     $stmt->execute([$token]);
 
-    echo "Your password has been successfully reset.";
+    echo '<script>
+    alert("Your password has been successfully reset.");
+    window.location.href = "../loginPage.html";
+    </script>';
 } else {
-    echo "Invalid request.";
+    echo '<script>
+    alert("Invalid request.");
+    window.location.href = "../loginPage.html";
+    </script>';
 }

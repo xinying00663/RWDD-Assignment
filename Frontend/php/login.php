@@ -28,7 +28,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
         exit;
   }else{
     try{
-      $stmt=$pdo->prepare("SELECT UserID,Password,Email FROM users WHERE Email=?");
+  $stmt=$pdo->prepare("SELECT UserID, Password, Email, Role FROM users WHERE Email=?");
       $stmt->execute([$email]);
       $user=$stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -37,8 +37,9 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
         $stmt=$pdo->prepare("UPDATE users SET Last_login=? WHERE UserID=?");
         $stmt->execute([$lastLogin,$user["UserID"]]);
 
-        $_SESSION["user_id"]=$user["UserID"];
-        $_SESSION["email"]=$user["Email"];
+  $_SESSION["user_id"]=$user["UserID"];
+  $_SESSION["email"]=$user["Email"];
+  $_SESSION["role"] = $user["Role"] ?? 'user';
         $_SESSION["logged_in"]=true;
 
         echo "<script>
