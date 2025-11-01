@@ -89,7 +89,7 @@ $stmt = $pdo->prepare($query);
 $stmt->execute([$userId]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-// Compute initials for avatar (e.g., "Lim Xin Ying" -> "XY")
+//Compute initials for avatar
 function computeInitials($fullName, $fallback = '') {
     $name = trim((string)$fullName);
     if ($name === '') {
