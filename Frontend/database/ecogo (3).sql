@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 01, 2025 at 01:07 PM
+-- Generation Time: Nov 01, 2025 at 01:37 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -134,29 +134,6 @@ INSERT INTO `items` (`ItemID`, `Title`, `Category`, `Description`, `Item_conditi
 (3, 'mnjhbgvfd', '', 'ikjuhygtrfd7ujyhbgtfv', 'kjhgf', 'jmnhgfd', 'upload/swapItems/690379dbeb73f.png', 'Available', 17),
 (4, 'mnjhbgvfd', '', '很过分的事', 'kjhgf', 'jmnhgfd', 'upload/swapItems/6904d77fac90d.jpg', 'Exchanged', 9),
 (6, 'mnjhbgvfd', 'home-grown', 'ikjuyhgtfd', 'kjhgf', 'jmnhgfd', 'upload/swapItems/6905e5f8de235.jpg', 'Available', 9);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `message`
---
-
-CREATE TABLE `message` (
-  `MessageID` int(11) NOT NULL,
-  `ConversationID` int(11) NOT NULL,
-  `SenderID` int(11) NOT NULL,
-  `Message_Content` text NOT NULL,
-  `Chat_Timestamp` timestamp NOT NULL DEFAULT current_timestamp(),
-  `is_read` tinyint(1) DEFAULT 0,
-  `is_system` tinyint(1) DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `message`
---
-
-INSERT INTO `message` (`MessageID`, `ConversationID`, `SenderID`, `Message_Content`, `Chat_Timestamp`, `is_read`, `is_system`) VALUES
-(1, 1, 0, 'Swap request submitted for: mnjhbgvfd. Offer: ijuhygtfrde', '2025-10-30 14:49:54', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -388,14 +365,6 @@ ALTER TABLE `items`
   ADD KEY `UserID` (`UserID`);
 
 --
--- Indexes for table `message`
---
-ALTER TABLE `message`
-  ADD PRIMARY KEY (`MessageID`),
-  ADD KEY `ConversationID` (`ConversationID`),
-  ADD KEY `SenderID` (`SenderID`);
-
---
 -- Indexes for table `notifications`
 --
 ALTER TABLE `notifications`
@@ -465,12 +434,6 @@ ALTER TABLE `exchange`
 --
 ALTER TABLE `items`
   MODIFY `ItemID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
---
--- AUTO_INCREMENT for table `message`
---
-ALTER TABLE `message`
-  MODIFY `MessageID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `notifications`
