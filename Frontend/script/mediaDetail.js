@@ -1,7 +1,5 @@
 (function () {
     const selectionKey = "ecogoSelectedMedia";
-    const likePrefix = "ecogoLikes:";
-    const commentPrefix = "ecogoComments:";
 
     const container = document.getElementById("detailShell");
 
@@ -113,117 +111,6 @@
         return meta;
     }
 
-    function setupLikeButton(actionsNode, data) {
-        const likeKey = `${likePrefix}${data.title}`;
-        const likedBefore = localStorage.getItem(likeKey) === "1";
-
-        const button = document.createElement("button");
-        button.type = "button";
-        button.className = "like-button";
-        button.textContent = likedBefore ? "You like this" : "Like this";
-        if (likedBefore) {
-            button.classList.add("liked");
-        }
-
-        button.addEventListener("click", () => {
-            const isLiked = button.classList.toggle("liked");
-            button.textContent = isLiked ? "You like this" : "Like this";
-            localStorage.setItem(likeKey, isLiked ? "1" : "0");
-        });
-
-        actionsNode.appendChild(button);
-        return button;
-    }
-
-    function setupFullscreenButton(actionsNode, mediaElement) {
-        if (!mediaElement.requestFullscreen && !mediaElement.webkitRequestFullscreen) {
-            return;
-        }
-        const button = document.createElement("button");
-        button.type = "button";
-        button.className = "fullscreen-button";
-        button.textContent = "View full screen";
-        button.addEventListener("click", () => {
-            if (mediaElement.requestFullscreen) {
-                mediaElement.requestFullscreen();
-            } else if (mediaElement.webkitRequestFullscreen) {
-                mediaElement.webkitRequestFullscreen();
-            }
-        });
-        actionsNode.appendChild(button);
-    }
-
-    function loadComments(title) {
-        try {
-            const raw = localStorage.getItem(`${commentPrefix}${title}`);
-            return raw ? JSON.parse(raw) : [];
-        } catch (error) {
-            console.warn("Unable to load comments", error);
-            return [];
-        }
-    }
-
-    function saveComments(title, comments) {
-        localStorage.setItem(`${commentPrefix}${title}`, JSON.stringify(comments));
-    }
-
-    function renderCommentsSection(data) {
-        const wrapper = document.createElement("section");
-        wrapper.className = "detail-comments";
-
-        const heading = document.createElement("h2");
-        heading.textContent = "Comments";
-        wrapper.appendChild(heading);
-
-        const comments = loadComments(data.title);
-        const list = document.createElement("ul");
-        list.className = "comment-list";
-
-        function appendComment(comment) {
-            const item = document.createElement("li");
-            const author = document.createElement("strong");
-            author.textContent = comment.author;
-            const time = document.createElement("span");
-            time.textContent = new Date(comment.timestamp).toLocaleString();
-            const body = document.createElement("p");
-            body.textContent = comment.message;
-            item.append(author, time, body);
-            list.prepend(item);
-        }
-
-        comments.forEach(appendComment);
-
-        const form = document.createElement("form");
-        form.className = "comment-form";
-        form.innerHTML = `
-            <label for="commentMessage">Add a comment</label>
-            <textarea id="commentMessage" name="commentMessage" placeholder="Share encouragement, tips, or questions" required></textarea>
-            <button type="submit">Post comment</button>
-        `;
-
-        form.addEventListener("submit", (event) => {
-            event.preventDefault();
-            const textarea = form.commentMessage;
-            const message = textarea.value.trim();
-            if (!message) {
-                return;
-            }
-            const comment = {
-                author: "You",
-                message,
-                timestamp: new Date().toISOString()
-            };
-            comments.push(comment);
-            saveComments(data.title, comments);
-            appendComment(comment);
-            textarea.value = "";
-        });
-
-        wrapper.appendChild(form);
-        wrapper.appendChild(list);
-        return wrapper;
-    }
-
     function createBackButton(data) {
         const button = document.createElement("button");
         button.type = "button";
@@ -248,8 +135,11 @@
         nav.appendChild(createBackButton(data));
         shell.appendChild(nav);
 
+        const contentWrapper = document.createElement("div");
+        contentWrapper.className = "detail-content-wrapper";
+
         const { wrapper: mediaWrapper, element: mediaElement } = renderMediaElement(data);
-        shell.appendChild(mediaWrapper);
+        contentWrapper.appendChild(mediaWrapper);
 
         const body = document.createElement("div");
         body.className = "detail-body";
@@ -269,15 +159,8 @@
             body.appendChild(description);
         }
 
-        const actions = document.createElement("div");
-        actions.className = "detail-actions";
-        const likeButton = setupLikeButton(actions, data);
-        setupFullscreenButton(actions, mediaElement);
-        body.appendChild(actions);
-
-        body.appendChild(renderCommentsSection(data));
-
-        shell.appendChild(body);
+        contentWrapper.appendChild(body);
+        shell.appendChild(contentWrapper);
         container.appendChild(shell);
     }
 

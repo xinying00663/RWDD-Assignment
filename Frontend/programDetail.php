@@ -178,12 +178,6 @@ echo "<!-- Debug: Final programData before rendering: " . var_export($programDat
                         <button class="primary-cta" onclick="showRegisterModal()">Register now</button>
                     <?php endif; ?>
                     <a class="secondary-cta" href="homePage.php">Back to programs</a>
-                    <?php if ($isAdmin): ?>
-                        <form method="POST" action="php/deleteProgram.php" class="inline-form" onsubmit="return confirm('Delete this program?');">
-                            <input type="hidden" name="program_id" value="<?php echo esc($programData['id']); ?>">
-                            <button type="submit" class="secondary-cta danger-cta">Delete program</button>
-                        </form>
-                    <?php endif; ?>
                 </div>
             </section>
             <section class="program-body">

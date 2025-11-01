@@ -13,13 +13,46 @@
     overflow: hidden;
     display: grid;
     grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: 
+        "nav"
+        "content";
 }
 
 .detail-nav {
+    grid-area: nav;
     display: flex;
     justify-content: flex-start;
-    padding: 28px 38px 0;
-    margin-bottom: 12px;
+    padding: 28px 38px 12px;
+}
+
+.detail-content-wrapper {
+    grid-area: content;
+    display: grid;
+    grid-template-columns: 40% 60%;
+    gap: 0;
+    min-height: 600px;
+}
+
+.detail-media {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    border-right: 2px solid rgba(45, 141, 96, 0.2);
+}
+
+.detail-media video,
+.detail-media img,
+.detail-media iframe {
+    width: 100%;
+    height: auto;
+    max-height: 100%;
+    object-fit: contain;
+    display: block;
+    border-radius: 12px;
+    border: 1px solid rgba(33, 66, 53, 0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .detail-back-button {
@@ -43,26 +76,12 @@
     outline-offset: 2px;
 }
 
-.detail-media {
-    position: relative;
-    background: #0f211b;
-}
-
-.detail-media video,
-.detail-media img,
-.detail-media iframe {
-    width: 100%;
-    height: 100%;
-    max-height: 540px;
-    object-fit: cover;
-    display: block;
-}
-
 .detail-body {
     padding: 36px 38px 42px;
     display: flex;
     flex-direction: column;
     gap: 24px;
+    overflow-y: auto;
 }
 
 .detail-meta {
@@ -109,106 +128,6 @@
     color: #4b6458;
 }
 
-.detail-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-}
-
-.detail-actions button {
-    border: none;
-    border-radius: 999px;
-    padding: 12px 22px;
-    font-size: 0.95rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.detail-actions .like-button {
-    background: var(--accent, #2d8d60);
-    color: #fff;
-}
-
-.detail-actions .like-button.liked {
-    background: #1f6b48;
-    box-shadow: 0 18px 32px rgba(33, 66, 53, 0.28);
-}
-
-.detail-actions .fullscreen-button {
-    background: rgba(45, 141, 96, 0.1);
-    color: #214235;
-}
-
-.detail-actions button:hover {
-    transform: translateY(-1px);
-}
-
-.detail-comments {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-}
-
-.detail-comments h2 {
-    font-size: 1.25rem;
-    color: #214235;
-}
-
-.comment-form {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.comment-form textarea {
-    border-radius: 16px;
-    border: 1px solid rgba(33, 66, 53, 0.2);
-    padding: 14px 16px;
-    font: inherit;
-    resize: vertical;
-    min-height: 96px;
-}
-
-.comment-form button {
-    align-self: flex-start;
-    border: none;
-    border-radius: 999px;
-    padding: 10px 20px;
-    background: #214235;
-    color: #fff;
-    font-weight: 600;
-    cursor: pointer;
-}
-
-.comment-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-}
-
-.comment-list li {
-    background: rgba(33, 66, 53, 0.06);
-    border-radius: 18px;
-    padding: 14px 18px;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.comment-list strong {
-    font-size: 0.9rem;
-    color: #214235;
-}
-
-.comment-list span {
-    font-size: 0.8rem;
-    color: rgba(33, 66, 53, 0.7);
-}
-
 .detail-empty {
     background: rgba(255, 255, 255, 0.92);
     border-radius: 28px;
@@ -232,6 +151,22 @@
         margin-left: 0;
         padding: 92px 32px 60px;
     }
+
+    .detail-content-wrapper {
+        grid-template-columns: 1fr;
+    }
+
+    .detail-media {
+        padding: 12px;
+        border-right: none;
+        border-bottom: 2px solid rgba(45, 141, 96, 0.2);
+    }
+
+    .detail-media video,
+    .detail-media img,
+    .detail-media iframe {
+        max-height: 500px;
+    }
 }
 
 @media (max-width: 720px) {
@@ -240,16 +175,22 @@
     }
 
     .detail-nav {
-        padding: 20px 20px 0;
+        padding: 20px 20px 12px;
     }
 
     .detail-shell {
         border-radius: 22px;
     }
 
+    .detail-media {
+        padding: 10px;
+        border-right: none;
+        border-bottom: 2px solid rgba(45, 141, 96, 0.2);
+    }
+
     .detail-media video,
     .detail-media img,
     .detail-media iframe {
-        max-height: none;
+        max-height: 400px;
     }
 }

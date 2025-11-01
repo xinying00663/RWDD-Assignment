@@ -51,7 +51,6 @@ try {
     <link rel="stylesheet" href="styles/general.css?v=8">
     <link rel="stylesheet" href="styles/common.css?v=8">
     <link rel="stylesheet" href="styles/sidebar.css?v=8">
-    <link rel="stylesheet" href="styles/searchbar.css?v=8">
     <link rel="stylesheet" href="styles/mediaFeed.css?v=8">
     <link rel="stylesheet" href="styles/swapPage.css?v=8">
     <link rel="stylesheet" href="styles/addButton.css?v=8">
@@ -135,7 +134,7 @@ try {
                 <?php endif; ?>
             </div>
         </section>
-        <button type="button" class="add-button" aria-label="List a swap item" onclick="window.location.href='uploadSwap.php'">+</button>
+        <button type="button" class="add-button" aria-label="List a swap item" onclick="window.location.href='uploadSwap.html'">+</button>
     </main>
     <script src="script/sidebar.js?v=3"></script>
     <script src="script/mediaFeed.js" defer></script>

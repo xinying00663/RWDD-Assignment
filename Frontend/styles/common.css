@@ -29,51 +29,6 @@ main {
     gap: 24px;
 }
 
-.user-submission .card-media.placeholder {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 160px;
-    border-radius: 18px;
-    background: rgba(33, 66, 53, 0.08);
-    color: #214235;
-    text-transform: uppercase;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-}
-
-.user-submission .card-media.placeholder .media-indicator {
-    background: transparent;
-    border: 1px solid rgba(33, 66, 53, 0.2);
-    padding: 8px 12px;
-    border-radius: 999px;
-    position: static;
-}
-
-.user-submission .card-body {
-    gap: 12px;
-}
-
-.user-submission .card-tag {
-    background: rgba(45, 141, 96, 0.16);
-}
-
-.swap-contact,
-.swap-meta {
-    margin: 12px 0 0;
-    color: var(--muted);
-    font-size: 0.9rem;
-}
-
-.card.user-submission {
-    border: 1px dashed rgba(26, 49, 38, 0.24);
-}
-
-.contact-details {
-    font-size: 0.9em;
-    color: #666;
-}
-
 @media (max-width: 1200px) {
     main {
         padding: 48px 40px 68px;

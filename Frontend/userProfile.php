@@ -19,34 +19,59 @@ $updateError = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
     try {
-        $updateQuery = "UPDATE users SET 
-            Username = ?,
-            Full_Name = ?,
-            Gender = ?,
-            Email = ?,
-            Phone_Number = ?,
-            City_Or_Neighbourhood = ?,
-            Additional_info = ?
-        WHERE UserID = ?";
+        // Check if username is being changed
+        $newUsername = $_POST['username'];
         
-        $updateStmt = $pdo->prepare($updateQuery);
-        $updateStmt->execute([
-            $_POST['username'],
-            $_POST['fullName'],
-            $_POST['gender'],
-            $_POST['email'],
-            $_POST['phone'],
-            $_POST['location'],
-            $_POST['bio'],
-            $userId
-        ]);
+        // Get current username
+        $currentUserQuery = "SELECT Username FROM users WHERE UserID = ?";
+        $currentUserStmt = $pdo->prepare($currentUserQuery);
+        $currentUserStmt->execute([$userId]);
+        $currentUsername = $currentUserStmt->fetchColumn();
         
-        $updateSuccess = true;
-        // Redirect to remove POST data
-        header("Location: userProfile.php?updated=true");
-        exit();
+        // If username is different, check if it's already taken
+        if ($newUsername !== $currentUsername) {
+            $checkQuery = "SELECT UserID FROM users WHERE Username = ? AND UserID != ?";
+            $checkStmt = $pdo->prepare($checkQuery);
+            $checkStmt->execute([$newUsername, $userId]);
+            
+            if ($checkStmt->fetch()) {
+                $updateError = "Username '$newUsername' is already taken. Please choose a different username.";
+                $showModal = true; // Keep modal open
+            }
+        }
+        
+        // If no error, proceed with update
+        if (empty($updateError)) {
+            $updateQuery = "UPDATE users SET 
+                Username = ?,
+                Full_Name = ?,
+                Gender = ?,
+                Email = ?,
+                Phone_Number = ?,
+                City_Or_Neighbourhood = ?,
+                Additional_info = ?
+            WHERE UserID = ?";
+            
+            $updateStmt = $pdo->prepare($updateQuery);
+            $updateStmt->execute([
+                $newUsername,
+                $_POST['fullName'],
+                $_POST['gender'],
+                $_POST['email'],
+                $_POST['phone'],
+                $_POST['location'],
+                $_POST['bio'],
+                $userId
+            ]);
+            
+            $updateSuccess = true;
+            // Redirect to remove POST data
+            header("Location: userProfile.php?updated=true");
+            exit();
+        }
     } catch (PDOException $e) {
         $updateError = "Error updating profile: " . $e->getMessage();
+        $showModal = true;
     }
 }
 
@@ -144,7 +169,6 @@ function formatDate($date) {
     <link rel="stylesheet" href="styles/general.css?v=5">
     <link rel="stylesheet" href="styles/common.css?v=5">
     <link rel="stylesheet" href="styles/sidebar.css?v=5">
-    <link rel="stylesheet" href="styles/searchbar.css?v=5">
     <link rel="stylesheet" href="styles/userProfile.css?v=5">
 </head>
 <body data-page="user-profile">
@@ -262,6 +286,13 @@ function formatDate($date) {
                 <h2 id="profileEditTitle">Edit profile</h2>
                 <a href="userProfile.php" class="profile-modal__close" aria-label="Close edit profile">&times;</a>
             </header>
+            
+            <?php if (!empty($updateError)): ?>
+                <div class="profile-modal__error" role="alert" style="background: #fee; border: 1px solid #fcc; color: #c33; padding: 12px 16px; margin: 0 24px 16px; border-radius: 8px; font-size: 0.9rem;">
+                    ⚠️ <?php echo htmlspecialchars($updateError); ?>
+                </div>
+            <?php endif; ?>
+            
             <form class="profile-modal__form" method="POST" action="userProfile.php">
                 <div class="profile-modal__grid">
                     <label class="profile-modal__field">

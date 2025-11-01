@@ -101,7 +101,6 @@ function esc($str) {
     <link rel="stylesheet" href="styles/general.css">
     <link rel="stylesheet" href="styles/common.css">  
     <link rel="stylesheet" href="styles/sidebar.css">
-    <link rel="stylesheet" href="styles/searchbar.css">
     <link rel="stylesheet" href="styles/mediaFeed.css">
     <link rel="stylesheet" href="styles/homePage.css">
     <link rel="stylesheet" href="styles/addButton.css">
@@ -271,5 +270,6 @@ function esc($str) {
         console.log('Added ' + markerCount + ' markers to map from PHP database');
     }
     </script>
+    <script src="script/typingEffect.js?v=2"></script>
 </body>
 </html>
