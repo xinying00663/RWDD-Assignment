@@ -61,7 +61,7 @@ try {
                 <label for="energyFilter">Show</label>
                 <select id="energyFilter" class="media-filter" data-target="energyGrid">
                     <option value="all">Everything</option>
-                    <option value="tutorial">Tutorial videos</option>
+                    <option value="tutorial">Tutorial</option>
                     <option value="habit">Daily habits</option>
                     <option value="planning">Planning &amp; checklists</option>
                 </select>

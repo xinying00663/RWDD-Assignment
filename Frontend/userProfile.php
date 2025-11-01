@@ -89,6 +89,28 @@ $stmt = $pdo->prepare($query);
 $stmt->execute([$userId]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
+// Compute initials for avatar (e.g., "Lim Xin Ying" -> "XY")
+function computeInitials($fullName, $fallback = '') {
+    $name = trim((string)$fullName);
+    if ($name === '') {
+        $name = trim((string)$fallback);
+        if ($name === '') return 'U';
+    }
+    $parts = preg_split('/\s+/', $name);
+    $parts = array_values(array_filter($parts, fn($p) => $p !== ''));
+    if (count($parts) >= 2) {
+        // Take first letter of the last two words (handles family-name-first formats)
+        $a = function_exists('mb_substr') ? mb_substr($parts[count($parts)-2], 0, 1, 'UTF-8') : substr($parts[count($parts)-2], 0, 1);
+        $b = function_exists('mb_substr') ? mb_substr($parts[count($parts)-1], 0, 1, 'UTF-8') : substr($parts[count($parts)-1], 0, 1);
+        $initials = $a . $b;
+    } else {
+        // Single word name: take first two letters
+        $initials = function_exists('mb_substr') ? mb_substr($parts[0], 0, 2, 'UTF-8') : substr($parts[0], 0, 2);
+    }
+    return function_exists('mb_strtoupper') ? mb_strtoupper($initials, 'UTF-8') : strtoupper($initials);
+}
+$avatarInitials = computeInitials($user['fullName'] ?? '', $user['username'] ?? '');
+
 // Get statistics
 // Programs Joined
 $programsJoinedQuery = "SELECT COUNT(*) as count FROM program_customer WHERE User_id = ?";
@@ -176,7 +198,7 @@ function formatDate($date) {
     <main>
         <section class="profile-hero">
             <div class="identity">
-                <div class="profile-avatar"></div>
+                <div class="profile-avatar"><?php echo htmlspecialchars($avatarInitials); ?></div>
                 <div>
                     <h1 class="username"><?php echo $user['username']; ?></h1>
                     <p class="fullName"><?php echo $user['fullName']; ?></p>
