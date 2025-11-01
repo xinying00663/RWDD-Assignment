@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 30, 2025 at 07:44 PM
+-- Generation Time: Nov 01, 2025 at 01:07 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `ecogo`
 --
+CREATE DATABASE IF NOT EXISTS `ecogo` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `ecogo`;
 
 -- --------------------------------------------------------
 
@@ -101,7 +103,9 @@ CREATE TABLE `exchange` (
 --
 
 INSERT INTO `exchange` (`ExchangeID`, `ItemID`, `RequesterID`, `OwnerID`, `Offer_title`, `Offer_description`, `Offer_notes`, `Offer_image`, `status`, `Exchange_timestamp`) VALUES
-(1, 3, 9, 17, 'ijuhygtfrde', 'ujhygtfrd', 'jnyhbgtvfrde', 'upload/offers/1761835794_offer_concert_ticketing_system-userview-concert_ticketing_system.png', 'pending', '2025-10-30 14:49:54');
+(1, 3, 9, 17, 'ijuhygtfrde', 'ujhygtfrd', 'jnyhbgtvfrde', 'upload/offers/1761835794_offer_concert_ticketing_system-userview-concert_ticketing_system.png', 'pending', '2025-10-30 14:49:54'),
+(2, 4, 19, 9, 'ygt', 'gvtvtt', '', 'upload/offers/1761926442_offer_Logical Design -Page-5.drawio.png', 'accepted', '2025-10-31 16:00:42'),
+(3, 2, 19, 9, '，空间和规范', 'tynyughbvctrfv', 'hgfdertjmhnf', 'upload/offers/1761929432_offer_Logical Design -Page-5.drawio (1).png', 'accepted', '2025-10-31 16:50:32');
 
 -- --------------------------------------------------------
 
@@ -112,7 +116,7 @@ INSERT INTO `exchange` (`ExchangeID`, `ItemID`, `RequesterID`, `OwnerID`, `Offer
 CREATE TABLE `items` (
   `ItemID` int(11) NOT NULL,
   `Title` varchar(200) NOT NULL,
-  `Category` enum('Home grown','Eco-friendly','Others','') NOT NULL,
+  `Category` enum('home-grown','eco-friendly','') NOT NULL,
   `Description` varchar(200) DEFAULT NULL,
   `Item_condition` varchar(200) NOT NULL,
   `Preferred_exchange` varchar(200) NOT NULL,
@@ -126,9 +130,10 @@ CREATE TABLE `items` (
 --
 
 INSERT INTO `items` (`ItemID`, `Title`, `Category`, `Description`, `Item_condition`, `Preferred_exchange`, `Image_path`, `Status`, `UserID`) VALUES
-(1, 'hh', 'Eco-friendly', 'nuhuhuhu', 'mjj', 'jjkj', 'upload/swapItems/69034b71ec643.png', '', 9),
-(2, 'pp', 'Home grown', 'fghjk', 'mjj', 'jjkj', 'upload/swapItems/69034cd4623a6.png', 'Available', 9),
-(3, 'mnjhbgvfd', 'Home grown', 'ikjuhygtrfd7ujyhbgtfv', 'kjhgf', 'jmnhgfd', 'upload/swapItems/690379dbeb73f.png', 'Available', 17);
+(2, 'pp', '', 'fghjk', 'mjj', 'jjkj', 'upload/swapItems/69034cd4623a6.png', 'Exchanged', 9),
+(3, 'mnjhbgvfd', '', 'ikjuhygtrfd7ujyhbgtfv', 'kjhgf', 'jmnhgfd', 'upload/swapItems/690379dbeb73f.png', 'Available', 17),
+(4, 'mnjhbgvfd', '', '很过分的事', 'kjhgf', 'jmnhgfd', 'upload/swapItems/6904d77fac90d.jpg', 'Exchanged', 9),
+(6, 'mnjhbgvfd', 'home-grown', 'ikjuyhgtfd', 'kjhgf', 'jmnhgfd', 'upload/swapItems/6905e5f8de235.jpg', 'Available', 9);
 
 -- --------------------------------------------------------
 
@@ -162,10 +167,21 @@ INSERT INTO `message` (`MessageID`, `ConversationID`, `SenderID`, `Message_Conte
 CREATE TABLE `notifications` (
   `NotificationID` int(11) NOT NULL,
   `UserID` int(11) NOT NULL,
+  `ExchangeID` int(11) DEFAULT NULL,
   `Message` text NOT NULL,
   `Is_read` tinyint(1) DEFAULT 0,
   `Notification_Timestamp` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `notifications`
+--
+
+INSERT INTO `notifications` (`NotificationID`, `UserID`, `ExchangeID`, `Message`, `Is_read`, `Notification_Timestamp`) VALUES
+(1, 9, 2, 'Hi, XINYING12 wants to swap with you using \"ygt\" for your item \"mnjhbgvfd\"', 1, '2025-10-31 16:00:42'),
+(2, 19, 2, 'Great news! XY has accepted your swap request for \"mnjhbgvfd\"', 1, '2025-10-31 16:11:42'),
+(3, 9, 3, 'Hi, XINYING12 wants to swap with you using \"，空间和规范\" for your item \"pp\"', 1, '2025-10-31 16:50:32'),
+(4, 19, 3, 'Great news! XY has accepted your swap request for \"pp\"', 1, '2025-10-31 16:51:15');
 
 -- --------------------------------------------------------
 
@@ -216,7 +232,8 @@ INSERT INTO `password_resets` (`id`, `user_id`, `token`, `expires_at`) VALUES
 (29, 9, '8617f89b6f1db0e279d779942496751274d843d606f788f69ac9140b2acf8a3f', '2025-10-24 06:23:48'),
 (30, 9, '331892783da2722d11af3c1c8be8dbd551631cb71afc60fd84326d23ab61ff6e', '2025-10-24 06:32:44'),
 (31, 9, 'b1700e25f31b3e51c39800511f3a8130150742bc59b5ac831cde8a88fd47c48d', '2025-10-24 06:32:53'),
-(32, 9, '33e9e241c581507923396207a2417beabf3cc548dd7cc426c8a8b8d9a05e86d8', '2025-10-24 06:33:09');
+(32, 9, '33e9e241c581507923396207a2417beabf3cc548dd7cc426c8a8b8d9a05e86d8', '2025-10-24 06:33:09'),
+(40, 9, 'd61606af749c5c63d3e7688eb02fbd47785011dde83a2c87fde8703c255d60c2', '2025-10-30 20:45:53');
 
 -- --------------------------------------------------------
 
@@ -325,14 +342,16 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`UserID`, `Username`, `Full_Name`, `Gender`, `Email`, `Password`, `Role`, `Phone_Number`, `City_Or_Neighbourhood`, `Additional_info`, `Join_date`, `Last_login`) VALUES
 (8, 'Xin Ying', 'Lim Xin YIng', 'Female', 'TP081765@mail.apu.edu.my', '$2y$10$GTc8FCRATXE2svxulGKV7uCTe5J0gPWhHXPDEbWqPEAL6VmuXEbru', 'user', '+60 12-345 6789', 'Kuala Lumpur, Malaysia', 'Nothing..', '2025-10-20', '2025-10-20'),
-(9, 'XY', 'Lim Xin Ying', 'Female', 'limxinying060327@gmail.com', '$2y$10$dvA/aIT0SggjFNehk52DCeOGH4qMja3QFlW4z/ZFM3jcdar/pZp6i', 'user', '+60 12-345 6789', 'Kuala Lumpur, Malaysia', 'Nothing to write..', '2025-10-20', '2025-10-30'),
+(9, 'ha', 'Lim Xin Ying', 'Female', 'limxinying060327@gmail.com', '$2y$10$dvA/aIT0SggjFNehk52DCeOGH4qMja3QFlW4z/ZFM3jcdar/pZp6i', 'user', '+60 12-345 6789', 'Kuala Lumpur, Malaysia', 'Nothing to write..', '2025-10-20', '2025-11-01'),
 (10, 'nice', 'Lim Xin YIng', 'Female', 'tp081765@mail.edu.apu.my', '$2y$10$BswV66rlEmb5.USY2JRQJ.1clBnmtN9pUKFgf0SF5eAYsNZCJfrzO', 'user', '+60 12-345 6789', 'Kuala Lumpur, Malaysia', 'xeded', '2025-10-21', '2025-10-21'),
 (12, 'victor', 'Lim Xin YIng', 'Male', 'victorbcchia7@gmail.com', '$2y$10$UN58j3FfLW/NbRg98M4NXecSGrqHsgn6kjSlcvcDtDbVzyBwJDURW', 'user', '+60 12-345 6789', 'Kuala Lumpur, Malaysia', 'thgfhyy', '2025-10-22', '2025-10-22'),
 (13, 'Lim', 'Lim Xin YIng', 'Female', 'limlim123@gmail.com', '$2y$10$FkD95J/3UmfxAkbp/Ieq3O7H.KjLCMuLf5FnhZpBIAZ8aRLxJ3Npq', 'admin', '+60 12-345 6789', 'Kuala Lumpur, Malaysia', 'ghjk', '2025-10-24', '2025-10-24'),
 (14, 'xyy', 'Lim Xin YIng', 'Male', '123445@gmail.com', '$2y$10$i1DSh.IXLXR9OmgKOx6wu.kpy4zKqFodTuEbUesG49tfh0/03F0Pi', 'admin', '+60 12-345 6789', 'Kuala Lumpur, Malaysia', 'fghjkl', '2025-10-24', '2025-10-24'),
 (15, 'jason', 'Teo Jun Jie', 'Male', 'jasonteo1408@gmail.com', '$2y$10$JwzsdHpuC2HJznhWgU0svuRaTr75h7Axi87P7dI8Pjl/3h454LWMC', 'user', '+60 12-345 6789', 'Kuala Lumpur, Malaysia', 'no idea...', '2025-10-24', '2025-10-24'),
 (16, 'jason', 'Ng Tian Xin', 'Female', 'tianxin0406@gmail.com', '$2y$10$itrM.ULvfpyWOyHq7bfcpOg4KmyaiNWKW3GdlF69byEYz2Gz3uMsS', 'admin', '+601126672929', 'Kuala Lumpur, Malaysia', '12345678', '2025-10-29', '2025-10-29'),
-(17, 'XINYING', 'Lim Xin Ying', 'Female', 'xiuography123@gmail.com', '$2y$10$Jp0m/T6qHpnpVDO2pnYXm.QnWEr73I5sQgZuUZev73sHP33wfH6yG', 'admin', '+601116116331', 'Kuala Lumpur, Malaysia', 'idkkk', '2025-10-30', '2025-10-30');
+(17, 'XINYING', 'Lim Xin Ying', 'Female', 'xiuography123@gmail.com', '$2y$10$Jp0m/T6qHpnpVDO2pnYXm.QnWEr73I5sQgZuUZev73sHP33wfH6yG', 'admin', '+601116116331', 'Kuala Lumpur, Malaysia', 'idkkk', '2025-10-30', '2025-11-01'),
+(18, 'XINYING1', 'Lim Xin Ying', 'Male', '123@gmail.com', '$2y$10$ZvUADkINi88Tqh38XAWUrei1oVkpO46XiAEq7vZvrem6kr6w7DNtu', 'admin', '+601116116331', 'Kuala Lumpur, Malaysia', NULL, '2025-10-31', '2025-10-31'),
+(19, 'XINYING12', 'Lim Xin Ying', 'Male', 'abc@gmail.com', '$2y$10$izHAljDtJhMWY2Xhyp4UguHbYZRy7wSFJJGvTtTx7FoDwC8Pc6SO2', 'user', '+601116116331', 'Kuala Lumpur, Malaysia', NULL, '2025-10-31', '2025-10-31');
 
 --
 -- Indexes for dumped tables
@@ -381,7 +400,8 @@ ALTER TABLE `message`
 --
 ALTER TABLE `notifications`
   ADD PRIMARY KEY (`NotificationID`),
-  ADD KEY `UserID` (`UserID`);
+  ADD KEY `UserID` (`UserID`),
+  ADD KEY `fk_notifications_exchange` (`ExchangeID`);
 
 --
 -- Indexes for table `password_resets`
@@ -438,13 +458,13 @@ ALTER TABLE `energy`
 -- AUTO_INCREMENT for table `exchange`
 --
 ALTER TABLE `exchange`
-  MODIFY `ExchangeID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `ExchangeID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `items`
 --
 ALTER TABLE `items`
-  MODIFY `ItemID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ItemID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `message`
@@ -456,13 +476,13 @@ ALTER TABLE `message`
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `NotificationID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `NotificationID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `password_resets`
 --
 ALTER TABLE `password_resets`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT for table `program`
@@ -486,7 +506,7 @@ ALTER TABLE `program_sections`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `UserID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `UserID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- Constraints for dumped tables
@@ -516,6 +536,7 @@ ALTER TABLE `items`
 -- Constraints for table `notifications`
 --
 ALTER TABLE `notifications`
+  ADD CONSTRAINT `fk_notifications_exchange` FOREIGN KEY (`ExchangeID`) REFERENCES `exchange` (`ExchangeID`) ON DELETE CASCADE,
   ADD CONSTRAINT `notifications_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `users` (`UserID`);
 
 --
