@@ -56,12 +56,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // ====== SCROLL ANIMATIONS ======
+    // ====== SCROLL ANIMATIONS (landing sections) ======
     function initScrollAnimations() {
         const sections = document.querySelectorAll('.info-section, .community-section, .faq, #contact-us');
         
         if (sections.length === 0) {
-            console.log('No sections found for animation');
             return;
         }
         
@@ -75,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('animate-in');
                 } else {
-                    entry.target.classList.remove('animate-in');  // Remove when scrolling away
+                    entry.target.classList.remove('animate-in');
                 }
             });
         }, observerOptions);
@@ -84,11 +83,9 @@ document.addEventListener('DOMContentLoaded', function() {
             section.classList.add('scroll-animate');
             observer.observe(section);
         });
-        
-        console.log('Scroll animations initialized for', sections.length, 'sections');
     }
     
-    // Initialize both effects
+    // Initialize typing and scroll animations
     initTypingEffect();
     initScrollAnimations();
     
