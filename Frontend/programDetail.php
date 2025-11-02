@@ -40,7 +40,7 @@ if ($userId) {
 // Determine admin role, with DB fallback if session role not set
 $isAdmin = false;
 if (isset($_SESSION['role'])) {
-    $isAdmin = ($_SESSION['role'] === 'admin');
+    $isAdmin = (strtolower((string)$_SESSION['role']) === 'admin');
 } else {
     try {
         $roleStmt = $pdo->prepare("SELECT Role FROM users WHERE UserID = ?");
@@ -48,7 +48,7 @@ if (isset($_SESSION['role'])) {
         $roleRow = $roleStmt->fetch(PDO::FETCH_ASSOC);
         if ($roleRow) {
             $_SESSION['role'] = $roleRow['Role'] ?? 'user';
-            $isAdmin = ($_SESSION['role'] === 'admin');
+            $isAdmin = (strtolower((string)$_SESSION['role']) === 'admin');
         }
     } catch (PDOException $e) {
         error_log('Role fetch error: ' . $e->getMessage());
@@ -170,12 +170,12 @@ echo "<!-- Debug: Final programData before rendering: " . var_export($programDat
                     </div>
                 </div>
                 <div class="hero-actions">
-                    <?php if ($isAdmin): ?>
-                        <button class="primary-cta is-disabled" disabled>Admins cannot register</button>
-                    <?php elseif ($isRegistered): ?>
-                        <button class="primary-cta is-disabled" disabled>Registered</button>
-                    <?php else: ?>
-                        <button class="primary-cta" onclick="showRegisterModal()">Register now</button>
+                    <?php if (!$isAdmin): ?>
+                        <?php if ($isRegistered): ?>
+                            <button class="primary-cta is-disabled" disabled>Registered</button>
+                        <?php else: ?>
+                            <button class="primary-cta" onclick="showRegisterModal()">Register now</button>
+                        <?php endif; ?>
                     <?php endif; ?>
                     <a class="secondary-cta" href="homePage.php">Back to programs</a>
                 </div>
@@ -231,6 +231,7 @@ echo "<!-- Debug: Final programData before rendering: " . var_export($programDat
                 </div>
             </section>
             
+            <?php if (!$isAdmin): ?>
             <!-- Registration Confirmation Modal -->
             <div id="registerModal" class="modal">
                 <div class="modal-content">
@@ -287,6 +288,7 @@ echo "<!-- Debug: Final programData before rendering: " . var_export($programDat
                     <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
                 </form>
             </section>
+            <?php endif; ?>
         </div>
         <?php else: ?>
         <section class="program-fallback" id="programFallback">
@@ -298,17 +300,21 @@ echo "<!-- Debug: Final programData before rendering: " . var_export($programDat
     <script src="script/sidebar.js?v=2"></script>
     <script>
         function showRegisterModal() {
-            document.getElementById('registerModal').style.display = 'flex';
+            const modal = document.getElementById('registerModal');
+            if (!modal) return; // Guard when admin (no modal rendered)
+            modal.style.display = 'flex';
         }
         
         function closeRegisterModal() {
-            document.getElementById('registerModal').style.display = 'none';
+            const modal = document.getElementById('registerModal');
+            if (!modal) return;
+            modal.style.display = 'none';
         }
         
         // Close modal when clicking outside
         window.onclick = function(event) {
             const modal = document.getElementById('registerModal');
-            if (event.target === modal) {
+            if (modal && event.target === modal) {
                 closeRegisterModal();
             }
         }
