@@ -41,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['email'])) {
             $mail->Port = 587;
 
             // Recipients
-            $mail->setFrom('no-reply@yourwebsite.com', 'Your Website');
+            $mail->setFrom('no-reply@yourwebsite.com', 'EcoGo Reset Password');
             $mail->addAddress($email);
 
             // Content
