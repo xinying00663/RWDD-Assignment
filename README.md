@@ -1,57 +1,145 @@
-# RWDD-Assignment
-# We Use Composer Only for PHPMailer (no other frameworks)
+# EcoGo - RWDD Assignment
 
-## 🧩 Step 1: Install Composer
+I'm using Composer PHPMailer to do the sendresetemail. I did not use for other framework
 
-Composer helps manage PHP dependencies easily.
+## 🚀 Installation Guide
 
-### 🔹 Installation:
-1. Visit the official Composer website: [https://getcomposer.org/](https://getcomposer.org/)
-2. Download the **Composer Setup** file for your operating system.
-3. Run the installer and follow the setup instructions.
-4. After installation, verify Composer by running this command in your terminal:
-   composer -V
+Follow these steps carefully to set up the project after downloading the zip file.
 
-## 🧩 Step 2: Install PHPMailer (IMPORTANT: Run in Frontend folder)
-1. **Open your terminal and navigate to the Frontend folder:**
-   ```powershell
-   cd Frontend
+### Step 1: Extract the Project
+
+1. Extract the downloaded zip file
+2. Copy the entire **`RWDD-Assignment`** folder to your XAMPP `htdocs` directory:
    ```
-2. **Install dependencies and PHPMailer:**
-   ```powershell
+   C:\xampp\htdocs\RWDD-Assignment\
+   ```
+
+### Step 2: Install Composer (if not already installed)
+
+Composer is required to install PHPMailer for the password reset feature.
+
+1. Visit: [https://getcomposer.org/download/](https://getcomposer.org/download/)
+2. Download **Composer-Setup.exe** (for Windows)
+3. Run the installer and follow the setup wizard
+4. Verify installation by opening **Command Prompt** or **PowerShell** and typing:
+   ```bash
+   composer --version
+   ```
+   You should see something like: `Composer version 2.x.x`
+
+### Step 3: Install PHPMailer Dependencies
+
+⚠️ **CRITICAL:** You MUST run these commands inside the `Frontend` folder!
+
+1. Open **Command Prompt** or **PowerShell**
+2. Navigate to the Frontend folder:
+   ```bash
+   cd C:\xampp\htdocs\RWDD-Assignment\Frontend
+   ```
+3. Install PHPMailer:
+   ```bash
    composer install
-   composer require phpmailer/phpmailer
    ```
-   This will create a `vendor` folder inside `Frontend`.
+   This will:
+   - Read `composer.json` and `composer.lock` files
+   - Download PHPMailer into `Frontend/vendor/` folder
+   - Create the autoloader file
 
-## 🧩 Step 3: Troubleshooting PHPMailer autoload errors
-- If you see an error like `failed to open stream: No such file or directory` for `vendor/autoload.php`,
-  it means Composer was run in the wrong folder.
-- Make sure `Frontend/vendor/autoload.php` exists.
-- The code in `php/sendResetLink.php` uses:
-  ```php
-  require '../vendor/autoload.php';
-  ```
-  This works only if `vendor` is inside `Frontend`.
-
-**Summary:** Always run Composer commands inside the `Frontend` folder so dependencies are installed in the correct place.
-
-## 🧩 Step 4: Enable OpenSSL extension in XAMPP (required for PHPMailer SMTP)
-PHPMailer needs the OpenSSL extension to send emails securely.
-
-1. Open your XAMPP `php.ini` file (usually at `xampp/php/php.ini`).
-2. Find this line:
+4. **Verify installation** - Check that this folder exists:
    ```
+   Frontend/vendor/phpmailer/phpmailer/
+   ```
+
+### Step 4: Enable OpenSSL in XAMPP
+
+PHPMailer requires OpenSSL to send emails via SMTP.
+
+1. Open XAMPP Control Panel
+2. Click **Config** next to Apache → Select **PHP (php.ini)**
+3. Find this line (use Ctrl+F to search):
+   ```ini
    ;extension=openssl
    ```
-3. Remove the semicolon (`;`) so it becomes:
-   ```
+4. Remove the semicolon (`;`) to enable it:
+   ```ini
    extension=openssl
    ```
-4. Save the file.
-5. Restart Apache from the XAMPP control panel.
+5. Save the file
+6. **Restart Apache** from XAMPP Control Panel
 
-If you skip this step, PHPMailer will not be able to send emails using SMTP with TLS/SSL.
+### Step 5: Import the Database
 
-**Summary:** Always run Composer commands inside the `Frontend` folder and make sure `extension=openssl` is enabled in your XAMPP `php.ini`.
+1. Open XAMPP Control Panel and start **Apache** and **MySQL**
+2. Open your browser and go to: [http://localhost/phpmyadmin](http://localhost/phpmyadmin)
+3. Create a new database named **`ecogo`**
+4. Click on the `ecogo` database
+5. Click **Import** tab
+6. Choose file: `Frontend/database/ecogo (3).sql`
+7. Click **Go** to import
+
+
+
+## 🌐 Accessing the Application
+
+1. Make sure **Apache** and **MySQL** are running in XAMPP
+2. Open your browser and visit:
+   ```
+   http://localhost/RWDD-Assignment/Frontend/landingPage.html
+   ```
+
+---
+
+## 🔑 Features
+
+- **User Authentication:** Sign up, login, password reset via email
+- **Recycling Programs:** Browse and join environmental programs
+- **Energy Tips:** Share and discover energy conservation guides
+- **Gardening Community:** Post gardening projects and tips
+- **Item Swap Marketplace:** Exchange items with other users
+- **Inbox System:** Manage swap requests and notifications
+
+---
+
+## ⚠️ Common Issues & Solutions
+
+### ❌ Error: "Class PHPMailer not found"
+**Solution:** You forgot to run `composer install` in the Frontend folder. Go back to Step 3.
+
+### ❌ Error: "vendor/autoload.php not found"
+**Solution:** Make sure you ran composer commands inside the `Frontend` folder, not the root folder.
+
+### ❌ Password reset email not sending
+**Solution:** 
+1. Check that OpenSSL extension is enabled (Step 4)
+2. Verify `Frontend/vendor/phpmailer/` folder exists
+3. Check your internet connection (SMTP requires internet)
+
+### ❌ Database connection error
+**Solution:**
+1. Make sure MySQL is running in XAMPP
+2. Verify the database `ecogo` exists in phpMyAdmin
+3. Check `Frontend/php/connect.php` credentials
+
+### ❌ Page not found (404 error)
+**Solution:** Make sure you're using the correct URL:
+- ✅ Correct: `http://localhost/RWDD-Assignment/Frontend/landingPage.html`
+- ❌ Wrong: `http://localhost/Frontend/landingPage.html`
+
+
+## 📁 Project Structure
+
+```
+RWDD-Assignment/
+├── Frontend/
+│   ├── php/                    # Backend PHP files
+│   ├── styles/                 # CSS stylesheets
+│   ├── script/                 # JavaScript files
+│   ├── Pictures/               # Images and media
+│   ├── database/               # SQL database file
+│   ├── vendor/                 # Composer dependencies (created after Step 3)
+│   ├── composer.json           # Composer configuration
+│   ├── *.php                   # Main page files
+│   └── *.html                  # Static page files
+└── README.md                   # This file
+```
 

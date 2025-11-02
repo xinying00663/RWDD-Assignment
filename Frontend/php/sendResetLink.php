@@ -1,10 +1,12 @@
 <?php
 // send_reset_link.php
-require '../vendor/autoload.php'; // Path to PHPMailer if using Composer
+require __DIR__ . '/../vendor/autoload.php'; // Path to PHPMailer if using Composer
 require 'connect.php'; // Your database connection script
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+
+
 
 
 
@@ -62,7 +64,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['email'])) {
                   </script>';
         }
     } else {
-        // Send a generic message to prevent revealing if an email exists
-        echo "If an account with that email exists, a password reset link has been sent.";
+        // Always show the same success message to avoid revealing whether the email exists
+        echo '<script>
+                alert("If an account with that email exists, a password reset link has been sent to your email.");
+                window.location.href = "../landingPage.html";
+              </script>';
+        exit;
     }
 }
