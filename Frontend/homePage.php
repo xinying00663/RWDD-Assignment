@@ -66,7 +66,9 @@ try {
         $programs = $stmt->fetchAll(PDO::FETCH_ASSOC);
     } else {
         // Fetch all programs
-        $query = "SELECT ProgramID, Program_name, Program_location, Event_date_start, Event_date_end, Program_description, Coordinator_name, Coordinator_email, Coordinator_phone, latitude, longitude FROM program ORDER BY created_at DESC";
+        $query = "SELECT ProgramID, Program_name, Program_location, Event_date_start, Event_date_end, Program_description, Coordinator_name, Coordinator_email, Coordinator_phone, latitude, longitude 
+                FROM program 
+                ORDER BY created_at DESC";
         $result = $pdo->query($query);
         $programs = $result->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -235,9 +237,10 @@ function esc($str) {
                 const infoContent = 
                     '<div style="padding:8px;max-width:250px;">' +
                     '<h3 style="margin:0 0 8px 0;color:#214235;font-size:1.1rem;"><?php echo addslashes(esc($program['Program_name'])); ?></h3>' +
-                    '<p style="margin:4px 0;color:#6c7c74;"><strong>📍 Location:</strong> <?php echo addslashes(esc($program['Program_location'])); ?></p>' +
-                    '<p style="margin:4px 0;color:#6c7c74;"><strong>📅 Date:</strong> <?php echo $program['Event_date_start'] ? date('M j, Y', strtotime($program['Event_date_start'])) : 'TBC'; ?></p>' +
-                    '<a href="programDetail.php?id=<?php echo $program['ProgramID']; ?>" style="display:inline-block;margin-top:8px;padding:6px 12px;background:#2d8d60;color:#fff;text-decoration:none;border-radius:999px;font-size:0.9rem;">View Details</a>' +
+                    '<p style="margin:4px 0;color:#6c7c74;"><strong> Location:</strong> <?php echo addslashes(esc($program['Program_location'])); ?></p>' +
+                    '<p style="margin:4px 0;color:#6c7c74;"><strong> Date:</strong> <?php echo $program['Event_date_start'] ? date('M j, Y', strtotime($program['Event_date_start'])) : 'TBC'; ?></p>' +
+                    '<a href="programDetail.php?id=<?php echo $program['ProgramID']; ?>" style="display:inline-block;margin-top:8px;padding:6px 12px;background:#2d8d60;color:#fff;text-decoration:none;border-radius:999px;font-size:0.9rem;">View Details</a>' 
+                    +
                     '</div>';
 
                 const infoWindow = new google.maps.InfoWindow({

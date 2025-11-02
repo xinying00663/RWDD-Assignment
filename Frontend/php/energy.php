@@ -46,7 +46,7 @@ $Energymedia=NULL;
 if(isset($_FILES["energyMedia"])&& $_FILES["energyMedia"]["error"]===0){
         if($_FILES["energyMedia"]["size"]>1000000000){
             echo '<script>
-                    alert("File size exceeds the 250MB limit.");
+                    alert("File size exceeds the 1GB limit.");
                     window.history.back();
                 </script>';
                 exit;
