@@ -6,6 +6,7 @@ require 'connect.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['token'])) {
     $token = $_POST['token'];
+    $safeToken = htmlspecialchars($token, ENT_QUOTES, 'UTF-8');
     $new_password = $_POST['new_password'] ?? '';
     $confirm_password = $_POST['confirm_password'] ?? '';
 
@@ -28,17 +29,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['token'])) {
     $now = new DateTime('now', new DateTimeZone('UTC'));
 
 
-    echo "PHP now: " . $now->format('Y-m-d H:i:s') . "<br>";
-    echo "DB expiry (as DateTime in UTC): " . $dbExpires->format('Y-m-d H:i:s') . "<br>";
-
     if ($dbExpires < $now) {
-        echo "Token is expired according to PHP comparison.<br>";
+        echo '<script>
+            alert("The password reset link has expired. Please request a new reset email.");
+            window.location.href = "../forgotPassword.html";
+        </script>';
         exit;
     }
 
-    // 3) Check password match
+    // 3) Validate password policy (min length 8) and match
+    if (strlen($new_password) < 8) {
+        echo '<script>
+            alert("Password must be at least 8 characters long.");
+            window.location.href = "resetPassword.php?token=' . $safeToken . '";
+        </script>';
+        exit;
+    }
+
     if ($new_password !== $confirm_password) {
-        echo "Passwords do not match.<br>";
+        echo '<script>
+            alert("Passwords do not match.");
+            window.location.href = "resetPassword.php?token=' . $safeToken . '";
+        </script>';
         exit;
     }
 

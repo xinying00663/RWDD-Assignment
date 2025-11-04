@@ -10,6 +10,24 @@ if (!isset($_SESSION['user_id'])) {
 
 $userId = $_SESSION['user_id'];
 
+// Determine admin role, with DB fallback if session role not set
+$isAdmin = false;
+if (isset($_SESSION['role'])) {
+    $isAdmin = (strtolower($_SESSION['role']) === 'admin');
+} else {
+    try {
+        $roleStmt = $pdo->prepare("SELECT Role FROM users WHERE UserID = ?");
+        $roleStmt->execute([$userId]);
+        $roleRow = $roleStmt->fetch(PDO::FETCH_ASSOC);
+        if ($roleRow) {
+            $_SESSION['role'] = $roleRow['Role'] ?? 'user';
+            $isAdmin = (strtolower($_SESSION['role']) === 'admin');
+        }
+    } catch (PDOException $e) {
+        error_log('Role fetch error: ' . $e->getMessage());
+    }
+}
+
 // Check if edit mode is requested
 $showModal = isset($_GET['edit']) && $_GET['edit'] === 'true';
 
@@ -118,6 +136,28 @@ $programsJoinedStmt = $pdo->prepare($programsJoinedQuery);
 $programsJoinedStmt->execute([$userId]);
 $programsJoined = $programsJoinedStmt->fetch(PDO::FETCH_ASSOC)['count'] ?? 0;
 
+// Admin-only stats: Events created and total participants joined my events
+$eventsCreated = 0;
+$participantsOnMyEvents = 0;
+if ($isAdmin) {
+    try {
+        $ecStmt = $pdo->prepare("SELECT COUNT(*) AS c FROM program WHERE userID = ?");
+        $ecStmt->execute([$userId]);
+        $eventsCreated = (int)($ecStmt->fetchColumn() ?: 0);
+
+        $pmStmt = $pdo->prepare(
+            "SELECT COUNT(*) AS c
+             FROM program_customer pc
+             INNER JOIN program p ON p.ProgramID = pc.Program_id
+             WHERE p.userID = ?"
+        );
+        $pmStmt->execute([$userId]);
+        $participantsOnMyEvents = (int)($pmStmt->fetchColumn() ?: 0);
+    } catch (PDOException $e) {
+        error_log('Admin stats error: ' . $e->getMessage());
+    }
+}
+
 // Projects Shared (community posts with category 'projects')
 $projectsSharedQuery = "SELECT COUNT(*) as count FROM community WHERE user_id = ? AND Community_category = 'projects'";
 $projectsSharedStmt = $pdo->prepare($projectsSharedQuery);
@@ -169,6 +209,27 @@ $userPosts = $userPostsStmt->fetchAll(PDO::FETCH_ASSOC);
 echo "<!-- Debug: userPosts count = " . count($userPosts) . " -->\n";
 echo "<!-- Debug: userPosts = " . print_r($userPosts, true) . " -->\n";
 
+// Admin: programs created by me with participant counts
+$myPrograms = [];
+if ($isAdmin) {
+    try {
+        $mpStmt = $pdo->prepare(
+            "SELECT p.ProgramID, p.Program_name, p.Event_date_start, p.Event_date_end,
+                    COUNT(pc.Program_id) AS participant_count
+             FROM program p
+             LEFT JOIN program_customer pc ON pc.Program_id = p.ProgramID
+             WHERE p.userID = ?
+             GROUP BY p.ProgramID, p.Program_name, p.Event_date_start, p.Event_date_end
+             ORDER BY p.created_at DESC"
+        );
+        $mpStmt->execute([$userId]);
+        $myPrograms = $mpStmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        error_log('My programs fetch error: ' . $e->getMessage());
+        $myPrograms = [];
+    }
+}
+
 // Helper function to format dates
 function formatDate($date) {
     if (!$date) return '';
@@ -215,10 +276,12 @@ function formatDate($date) {
             </div>
             
             <div class="impact-stats">
+                <?php if (!$isAdmin): ?>
                 <article>
                     <span class="label">Programs Joined</span>
                     <strong><?php echo $programsJoined; ?></strong>
                 </article>
+                <?php endif; ?>
                 <article>
                     <span class="label">Projects Shared</span>
                     <strong><?php echo $projectsShared; ?></strong>
@@ -227,6 +290,16 @@ function formatDate($date) {
                     <span class="label">Tips Shared</span>
                     <strong><?php echo $tipsShared; ?></strong>
                 </article>
+                <?php if ($isAdmin): ?>
+                <article>
+                    <span class="label">Events Created</span>
+                    <strong><?php echo $eventsCreated; ?></strong>
+                </article>
+                <article>
+                    <span class="label">Participants Joined My Events</span>
+                    <strong><?php echo $participantsOnMyEvents; ?></strong>
+                </article>
+                <?php endif; ?>
             </div>
         </section>
             <section class="tabs">
@@ -235,6 +308,7 @@ function formatDate($date) {
             </section>
             <section id="programs" class="profile-content active">
     <div class="profile-card">
+        <?php if (!$isAdmin): ?>
         <h2>Registered Events</h2>
         <div class="activity-feed">
             <?php if (count($allRegistered) > 0): ?>
@@ -258,6 +332,38 @@ function formatDate($date) {
                 <p class="empty-state">You haven't registered for any programs yet. <a class="program-link" href="homePage.php">Browse programs</a></p>
             <?php endif; ?>
         </div>
+        <?php endif; ?>
+
+        <?php if ($isAdmin): ?>
+        <h2>My Created Programs (Admin)</h2>
+        <div class="activity-feed">
+            <?php if (!empty($myPrograms)): ?>
+                <?php foreach ($myPrograms as $p): ?>
+                    <article class="activity-item">
+                        <strong>
+                            <a class="program-link" href="programDetail.php?id=<?php echo (int)$p['ProgramID']; ?>">
+                                <?php echo htmlspecialchars($p['Program_name']); ?>
+                            </a>
+                        </strong>
+                        <p>
+                            <?php 
+                                $ds = $p['Event_date_start'] ?? '';
+                                $de = $p['Event_date_end'] ?? '';
+                                if ($ds && $de) {
+                                    echo date('M j, Y', strtotime($ds)) . ' - ' . date('M j, Y', strtotime($de));
+                                } elseif ($ds) {
+                                    echo 'Starts ' . date('M j, Y', strtotime($ds));
+                                }
+                            ?>
+                            • Participants: <strong><?php echo (int)($p['participant_count'] ?? 0); ?></strong>
+                        </p>
+                    </article>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p class="empty-state">You haven't created any programs yet.</p>
+            <?php endif; ?>
+        </div>
+        <?php endif; ?>
     </div>
 </section>
             <section id="posts" class="profile-content">

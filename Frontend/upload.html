@@ -136,6 +136,57 @@
             const sectionList = document.querySelector('[data-section-list]');
             const addButton = document.querySelector('[data-section-add]');
             const template = document.getElementById('program-section-template');
+            
+            // Date validation and constraints
+            const fromInput = document.getElementById('eventDate');
+            const toInput = document.getElementById('eventDateTo');
+            const today = new Date();
+            today.setHours(0,0,0,0);
+            const todayStr = today.toISOString().split('T')[0];
+            
+            // Set minimum to today for both dates
+            if (fromInput) fromInput.min = todayStr;
+            if (toInput) toInput.min = todayStr;
+
+            // When from changes, ensure to >= from
+            function syncEndMin() {
+                if (!fromInput || !toInput || !fromInput.value) return;
+                toInput.min = fromInput.value;
+                if (toInput.value && toInput.value < fromInput.value) {
+                    toInput.value = fromInput.value;
+                }
+            }
+            if (fromInput) fromInput.addEventListener('change', syncEndMin);
+            syncEndMin();
+
+            // Prevent submit if invalid dates
+            const form = document.querySelector('.upload-form');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    const fromVal = fromInput?.value;
+                    const toVal = toInput?.value;
+                    if (!fromVal || !toVal) return; // HTML required handles empties
+
+                    if (fromVal < todayStr) {
+                        e.preventDefault();
+                        alert('Event date From cannot be in the past.');
+                        fromInput.focus();
+                        return;
+                    }
+                    if (toVal < todayStr) {
+                        e.preventDefault();
+                        alert('Event date To cannot be in the past.');
+                        toInput.focus();
+                        return;
+                    }
+                    if (toVal < fromVal) {
+                        e.preventDefault();
+                        alert('Event date To cannot be before Event date From.');
+                        toInput.focus();
+                        return;
+                    }
+                });
+            }
 
             // Add new section
             addButton.addEventListener('click', function() {

@@ -1,21 +1,12 @@
 <?php
 // send_reset_link.php
-// Prefer absolute paths using __DIR__ so includes work regardless of the current working directory.
-// Use the project's root vendor autoload so the single Composer install (at project root) is used.
-// Diagnostic: resolve autoload path and verify it exists before requiring.
-$composerAutoload = realpath(__DIR__ . '/../../vendor/autoload.php');
-if (!$composerAutoload || !file_exists($composerAutoload)) {
-    // Useful for debugging if the web server is resolving a different document root.
-    error_log("sendResetLink: Composer autoload not found at: " . __DIR__ . '/../../vendor/autoload.php');
-    http_response_code(500);
-    echo 'Server configuration error: Composer autoload not found.';
-    exit;
-}
-require_once $composerAutoload; // project-root/vendor/autoload.php
-require_once __DIR__ . '/connect.php'; // Your database connection script (Frontend/php/connect.php)
+require '../vendor/autoload.php'; // Path to PHPMailer if using Composer
+require 'connect.php'; // Your database connection script
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+
+
 
 
 
@@ -53,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['email'])) {
             $mail->Port = 587;
 
             // Recipients
-            $mail->setFrom('no-reply@yourwebsite.com', 'Your Website');
+            $mail->setFrom('no-reply@yourwebsite.com', 'EcoGo Reset Password');
             $mail->addAddress($email);
 
             // Content
@@ -74,7 +65,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['email'])) {
                   </script>';
         }
     } else {
-        // Send a generic message to prevent revealing if an email exists
-        echo "If an account with that email exists, a password reset link has been sent.";
+        // Always show the same success message to avoid revealing whether the email exists
+        echo '<script>
+                alert("If an account with that email exists, a password reset link has been sent to your email.");
+                window.location.href = "../landingPage.html";
+              </script>';
+        exit;
     }
 }

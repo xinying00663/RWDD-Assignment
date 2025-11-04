@@ -124,7 +124,7 @@ try {
                 <?php endif; ?>
             </div>
         </section>
-        <button type="button" class="add-button" aria-label="Share with the community" onclick="window.location.href='uploadCommunity.php'">+</button>
+        <button type="button" class="add-button" aria-label="Share with the community" onclick="window.location.href='uploadCommunity.html'">+</button>
     </main>
     <script src="script/sidebar.js?v=3"></script>
     <script src="script/mediaFeed.js" defer></script>

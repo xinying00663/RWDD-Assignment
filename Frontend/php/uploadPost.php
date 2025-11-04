@@ -65,6 +65,38 @@ if ($programName === '' || $programStartDate === '' || $programEndDate === '') {
     exit;
 }
 
+// Server-side date validation
+// Expecting format YYYY-MM-DD from <input type="date">
+$today = (new DateTime('today'));
+$start = DateTime::createFromFormat('Y-m-d', $programStartDate);
+$end = DateTime::createFromFormat('Y-m-d', $programEndDate);
+
+if (!$start || !$end) {
+    http_response_code(400);
+    echo '<script> alert("Invalid date format."); window.history.back(); </script>';
+    exit;
+}
+
+// Normalize times to start of day for comparison
+$start->setTime(0,0,0);
+$end->setTime(0,0,0);
+
+if ($start < $today) {
+    http_response_code(400);
+    echo '<script> alert("Event date From cannot be in the past."); window.history.back(); </script>';
+    exit;
+}
+if ($end < $today) {
+    http_response_code(400);
+    echo '<script> alert("Event date To cannot be in the past."); window.history.back(); </script>';
+    exit;
+}
+if ($end < $start) {
+    http_response_code(400);
+    echo '<script> alert("Event date To cannot be before Event date From."); window.history.back(); </script>';
+    exit;
+}
+
 try {
     if (!isset($pdo) || !($pdo instanceof PDO)) {
         throw new Exception("Database connection not available.");

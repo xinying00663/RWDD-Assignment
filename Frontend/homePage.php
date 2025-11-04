@@ -23,7 +23,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
 // Determine admin role, with DB fallback if session role not set
 $isAdmin = false;
 if (isset($_SESSION['role'])) {
-    $isAdmin = ($_SESSION['role'] === 'admin');
+    $isAdmin = (strtolower($_SESSION['role']) === 'admin');
 } else {
     try {
         $roleStmt = $pdo->prepare("SELECT Role FROM users WHERE UserID = ?");
@@ -31,7 +31,7 @@ if (isset($_SESSION['role'])) {
         $roleRow = $roleStmt->fetch(PDO::FETCH_ASSOC);
         if ($roleRow) {
             $_SESSION['role'] = $roleRow['Role'] ?? 'user';
-            $isAdmin = ($_SESSION['role'] === 'admin');
+            $isAdmin = (strtolower($_SESSION['role']) === 'admin');
         }
     } catch (PDOException $e) {
         error_log('Role fetch error: ' . $e->getMessage());
